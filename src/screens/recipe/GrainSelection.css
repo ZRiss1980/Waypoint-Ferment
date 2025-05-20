@@ -1,0 +1,41 @@
+.grain-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.grain-table th,
+.grain-table td {
+  padding: 0.5rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.grain-col select {
+  width: 100%;
+  min-width: 200px;
+}
+
+.percent-col input,
+.weight-col {
+  width: 100px;
+  text-align: right;
+}
+
+.percent-col input {
+  padding: 0.25rem 0.5rem;
+  box-sizing: border-box;
+}
+
+.weight-col {
+  white-space: nowrap;
+  padding-right: 1rem;
+}
+
+.remove-col button {
+  background: none;
+  color: var(--color-text-primary);
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+}

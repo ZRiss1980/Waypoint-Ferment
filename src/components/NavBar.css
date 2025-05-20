@@ -1,0 +1,114 @@
+:root {
+  --navbar-height: 72px;
+  --color-surface: #2b2b2b;
+  --color-text-primary: #d8cab8;
+  --color-text-secondary: #3c5a40;
+  --color-accent-hover: #3c5a40;
+}
+
+/* Top bar container */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--navbar-height);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  padding: 1rem;
+  z-index: 9999;
+  border-bottom: 1px solid var(--color-text-secondary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Left/right flex layout */
+.navbar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 100%;
+}
+
+/* ☰ button on the left */
+.menu-toggle {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Centered app title */
+.app-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  color: var(--color-gold)!important;
+}
+
+/* Dropdown menu panel */
+.nav-links {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  flex-direction: column;
+  background-color: var(--color-surface); /* ✅ FIXED */
+  color: var(--color-text-primary);
+  padding: 0.5rem 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  max-width: max-content;
+  min-width: fit-content;
+  white-space: nowrap;
+}
+
+/* Show dropdown when open */
+.nav-links.open {
+  display: inline-flex;
+}
+
+/* Each link in menu */
+.nav-links a {
+  background-color: transparent;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  margin: 0.5rem 0;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease-in-out;
+  white-space: nowrap;
+}
+
+/* Link hover and active states */
+.nav-links a:hover,
+.nav-links a.active {
+  background-color: var(--color-accent-hover);
+  color: var(--color-text-primary);
+}
+.nav-links,
+.nav-links.open {
+  background-color: #2b2b2b !important;
+}
+
+.nav-links a {
+  background-color: transparent !important;
+  color: #d8cab8 !important;
+}
+nav {
+  z-index: 10;
+  position: relative;
+  background-color: #121212;
+}

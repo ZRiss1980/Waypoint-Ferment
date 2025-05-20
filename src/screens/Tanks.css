@@ -1,0 +1,137 @@
+.fermenters-screen {
+  padding: 2rem;
+  background-color: var(--color-primary-bg);
+  color: var(--color-text-primary);
+  border-radius: 8px;
+  position: relative;
+  overflow: visible;
+}
+
+.fermenters-screen h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-gold, #d4af37)!important;
+}
+
+.subheading {
+  color: var(--color-text-secondary);
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+.add-fermenter-wrapper {
+  position: relative;
+  display: inline-block;
+  z-index: 10;
+  overflow: visible;
+}
+
+.add-fermenter-button {
+  background-color: var(--color-accent);
+  color: #cccc;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.add-fermenter-button:hover {
+  background-color: var(--color-gold);
+  color: white;
+}
+
+.add-fermenter-form {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 320px;
+  padding: 1rem;
+  background-color: rgba(43, 43, 43, 0.95);
+  backdrop-filter: blur(4px);
+  border: 1px solid #444;
+  border-radius: 12px;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  animation: dropIn 0.25s ease-out;
+}
+
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.add-fermenter-form label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+}
+
+.add-fermenter-form input[type="text"],
+.add-fermenter-form input[type="number"] {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  background-color: #2a2a2a;
+  border: 1px solid #555;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.add-fermenter-form input[type="checkbox"] {
+  margin-left: 0.5rem;
+}
+
+.add-fermenter-form button[type="submit"] {
+  margin-top: 1rem;
+  background-color: var(--color-gold);
+  color: #cccc;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Table styling */
+.fermenter-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  background-color: var(--color-surface);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.fermenter-table th,
+.fermenter-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #444;
+}
+
+.fermenter-table th {
+  background-color: #333;
+  color: var(--color-gold, #d4af37);
+  font-weight: 600;
+}
+
+.fermenter-table td {
+  color: var(--color-text-secondary);
+}
+
+.fermenter-table tr:last-child td {
+  border-bottom: none;
+}
