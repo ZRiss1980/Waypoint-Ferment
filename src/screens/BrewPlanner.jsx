@@ -56,7 +56,7 @@ function BrewPlanner() {
   }, [planScope]);
 
   const handleAddBeer = () => {
-    setBeerPlans((prev) => [...prev, { beerName: "", recipe: "", flagType: "flagship", eventTag: "", eventDueDate: "", fermentationType: "", planQuarter: "Q1", notes: "" }]);
+    setBeerPlans((prev) => [...prev, { beerName: "", recipe: "", flagType: "flagship", eventTag: "", eventDueDate: "", batchTarget: "", planQuarter: "Q1", notes: "" }]);
   };
 
   const handleInputChange = (index, field, value) => {
@@ -205,18 +205,13 @@ function BrewPlanner() {
     </label>
 
     <label>
-      Fermentation Type:
-      <select
-    name="fermentationType"
-    value={plan.fermentationType || ""}
-    onChange={(e) => handleInputChange(index, "fermentationType", e.target.value)}
-  >
-    <option value="">Select Type</option>
-    <option value="lager">Lager</option>
-    <option value="lager-hybrid">Lager Hybrid</option>
-    <option value="ale-hybrid">Ale Hybrid</option>
-    <option value="ale">Ale</option>
-  </select>
+      Batch Target:
+      <input
+        type="number"
+        name="batchTarget"
+        value={plan.batchTarget}
+        onChange={(e) => handleInputChange(index, "batchTarget", e.target.value)}
+      />
     </label>
 
     <label>
