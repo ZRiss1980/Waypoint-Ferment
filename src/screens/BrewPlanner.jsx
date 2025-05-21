@@ -56,7 +56,7 @@ function BrewPlanner() {
   }, [planScope]);
 
   const handleAddBeer = () => {
-    setBeerPlans((prev) => [...prev, { beerName: "", recipe: "", flagType: "flagship", eventTag: "", eventDueDate: "", batchTarget: "", planQuarter: "Q1", notes: "" }]);
+    setBeerPlans((prev) => [...prev, { beerName: "", recipe: "", flagType: "flagship", eventTag: "", eventDueDate: "", fermentationType: "", planQuarter: "Q1", notes: "" }]);
   };
 
   const handleInputChange = (index, field, value) => {
