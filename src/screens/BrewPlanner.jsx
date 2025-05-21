@@ -7,7 +7,7 @@ import "./BrewPlanner.css";
 
 function BrewPlanner() {
   const navigate = useNavigate();
-  const [planScope, setPlanScope] = useState("yearly");
+  const [ setPlanScope] = useState("yearly");
   const [beerPlans, setBeerPlans] = useState([]);
   const [existingPlans, setExistingPlans] = useState([]);
   const [editedPlans, setEditedPlans] = useState({});
@@ -22,29 +22,28 @@ function BrewPlanner() {
     };
 
     try {
-      const snapshot = await getDocs(collection(db, "brewPlans"));
+      const snapshot = await getDocs(collection(db, "userPlans"));
       const allPlans = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
       const currentQuarter = getCurrentQuarter();
 
       const filtered = allPlans.filter(plan => {
-        if (planScope === "yearly") return plan.planScope === "yearly";
+        if (planScope === "yearly") return true;
         if (planScope === "quarterly") {
           return (
-            (plan.planScope === "yearly" && plan.planQuarter === currentQuarter) ||
-            plan.planScope === "quarterly"
+            plan.planQuarter === currentQuarter
           );
         }
         if (planScope === "monthly") {
-        const now = new Date();
-        const in30Days = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-        return (
-          plan.eventDueDate &&
-          !isNaN(new Date(plan.eventDueDate)) &&
-          new Date(plan.eventDueDate) >= now &&
-          new Date(plan.eventDueDate) <= in30Days
-        );
-      }
+          const now = new Date();
+          const in30Days = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+          return (
+            plan.eventDueDate &&
+            !isNaN(new Date(plan.eventDueDate)) &&
+            new Date(plan.eventDueDate) >= now &&
+            new Date(plan.eventDueDate) <= in30Days
+          );
+        }
         return false;
       });
 
@@ -85,23 +84,41 @@ function BrewPlanner() {
   };
 
   const handleSaveEdit = async (id) => {
-    const ref = doc(db, "brewPlans", id);
-    const snapshot = await getDocs(collection(db, "brewPlans"));
+    const ref = doc(db, "userPlans", id);
+    const snapshot = await getDocs(collection(db, "userPlans"));
     const current = snapshot.docs.find(doc => doc.id === id);
     console.log("Current plan data:", current?.data());
     const updates = editedPlans[id];
     if (!updates) return;
     console.log("Saving updates for", id, updates);
     try {
-      const ref = doc(db, "brewPlans", id);
+      const ref = doc(db, "userPlans", id);
       await updateDoc(ref, {
         ...updates,
-        planScope: planScope === "monthly" ? "monthly" : updates.planScope
+        
       });
       alert("Brew plan saved!");
     } catch (error) {
       console.error("Error saving brew plan:", error);
       alert("Failed to save plan");
+    }
+  };
+
+  const handleSubmit = async (e, index) => {
+    e.preventDefault();
+    const plan = beerPlans[index];
+    try {
+      await addDoc(collection(db, "userPlans"), {
+        ...plan,
+        planScope,
+        createdAt: serverTimestamp(),
+      });
+      alert("Brew plan submitted!");
+      setBeerPlans((prev) => prev.filter((_, i) => i !== index));
+      fetchPlans();
+    } catch (err) {
+      console.error("Error adding brew plan:", err);
+      alert("Failed to submit plan");
     }
   };
 
@@ -228,14 +245,17 @@ function BrewPlanner() {
                       value={editedPlans[plan.id]?.eventDueDate || plan.eventDueDate || ""}
                       onChange={(e) => handleEditChange(plan.id, "eventDueDate", e.target.value)}
                     />
+                    {editedPlans[plan.id] && (
+                      <button onClick={() => handleSaveEdit(plan.id)}>Save</button>
+                    )}
                   </td>
                   <td>{plan.batchTarget}</td>
                   <td>{plan.notes}</td>
                   <td>
-  {editedPlans[plan.id] && (
-    <button onClick={() => handleSaveEdit(plan.id)}>Save</button>
-  )}
-</td>
+                    {editedPlans[plan.id] && (
+                      <button onClick={() => handleSaveEdit(plan.id)}>Save</button>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
