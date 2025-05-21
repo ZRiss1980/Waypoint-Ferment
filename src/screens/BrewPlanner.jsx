@@ -7,7 +7,7 @@ import "./BrewPlanner.css";
 
 function BrewPlanner() {
   const navigate = useNavigate();
-  const [ setPlanScope] = useState("yearly");
+  const [setPlanScope] = useState("yearly");
   const [beerPlans, setBeerPlans] = useState([]);
   const [existingPlans, setExistingPlans] = useState([]);
   const [editedPlans, setEditedPlans] = useState({});
