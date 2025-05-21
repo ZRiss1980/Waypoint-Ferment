@@ -205,8 +205,8 @@ function BrewPlanner() {
     </label>
 
     <label>
-  Fermentation Type:
-  <select
+      Fermentation Type:
+      <select
     name="fermentationType"
     value={plan.fermentationType || ""}
     onChange={(e) => handleInputChange(index, "fermentationType", e.target.value)}
@@ -217,25 +217,7 @@ function BrewPlanner() {
     <option value="ale-hybrid">Ale Hybrid</option>
     <option value="ale">Ale</option>
   </select>
-</label>
-        <label>
-          Fermentation Type:
-          <select
-            name="fermentationType"
-            value={plan.fermentationType || ""}
-            onChange={(e) =>
-              handleInputChange(index, "fermentationType", e.target.value)
-            }
-          >
-            <option value="">Select Type</option>
-            <option value="lager">Lager</option>
-            <option value="lager-hybrid">Lager Hybrid</option>
-            <option value="ale-hybrid">Ale Hybrid</option>
-            <option value="ale">Ale</option>
-          </select>
-        </label>
-
-
+    </label>
 
     <label>
       Preferred Quarter:
