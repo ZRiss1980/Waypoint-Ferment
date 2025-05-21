@@ -142,116 +142,117 @@ function BrewPlanner() {
       </div>
 
       {beerPlans.map((plan, index) => (
-  <form key={index} className="brew-plan-form" onSubmit={(e) => handleSubmit(e, index)}>
+  <form
+    key={index}
+    className="brew-plan-form"
+    onSubmit={(e) => handleSubmit(e, index)}
+  >
     <label>
       Beer Name:
-      <input type="text" name="beerName" value={plan.beerName} onChange={(e) => handleInputChange(index, "beerName", e.target.value)} required />
+      <input
+        type="text"
+        name="beerName"
+        value={plan.beerName}
+        onChange={(e) => handleInputChange(index, "beerName", e.target.value)}
+        required
+      />
     </label>
+
     <label>
       Select Recipe:
-      <select name="recipe" value={plan.recipe} onChange={(e) => handleInputChange(index, "recipe", e.target.value)}>
+      <select
+        name="recipe"
+        value={plan.recipe}
+        onChange={(e) => handleInputChange(index, "recipe", e.target.value)}
+      >
         <option value="">I don't have it yet</option>
         <option value="classic-saison">Classic Saison</option>
         <option value="guardiana-lager">Guardiana del Mictlán</option>
       </select>
     </label>
+
     <label>
       Plan Type:
-      <select name="flagType" value={plan.flagType} onChange={(e) => handleInputChange(index, "flagType", e.target.value)}>
+      <select
+        name="flagType"
+        value={plan.flagType}
+        onChange={(e) => handleInputChange(index, "flagType", e.target.value)}
+      >
         <option value="flagship">Flagship</option>
         <option value="seasonal">Seasonal</option>
         <option value="one-off">One-Off</option>
       </select>
     </label>
+
     <label>
       Event Tag (optional):
-      <input type="text" name="eventTag" value={plan.eventTag} onChange={(e) => handleInputChange(index, "eventTag", e.target.value)} />
+      <input
+        type="text"
+        name="eventTag"
+        value={plan.eventTag}
+        onChange={(e) => handleInputChange(index, "eventTag", e.target.value)}
+      />
     </label>
+
     <label>
       Event Due Date:
-      <input type="date" name="eventDueDate" value={plan.eventDueDate} onChange={(e) => handleInputChange(index, "eventDueDate", e.target.value)} />
+      <input
+        type="date"
+        name="eventDueDate"
+        value={plan.eventDueDate}
+        onChange={(e) => handleInputChange(index, "eventDueDate", e.target.value)}
+      />
     </label>
+
     <label>
       Batch Target:
-      <input type="number" name="batchTarget" value={plan.batchTarget} onChange={(e) => handleInputChange(index, "batchTarget", e.target.value)} />
+      <input
+        type="number"
+        name="batchTarget"
+        value={plan.batchTarget}
+        onChange={(e) => handleInputChange(index, "batchTarget", e.target.value)}
+      />
     </label>
+
     <label>
       Preferred Quarter:
-      <select name="planQuarter" value={plan.planQuarter} onChange={(e) => handleInputChange(index, "planQuarter", e.target.value)}>
+      <select
+        name="planQuarter"
+        value={plan.planQuarter}
+        onChange={(e) => handleInputChange(index, "planQuarter", e.target.value)}
+      >
         <option value="Q1">Q1</option>
         <option value="Q2">Q2</option>
         <option value="Q3">Q3</option>
         <option value="Q4">Q4</option>
       </select>
     </label>
+
     <label>
       Notes:
-      <textarea name="notes" rows="4" value={plan.notes} onChange={(e) => handleInputChange(index, "notes", e.target.value)}></textarea>
+      <textarea
+        name="notes"
+        rows="4"
+        value={plan.notes}
+        onChange={(e) => handleInputChange(index, "notes", e.target.value)}
+      ></textarea>
     </label>
+
     <div className="form-actions">
       <button type="submit">Save Brew Plan</button>
-      <button type="button" className="delete-button" onClick={() => handleRemoveBeer(index)}>Remove</button>
+      <button
+        type="button"
+        className="delete-button"
+        onClick={() => handleRemoveBeer(index)}
+      >
+        Remove
+      </button>
     </div>
   </form>
 ))}
-
-{existingPlans.length > 0 && (
-  <div className="existing-plans-table">
-    <h2>{planScope.charAt(0).toUpperCase() + planScope.slice(1)} Plan Overview</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Beer</th>
-          <th>Type</th>
-          <th>Quarter</th>
-          <th>Due Date</th>
-          <th>Batch</th>
-          <th>Notes</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {existingPlans.map((plan) => (
-          <tr key={plan.id} className={editedPlans[plan.id] ? "edited-row" : ""}>
-            <td>{plan.beerName}</td>
-            <td>{plan.flagType}</td>
-            <td>
-              <select
-                value={editedPlans[plan.id]?.planQuarter || plan.planQuarter}
-                onChange={(e) => handleEditChange(plan.id, "planQuarter", e.target.value)}
-              >
-                <option value="Q1">Q1</option>
-                <option value="Q2">Q2</option>
-                <option value="Q3">Q3</option>
-                <option value="Q4">Q4</option>
-              </select>
-            </td>
-            <td>
-              <input
-                type="date"
-                value={editedPlans[plan.id]?.eventDueDate || plan.eventDueDate || ""}
-                onChange={(e) => handleEditChange(plan.id, "eventDueDate", e.target.value)}
-              />
-              {editedPlans[plan.id] && (
-                <button onClick={() => handleSaveEdit(plan.id)}>Save</button>
-              )}
-            </td>
-            <td>{plan.batchTarget}</td>
-            <td>{plan.notes}</td>
-            <td>
-              {editedPlans[plan.id] && (
-                <button onClick={() => handleSaveEdit(plan.id)}>Save</button>
-              )}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
   </div>
-)}
+);
 
-    </div>
-  );
 }
 
 export default BrewPlanner;
