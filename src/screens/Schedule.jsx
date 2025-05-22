@@ -41,13 +41,28 @@ const Schedule = () => {
     };
 
     const loadWeeklyTasks = async () => {
-      const snapshot = await getDocs(collection(db, "tasks"));
-      const tasks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      const thisWeek = tasks.filter(task => {
-        const due = new Date(task.dueDate);
-        return due >= now && due <= oneWeekOut;
-      });
-      setWeeklyTasks(thisWeek);
+  const now = new Date();
+  const oneWeekOut = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+  const snapshot = await getDocs(collection(db, "taskTemplates"));
+  const templates = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+  const tasksThisWeek = templates
+    .filter(t => t.anchorEvent === "daily" && typeof t.dayOffset === "number")
+    .map(t => {
+      const dueDate = new Date(now);
+      dueDate.setDate(now.getDate() + t.dayOffset);
+      return {
+        id: t.id,
+        taskName: t.taskName,
+        dueDate: dueDate.toISOString()
+      };
+    })
+    .filter(t => {
+      const d = new Date(t.dueDate);
+      return d >= now && d <= oneWeekOut;
+    });
+
+  setWeeklyTasks(tasksThisWeek);
     };
 
     loadBrewDays();
