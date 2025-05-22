@@ -47,10 +47,11 @@ const Schedule = () => {
   const templates = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
   const tasksThisWeek = templates
-    .filter(t => t.anchorEvent === "daily" && typeof t.dayOffset === "number")
+    .filter(t => t.anchorEvent === "daily" && !isNaN(parseInt(t.dayOffset)))
     .map(t => {
+      const offset = parseInt(t.dayOffset, 10);
       const dueDate = new Date(now);
-      dueDate.setDate(now.getDate() + t.dayOffset);
+      dueDate.setDate(now.getDate() + offset);
       return {
         id: t.id,
         taskName: t.taskName,
