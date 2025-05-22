@@ -2,11 +2,59 @@ import React from "react";
 import DailyScheduleGrid from "../components/DailyScheduleGrid";
 import { useNavigate } from "react-router-dom";
 import "./Tanks.css";
+import { useEffect } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
+
+
+  
+const groupTasksByDay = (tasks) => {
+  const days = {};
+  tasks.forEach((task) => {
+    const date = new Date(task.dueDate);
+    const day = date.toLocaleDateString("en-US", { weekday: "long" });
+    if (!days[day]) days[day] = [];
+    days[day].push(task);
+  });
+  return days;
+};
 
 const Schedule = () => {
   const navigate = useNavigate();
+  const [brewDays, setBrewDays] = React.useState([]);
+  const [weeklyTasks, setWeeklyTasks] = React.useState([]);
 
-  return (
+  useEffect(() => {
+    const now = new Date();
+    const thisMonth = now.getMonth();
+    const thisYear = now.getFullYear();
+    const oneWeekOut = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+    const loadBrewDays = async () => {
+      const snapshot = await getDocs(collection(db, "userPlans"));
+      const plans = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const thisMonthPlans = plans.filter(plan => {
+        const date = new Date(plan.startDate);
+        return !isNaN(date) && date.getMonth() === thisMonth && date.getFullYear() === thisYear;
+      });
+      setBrewDays(thisMonthPlans);
+    };
+
+    const loadWeeklyTasks = async () => {
+      const snapshot = await getDocs(collection(db, "tasks"));
+      const tasks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const thisWeek = tasks.filter(task => {
+        const due = new Date(task.dueDate);
+        return due >= now && due <= oneWeekOut;
+      });
+      setWeeklyTasks(thisWeek);
+    };
+
+    loadBrewDays();
+    loadWeeklyTasks();
+  }, []);
+
+    return (
     <div className="fermenters-screen">
       <h1>Brew Schedule</h1>
       <button className="return-home-button" onClick={() => navigate("/")}>← Return Home</button>
@@ -29,18 +77,7 @@ const Schedule = () => {
         </ul>
       </div>
 
-      <div className="brew-days-this-month">
-        <h2>Brew Days This Month</h2>
-        <ul>
-          {brewDays.map(plan => (
-            <li key={plan.id}>
-              {plan.beerName} – {new Date(plan.startDate).toLocaleDateString()}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <DailyScheduleGrid />
+     
 
       <div className="weekly-tasks">
         <h2>Tasks This Week</h2>
