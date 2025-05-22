@@ -311,6 +311,7 @@ function BrewPlanner() {
                 <th>Type</th>
                 <th>Quarter</th>
                 <th>Due Date</th>
+                <th>Brew Date</th>
                 <th>Fermentation</th>
                 <th>Notes</th>
                 <th>Action</th>
@@ -339,6 +340,7 @@ function BrewPlanner() {
                       onChange={(e) => handleEditChange(plan.id, "eventDueDate", e.target.value)}
                     />
                   </td>
+                  <td>{calculateStartDate(plan.eventDueDate, plan.fermentationType)?.toLocaleDateString() || "—"}</td>
                   <td>{plan.fermentationType || "n/a"}</td>
                   <td>{plan.notes}</td>
                   <td>
