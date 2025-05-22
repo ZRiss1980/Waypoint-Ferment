@@ -12,6 +12,30 @@ import {
 } from "firebase/firestore";
 import "./BrewPlanner.css";
 
+const calculateStartDate = (dueDateStr, fermentationType) => {
+  if (!dueDateStr) return null;
+  const dueDate = new Date(dueDateStr);
+  let offsetDays = 0;
+  switch (fermentationType) {
+    case "ale":
+      offsetDays = 14;
+      break;
+    case "ale-hybrid":
+      offsetDays = 21;
+      break;
+    case "lager-hybrid":
+      offsetDays = 42;
+      break;
+    case "lager":
+      offsetDays = 56;
+      break;
+    default:
+      offsetDays = 14; // fallback
+  }
+  return new Date(dueDate.getTime() - offsetDays * 24 * 60 * 60 * 1000);
+};
+
+
 function BrewPlanner() {
   const navigate = useNavigate();
   const [planScope, setPlanScope] = useState("yearly");
@@ -42,11 +66,11 @@ function BrewPlanner() {
         if (planScope === "monthly") {
           const now = new Date();
           const in30Days = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+          const startDate = calculateStartDate(plan.eventDueDate, plan.fermentationType);
           return (
-            plan.eventDueDate &&
-            !isNaN(new Date(plan.eventDueDate)) &&
-            new Date(plan.eventDueDate) >= now &&
-            new Date(plan.eventDueDate) <= in30Days
+            startDate &&
+            startDate >= now &&
+            startDate <= in30Days
           );
         }
         return false;
@@ -212,12 +236,13 @@ function BrewPlanner() {
           </label>
 
           <label>
-            Event Due Date:
+            Due Date:
             <input
               type="date"
               name="eventDueDate"
               value={plan.eventDueDate}
               onChange={(e) => handleInputChange(index, "eventDueDate", e.target.value)}
+              required
             />
           </label>
 
