@@ -147,10 +147,13 @@ function BrewPlanner() {
     e.preventDefault();
     const plan = beerPlans[index];
     try {
+      const startDate = calculateStartDate(plan.eventDueDate, plan.fermentationType);
       await addDoc(collection(db, "userPlans"), {
-        ...plan,
-        createdAt: serverTimestamp()
+       ...plan,
+      startDate: startDate ? startDate.toISOString() : null,
+      createdAt: serverTimestamp()
       });
+
       alert("Brew plan submitted!");
       setBeerPlans((prev) => prev.filter((_, i) => i !== index));
       fetchPlans();
