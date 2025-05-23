@@ -157,6 +157,17 @@ function BrewPlanner() {
       alert("Brew plan submitted!");
       setBeerPlans((prev) => prev.filter((_, i) => i !== index));
       fetchPlans();
+      fetch("https://us-central1-brewery-app-bf7f1.cloudfunctions.net/generateDailyTasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ trigger: "planCreated" })
+      })
+      .then(res => res.json())
+      .then(data => console.log("📦 Task generation response:", data))
+      .catch(err => console.error("⚠️ Failed to trigger task scheduler:", err));
+
     } catch (err) {
       console.error("Error adding brew plan:", err);
       alert("Failed to submit plan");
