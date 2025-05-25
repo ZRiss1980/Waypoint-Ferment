@@ -35,7 +35,6 @@ const calculateStartDate = (dueDateStr, fermentationType) => {
   return new Date(dueDate.getTime() - offsetDays * 24 * 60 * 60 * 1000);
 };
 
-
 function BrewPlanner() {
   const navigate = useNavigate();
   const [planScope, setPlanScope] = useState("yearly");
@@ -148,11 +147,20 @@ function BrewPlanner() {
     const plan = beerPlans[index];
     try {
       const startDate = calculateStartDate(plan.eventDueDate, plan.fermentationType);
-      await addDoc(collection(db, "userPlans"), {
-       ...plan,
+      const docRef = await addDoc(collection(db, "userPlans"), {
+      ...plan,
       startDate: startDate ? startDate.toISOString() : null,
       createdAt: serverTimestamp()
-      });
+});
+
+// PATCH: Write default subcollection under the new plan (e.g., scheduledTasks)
+const tasksRef = collection(db, "userPlans", docRef.id, "scheduledTasks");
+await addDoc(tasksRef, {
+  taskName: "Initial Planning Task",
+  status: "pending",
+  createdAt: serverTimestamp()
+});
+
 
       alert("Brew plan submitted!");
       setBeerPlans((prev) => prev.filter((_, i) => i !== index));
@@ -164,9 +172,9 @@ function BrewPlanner() {
         },
         body: JSON.stringify({ trigger: "planCreated" })
       })
-      .then(res => res.json())
-      .then(data => console.log("📦 Task generation response:", data))
-      .catch(err => console.error("⚠️ Failed to trigger task scheduler:", err));
+        .then(res => res.json())
+        .then(data => console.log("📦 Task generation response:", data))
+        .catch(err => console.error("⚠️ Failed to trigger task scheduler:", err));
 
     } catch (err) {
       console.error("Error adding brew plan:", err);
