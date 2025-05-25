@@ -154,12 +154,18 @@ function BrewPlanner() {
 });
 
 // PATCH: Write default subcollection under the new plan (e.g., scheduledTasks)
-const tasksRef = collection(db, "userPlans", docRef.id, "scheduledTasks");
-await addDoc(tasksRef, {
-  taskName: "Initial Planning Task",
-  status: "pending",
-  createdAt: serverTimestamp()
-});
+try {
+  const tasksRef = collection(db, "userPlans", docRef.id, "scheduledTasks");
+  await addDoc(tasksRef, {
+    taskName: "Initial Planning Task",
+    status: "pending",
+    createdAt: serverTimestamp()
+  });
+  console.log("✅ Subcollection write succeeded.");
+} catch (err) {
+  console.error("🔥 Subcollection write failed:", err.message);
+}
+
 
 
       alert("Brew plan submitted!");
