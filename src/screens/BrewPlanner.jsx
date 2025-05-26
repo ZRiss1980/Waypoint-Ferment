@@ -200,9 +200,7 @@ function BrewPlanner() {
 
       for (const template of filteredTemplates) {
   try {
-    const anchor = (template.anchorEvent || "").toLowerCase();
-    let anchorDate = plan.startDate ? new Date(plan.startDate) : new Date();
-
+    const anchorDate = resolveAnchorDate(template.anchorEvent, startDate, plan.fermentationType);
     switch (anchor) {
       case "brewday":
       case "":
