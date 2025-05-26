@@ -66,6 +66,7 @@ function BrewPlanner() {
           const now = new Date();
           const in30Days = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
           const startDate = calculateStartDate(plan.eventDueDate, plan.fermentationType);
+          plan.startDate = startDate;
           return (
             startDate &&
             startDate >= now &&
@@ -147,6 +148,7 @@ function BrewPlanner() {
     const plan = beerPlans[index];
     try {
       const startDate = calculateStartDate(plan.eventDueDate, plan.fermentationType);
+      plan.startDate = startDate;
       const docRef = await addDoc(collection(db, "userPlans"), {
         ...plan,
         startDate: startDate ? startDate.toISOString() : null,
