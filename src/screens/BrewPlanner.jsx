@@ -147,11 +147,11 @@ function BrewPlanner() {
     const plan = beerPlans[index];
     try {
       const startDate = calculateStartDate(plan.eventDueDate, plan.fermentationType);
-      const docRef = await addDoc(collection(db, "userPlans"), {
+      const docRef = await addDoc(collection(db, "userPlans"),  {
       ...plan,
       startDate: startDate ? startDate.toISOString() : null,
       createdAt: serverTimestamp()
-});
+    });
 
 // FETCH: Pull all beer-related task templates
 const templatesSnapshot = await getDocs(collection(db, "taskTemplates"));
@@ -166,7 +166,7 @@ const filteredTemplates = allTemplates.filter(
 );
 
 // WRITE: Add scheduledTasks subcollection using template pointers
-for (const template of filteredTemplates) {
+  for (const template of filteredTemplates) {
   await addDoc(collection(db, "userPlans", docRef.id, "scheduledTasks"), {
     taskTemplateId: template.id,
     dayOffset: template.dayOffset || 0, // fallback if template has no offset
@@ -368,4 +368,4 @@ for (const template of filteredTemplates) {
                   <td>
                     <input
                       type="date"
-                      v
+                
