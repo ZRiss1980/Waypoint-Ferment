@@ -99,7 +99,7 @@ function Schedule() {
           <h2>{dayOfWeek}'s Tasks</h2>
           <ul>
             {todayTasks.map(task => (
-              <li key={task.id}>{task.beerName}: {task.taskTemplateId}</li>
+              <li key={task.id}>{task.beerName}: {task.taskName}</li>
             ))}
           </ul>
         </section>
