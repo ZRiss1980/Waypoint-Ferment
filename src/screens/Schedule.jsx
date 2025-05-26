@@ -108,7 +108,7 @@ function Schedule() {
           <h2>This Week’s Tasks</h2>
           <ul>
             {weekTasks.map(task => (
-              <li key={task.id}>{task.beerName}: {task.taskTemplateId} on {task.scheduledDate.toLocaleDateString()}</li>
+              <li key={task.id}>{task.beerName}: {task.taskName} on {task.scheduledDate.toLocaleDateString()}</li>
             ))}
           </ul>
         </section>
