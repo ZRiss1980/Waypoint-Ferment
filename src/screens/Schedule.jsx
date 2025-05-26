@@ -34,33 +34,29 @@ function Schedule() {
       const tasksForWeek = [];
       const brewDatesList = [];
 
-      for (const plan of plans) {
-        const planStart = new Date(plan.startDate);
-        brewDatesList.push({ beerName: plan.beerName, startDate: planStart });
+      const tasksSnapshot = await getDocs(collection(db, "userPlans", plan.id, "tasks"));
+const tasks = tasksSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-        const tasksSnapshot = await getDocs(collection(db, "userPlans", plan.id, "scheduledTasks"));
-        const tasks = tasksSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+for (const task of tasks) {
+  if (!task.scheduledDate) continue;
+  const taskDate = new Date(task.scheduledDate.toDate ? task.scheduledDate.toDate() : task.scheduledDate);
 
-        for (const task of tasks) {
-          const taskDate = new Date(planStart);
-          taskDate.setDate(taskDate.getDate() + (task.dayOffset || 0));
+  const taskWithMeta = {
+    ...task,
+    planId: plan.id,
+    beerName: plan.beerName,
+    scheduledDate: taskDate
+  };
 
-          const taskWithMeta = {
-            ...task,
-            planId: plan.id,
-            beerName: plan.beerName,
-            scheduledDate: taskDate
-          };
+  if (taskDate.toDateString() === today.toDateString()) {
+    tasksForToday.push(taskWithMeta);
+  }
 
-          if (taskDate.toDateString() === today.toDateString()) {
-            tasksForToday.push(taskWithMeta);
-          }
+  if (taskDate >= startOfWeek && taskDate <= endOfWeek) {
+    tasksForWeek.push(taskWithMeta);
+  }
+}
 
-          if (taskDate >= startOfWeek && taskDate <= endOfWeek) {
-            tasksForWeek.push(taskWithMeta);
-          }
-        }
-      }
 
       setTodayTasks(tasksForToday);
       setWeekTasks(tasksForWeek);
