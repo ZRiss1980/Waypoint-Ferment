@@ -366,4 +366,61 @@ function BrewPlanner() {
         </form>
       ))}
 
-      {existingPlans.length >
+      {existingPlans.length > 0 && (
+        <div className="existing-plans-table">
+          <h2>{planScope.charAt(0).toUpperCase() + planScope.slice(1)} Plan Overview</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Beer</th>
+                <th>Type</th>
+                <th>Quarter</th>
+                <th>Due Date</th>
+                <th>Brew Date</th>
+                <th>Fermentation</th>
+                <th>Notes</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {existingPlans.map((plan) => (
+                <tr key={plan.id} className={editedPlans[plan.id] ? "edited-row" : ""}>
+                  <td>{plan.beerName}</td>
+                  <td>{plan.flagType}</td>
+                  <td>
+                    <select
+                      value={editedPlans[plan.id]?.planQuarter || plan.planQuarter}
+                      onChange={(e) => handleEditChange(plan.id, "planQuarter", e.target.value)}
+                    >
+                      <option value="Q1">Q1</option>
+                      <option value="Q2">Q2</option>
+                      <option value="Q3">Q3</option>
+                      <option value="Q4">Q4</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input
+                      type="date"
+                      value={editedPlans[plan.id]?.eventDueDate || plan.eventDueDate || ""}
+                      onChange={(e) => handleEditChange(plan.id, "eventDueDate", e.target.value)}
+                    />
+                  </td>
+                  <td>{calculateStartDate(plan.eventDueDate, plan.fermentationType)?.toLocaleDateString() || "—"}</td>
+                  <td>{plan.fermentationType || "n/a"}</td>
+                  <td>{plan.notes}</td>
+                  <td>
+                    {editedPlans[plan.id] && (
+                      <button onClick={() => handleSaveEdit(plan.id)}>Save</button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default BrewPlanner;
