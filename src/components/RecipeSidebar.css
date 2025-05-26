@@ -1,0 +1,64 @@
+/* /src/components/RecipeSidebar.css */
+
+.recipe-sidebar {
+  background-color: #101010;
+  color: #a0a0a0;
+  padding: 1.5rem 1rem;
+  width: 220px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.recipe-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recipe-sidebar li {
+  margin-bottom: 1rem;
+}
+
+.recipe-sidebar a {
+  display: block;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: #a0a0a0;
+  font-weight: normal;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.recipe-sidebar a:hover {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+}
+
+.recipe-sidebar a.active {
+  color: #d8cab8;
+  font-weight: bold;
+}
+
+/* Layout rule stays here */
+.recipe-builder-layout > :first-child {
+  z-index: 1;
+  position: relative;
+}
+
+.recipe-sidebar .save-recipe-btn {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 16px;
+  padding: 10px 20px;
+  background-color: #666 !important; /* forced dark gray */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.recipe-sidebar .save-recipe-btn:hover {
+  background-color: #444 !important;
+}

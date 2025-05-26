@@ -1,0 +1,53 @@
+/* Schedule.css */
+.schedule-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.schedule-day {
+  background-color: #1e1e1e;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  color: #f4f4f4;
+}
+
+.schedule-day h2 {
+  color: #fbbf24;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.warning {
+  color: #f87171;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.task-card {
+  background-color: #2d2d2d;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.task-card .task-title {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.task-card .task-beer {
+  font-size: 0.875rem;
+  color: #d4d4d8;
+}
+
+.task-card .task-meta {
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  margin-top: 0.25rem;
+}
+h1{
+   color: var(--color-gold)!important;
+}   
