@@ -77,7 +77,7 @@ function Schedule() {
     <div className="schedule-screen">
       <h1>Schedule</h1>
       <button className="return-home-button" onClick={() => navigate('/')}>← Return Home</button>
-      <button className="return-home-button" onClick={() => navigate('/planner')}>Planning</button>
+      <button className="return-home-button" onClick={() => navigate('/plan')}>Planning</button>
 
       <aside className="sidebar">
         <h2>{thisMonth} Brew Dates</h2>
