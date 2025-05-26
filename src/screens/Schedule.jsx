@@ -1,6 +1,3 @@
-// /src/screens/Schedule.jsx
-// Will render today's tasks, this week's tasks, and this month's brew dates with UI structure as described by the user.
-
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase";
 import {
@@ -100,7 +97,7 @@ function Schedule() {
 
         <section>
           <h2>This Week’s Tasks</h2>
-          <ul>
+          <ul>  
             {weekTasks.map(task => (
               <li key={task.id}>{task.beerName}: {task.taskTemplateId} on {task.scheduledDate.toLocaleDateString()}</li>
             ))}
