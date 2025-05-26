@@ -1,4 +1,8 @@
+// /src/screens/Schedule.jsx
+// Will render today's tasks, this week's tasks, and this month's brew dates with UI structure as described by the user.
+
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import {
   collection,
@@ -10,6 +14,7 @@ import {
 import "./Schedule.css";
 
 function Schedule() {
+  const navigate = useNavigate();
   const [todayTasks, setTodayTasks] = useState([]);
   const [weekTasks, setWeekTasks] = useState([]);
   const [brewDates, setBrewDates] = useState([]);
@@ -47,15 +52,11 @@ function Schedule() {
             scheduledDate: taskDate
           };
 
-          if (
-            taskDate.toDateString() === today.toDateString()
-          ) {
+          if (taskDate.toDateString() === today.toDateString()) {
             tasksForToday.push(taskWithMeta);
           }
 
-          if (
-            taskDate >= startOfWeek && taskDate <= endOfWeek
-          ) {
+          if (taskDate >= startOfWeek && taskDate <= endOfWeek) {
             tasksForWeek.push(taskWithMeta);
           }
         }
@@ -75,12 +76,9 @@ function Schedule() {
   return (
     <div className="schedule-screen">
       <h1>Schedule</h1>
-      <button className="return-home-button" onClick={() => navigate('/')}>
-        ← Return Home
-      </button>
-      <button className="go to planning screen" onClick={() => navigate('/')}>
-        Planning
-      </button>
+      <button className="return-home-button" onClick={() => navigate('/')}>← Return Home</button>
+      <button className="return-home-button" onClick={() => navigate('/planner')}>Planning</button>
+
       <aside className="sidebar">
         <h2>{thisMonth} Brew Dates</h2>
         <ul>
@@ -104,7 +102,7 @@ function Schedule() {
 
         <section>
           <h2>This Week’s Tasks</h2>
-          <ul>  
+          <ul>
             {weekTasks.map(task => (
               <li key={task.id}>{task.beerName}: {task.taskTemplateId} on {task.scheduledDate.toLocaleDateString()}</li>
             ))}
