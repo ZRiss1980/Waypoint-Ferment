@@ -148,33 +148,39 @@ function BrewPlanner() {
     try {
       const startDate = calculateStartDate(plan.eventDueDate, plan.fermentationType);
       const docRef = await addDoc(collection(db, "userPlans"), {
-  ...plan,
-  startDate: startDate ? startDate.toISOString() : null,
-  createdAt: serverTimestamp()
-}); 
+        ...plan,
+        startDate: startDate ? startDate.toISOString() : null,
+        createdAt: serverTimestamp()
+      });
 
+      console.log("✅ New plan created:", docRef.id);
 
-// FETCH: Pull all beer-related task templates
-const templatesSnapshot = await getDocs(collection(db, "taskTemplates"));
-const allTemplates = templatesSnapshot.docs.map(doc => ({
-  id: doc.id,
-  ...doc.data()
-}));
+      const templatesSnapshot = await getDocs(collection(db, "taskTemplates"));
+      const allTemplates = templatesSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
 
-// FILTER: Include only templates relevant to beer plans
-const filteredTemplates = allTemplates.filter(
-  (template) => template.taskGroup === "brew" || template.taskGroup === "fermentation"
-);
+      const filteredTemplates = allTemplates.filter(
+        (template) => {
+          const anchor = (template.anchorEvent || "").toLowerCase();
+          return !["daily", "weekly", "monthly", "quarterly", "yearly"].includes(anchor);
+        }
+      );
 
-// WRITE: Add scheduledTasks subcollection using template pointers
-  for (const template of filteredTemplates) {
-  await addDoc(collection(db, "userPlans", docRef.id, "scheduledTasks"), {
-    taskTemplateId: template.id,
-    dayOffset: template.dayOffset || 0, // fallback if template has no offset
-    status: "scheduled",
-    createdAt: serverTimestamp()
-  });
-}
+      for (const template of filteredTemplates) {
+        try {
+          await addDoc(collection(db, "userPlans", docRef.id, "tasks"), {
+            taskTemplateId: template.id,
+            dayOffset: template.dayOffset || 0,
+            status: "scheduled",
+            createdAt: serverTimestamp()
+          });
+          console.log(`✅ Task written from template ${template.id}`);
+        } catch (err) {
+          console.error(`❌ Failed to write task from template ${template.id}:`, err);
+        }
+      }
 
       alert("Brew plan submitted!");
       setBeerPlans((prev) => prev.filter((_, i) => i !== index));
@@ -201,9 +207,7 @@ const filteredTemplates = allTemplates.filter(
       <h1>Plan a New Brew</h1>
 
       <div className="brew-planner-header-row">
-        <button className="return-home-button" onClick={() => navigate("/schedule")}>
-          ← Return to Schedule
-        </button>
+        <button className="return-home-button" onClick={() => navigate("/schedule")}>← Return to Schedule</button>
 
         <div className="plan-scope-toggle">
           {["yearly", "quarterly", "monthly"].map((scope) => (
@@ -217,9 +221,7 @@ const filteredTemplates = allTemplates.filter(
           ))}
         </div>
 
-        <button className="add-beer-button" onClick={handleAddBeer}>
-          + Add Beer to Plan
-        </button>
+        <button className="add-beer-button" onClick={handleAddBeer}>+ Add Beer to Plan</button>
       </div>
 
       {beerPlans.map((plan, index) => (
@@ -367,11 +369,11 @@ const filteredTemplates = allTemplates.filter(
                     </select>
                   </td>
                   <td>
-                      <input
-                        type="date"
-                        value={editedPlans[plan.id]?.eventDueDate || plan.eventDueDate || ""}
-                        onChange={(e) => handleEditChange(plan.id, "eventDueDate", e.target.value)}
-                      />
+                    <input
+                      type="date"
+                      value={editedPlans[plan.id]?.eventDueDate || plan.eventDueDate || ""}
+                      onChange={(e) => handleEditChange(plan.id, "eventDueDate", e.target.value)}
+                    />
                   </td>
                   <td>{calculateStartDate(plan.eventDueDate, plan.fermentationType)?.toLocaleDateString() || "—"}</td>
                   <td>{plan.fermentationType || "n/a"}</td>
