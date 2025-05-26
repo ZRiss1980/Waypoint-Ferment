@@ -147,11 +147,12 @@ function BrewPlanner() {
     const plan = beerPlans[index];
     try {
       const startDate = calculateStartDate(plan.eventDueDate, plan.fermentationType);
-      const docRef = await addDoc(collection(db, "userPlans"),  {
-      ...plan,
-      startDate: startDate ? startDate.toISOString() : null,
-      createdAt: serverTimestamp()
-    });
+      const docRef = await addDoc(collection(db, "userPlans"), {
+  ...plan,
+  startDate: startDate ? startDate.toISOString() : null,
+  createdAt: serverTimestamp()
+}); 
+
 
 // FETCH: Pull all beer-related task templates
 const templatesSnapshot = await getDocs(collection(db, "taskTemplates"));
@@ -366,6 +367,28 @@ const filteredTemplates = allTemplates.filter(
                     </select>
                   </td>
                   <td>
-                    <input
-                      type="date"
-                
+                      <input
+                        type="date"
+                        value={editedPlans[plan.id]?.eventDueDate || plan.eventDueDate || ""}
+                        onChange={(e) => handleEditChange(plan.id, "eventDueDate", e.target.value)}
+                      />
+                  </td>
+                  <td>{calculateStartDate(plan.eventDueDate, plan.fermentationType)?.toLocaleDateString() || "—"}</td>
+                  <td>{plan.fermentationType || "n/a"}</td>
+                  <td>{plan.notes}</td>
+                  <td>
+                    {editedPlans[plan.id] && (
+                      <button onClick={() => handleSaveEdit(plan.id)}>Save</button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default BrewPlanner;
