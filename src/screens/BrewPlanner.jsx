@@ -36,6 +36,13 @@ const calculateStartDate = (dueDateStr, fermentationType) => {
 };
 
 function BrewPlanner() {
+  const fermentationDurationByType = {
+    ale: 10,
+    "ale-hybrid": 14,
+    "lager-hybrid": 21,
+    lager: 28
+  };
+
   const navigate = useNavigate();
   const [planScope, setPlanScope] = useState("yearly");
   const [beerPlans, setBeerPlans] = useState([]);
@@ -142,6 +149,27 @@ function BrewPlanner() {
       alert("Failed to save plan");
     }
   };
+
+  const resolveAnchorDate = (anchorEvent, startDate, fermentationType) => {
+    const fermentationDuration = fermentationDurationByType[fermentationType] || 10;
+    const fermentationEnd = new Date(startDate.getTime() + fermentationDuration * 86400000);
+    const servingDate = new Date(fermentationEnd.getTime() + 7 * 86400000);
+
+    const anchor = (anchorEvent || "").toLowerCase();
+    switch (anchor) {
+      case "fermentationstart":
+      case "brewday":
+      case "":
+        return startDate;
+      case "fermentationend":
+        return fermentationEnd;
+      case "serving":
+        return servingDate;
+      default:
+        return startDate;
+    }
+  };
+
 
   const handleSubmit = async (e, index) => {
     e.preventDefault();
