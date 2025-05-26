@@ -153,20 +153,27 @@ function BrewPlanner() {
       createdAt: serverTimestamp()
 });
 
-// PATCH: Write default subcollection under the new plan (e.g., scheduledTasks)
-try {
-  const tasksRef = collection(db, "userPlans", docRef.id, "scheduledTasks");
-  await addDoc(tasksRef, {
-    taskName: "Initial Planning Task",
-    status: "pending",
+// FETCH: Pull all beer-related task templates
+const templatesSnapshot = await getDocs(collection(db, "taskTemplates"));
+const allTemplates = templatesSnapshot.docs.map(doc => ({
+  id: doc.id,
+  ...doc.data()
+}));
+
+// FILTER: Include only templates relevant to beer plans
+const filteredTemplates = allTemplates.filter(
+  (template) => template.taskGroup === "brew" || template.taskGroup === "fermentation"
+);
+
+// WRITE: Add scheduledTasks subcollection using template pointers
+for (const template of filteredTemplates) {
+  await addDoc(collection(db, "userPlans", docRef.id, "scheduledTasks"), {
+    taskTemplateId: template.id,
+    dayOffset: template.dayOffset || 0, // fallback if template has no offset
+    status: "scheduled",
     createdAt: serverTimestamp()
   });
-  console.log("✅ Subcollection write succeeded.");
-} catch (err) {
-  console.error("🔥 Subcollection write failed:", err.message);
 }
-
-
 
       alert("Brew plan submitted!");
       setBeerPlans((prev) => prev.filter((_, i) => i !== index));
@@ -361,26 +368,4 @@ try {
                   <td>
                     <input
                       type="date"
-                      value={editedPlans[plan.id]?.eventDueDate || plan.eventDueDate || ""}
-                      onChange={(e) => handleEditChange(plan.id, "eventDueDate", e.target.value)}
-                    />
-                  </td>
-                  <td>{calculateStartDate(plan.eventDueDate, plan.fermentationType)?.toLocaleDateString() || "—"}</td>
-                  <td>{plan.fermentationType || "n/a"}</td>
-                  <td>{plan.notes}</td>
-                  <td>
-                    {editedPlans[plan.id] && (
-                      <button onClick={() => handleSaveEdit(plan.id)}>Save</button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default BrewPlanner;
+                      v
