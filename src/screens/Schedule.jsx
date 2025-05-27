@@ -43,9 +43,10 @@ function Schedule() {
 
   for (const task of tasks) {
     if (!task.scheduledDate) continue;
-    const taskDate = new Date(
-      task.scheduledDate.toDate ? task.scheduledDate.toDate() : task.scheduledDate
-    );
+    const taskDate = task.scheduledDate instanceof Timestamp
+  ? task.scheduledDate.toDate()
+  : new Date(task.scheduledDate);
+
 
     const taskWithMeta = {
       ...task,
@@ -87,7 +88,7 @@ function Schedule() {
         <h2>{thisMonth} Brew Dates</h2>
         <ul>
           {brewDates.map((brew) => (
-            <li key={brew.beerName + brew.startDate}>
+            <li key={brew.beerName + brew.startDate.toISOString()}>
               {brew.beerName} – {brew.startDate.toLocaleDateString()}
             </li>
           ))}
