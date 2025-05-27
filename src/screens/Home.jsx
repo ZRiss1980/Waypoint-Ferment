@@ -50,28 +50,27 @@ function Home() {
 
       <div className="dashboard-grid">
         <section className="card">
-          <h2 className="home-link" onClick={() => navigate("/schedule")}>
-            Brew Schedule
-          </h2>
+          <h2 className="home-link" onClick={() => navigate("/schedule")}>Brew Schedule</h2>
+          {!loading && monthlyBrewPlans.length > 0 && fermenters.length > 0 && (
+            <ul>
+              {monthlyBrewPlans.map((plan) => {
+                console.log("plan:", plan.beerName, "→ assignedFermenter:", plan.assignedFermenter);
+                console.log("fermenters:", fermenters.map(f => f.id));
 
-          <ul>
-            {monthlyBrewPlans.length === 0 && <li>No brews scheduled this month</li>}
-            {monthlyBrewPlans.map((plan) => {
-              const assignedFV = fermenters.find(f => f.id === plan.assignedFermenter)?.id;
-              return (
-                <li key={plan.id}>
-                  {plan.beerName} – Brew Day: {new Date(plan.startDate).toLocaleDateString()}
-                  {assignedFV && <> – {assignedFV}</>}
-                </li>
-              );
-            })}
-          </ul>
+                const assignedFV = fermenters.find(f => f.id === plan.assignedFermenter)?.id;
+                return (
+                  <li key={plan.id}>
+                    {plan.beerName} – Brew Day: {new Date(plan.startDate).toLocaleDateString()} – FV: {assignedFV || "unassigned"}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          {monthlyBrewPlans.length === 0 && <li>No brews scheduled this month</li>}
         </section>
 
         <section className="card">
-          <h2 style={{ cursor: 'pointer' }} onClick={() => navigate('/tanks')}>
-            Fermenters
-          </h2>
+          <h2 style={{ cursor: 'pointer' }} onClick={() => navigate('/tanks')}>Fermenters</h2>
           <ul>
             {loading && <li>Loading fermenters...</li>}
             {error && <li>Error loading tanks</li>}
