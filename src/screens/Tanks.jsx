@@ -195,17 +195,4 @@ function Tanks() {
           {brights.slice().sort((a, b) => a.id.localeCompare(b.id)).map((b) => (
             <tr key={b.id}>
               <td>{b.id}</td>
-              <td>{b.currentStatus || "n/a"}</td>
-              <td>{b.currentBatch?.beerName || "—"}</td>
-              <td>{b.startDate || "—"}</td>
-              <td>{b.fermentationDaysExpected || "—"}</td>
-              <td>{b.lastCIP || "—"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-export default Tanks;
+           

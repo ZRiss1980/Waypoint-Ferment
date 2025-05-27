@@ -90,12 +90,17 @@ setFermenters(fetchedFermenters);
 
 
       plans.forEach((plan) => {
-        if (plan.assignedFermenter) {
-          fvBookings[plan.assignedFermenter].push({
-            start: new Date(plan.startDate),
-            end: new Date(plan.endDate),
-          });
-        }
+        if (plan.assignedFermenter && fvBookings[plan.assignedFermenter]) {
+  fvBookings[plan.assignedFermenter].push({
+    start: new Date(plan.startDate),
+    end: new Date(plan.endDate),
+  });
+} else if (plan.assignedFermenter) {
+  console.warn(
+    `🛑 Unknown fermenter: ${plan.assignedFermenter} for plan: ${plan.beerName}`
+  );
+}
+
       });
 
       // Sort plans by priority
