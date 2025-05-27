@@ -82,7 +82,7 @@ function Schedule() {
       setWeekTasks(tasksForWeek);
       setBrewDates(brewDatesList);
       console.log("🧪 Tasks for Today:", tasksForToday);
-      console.log("🧪 Tasks for Week:", tasksForWeek);
+      console.log("🧪 Tasks for Week:", tasksForWeek);  
     };
 
     fetchScheduleData();
