@@ -111,13 +111,4 @@ function Home() {
 
       <div className="quick-actions">
         <h2>Quick Actions</h2>
-        <button onClick={handleNewRecipe}>+ New Recipe</button>
-        <button disabled>+ Brew Day Checklist</button>
-        <button disabled>+ Schedule Task</button>
-        <button disabled>+ PM Entry</button>
-      </div>
-    </div>
-  );
-}
-
-export default Home;
+        <button onClick={handleNewRe
