@@ -161,7 +161,6 @@ function BrewPlanner() {
     }
   };
 
-
   return (
     <div className="brew-planner-screen">
       <h1>Plan a New Brew</h1>
