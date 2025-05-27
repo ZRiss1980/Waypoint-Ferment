@@ -199,17 +199,14 @@ function BrewPlanner() {
       );
 
       for (const template of filteredTemplates) {
-  try {
-    const anchorDate = resolveAnchorDate(template.anchorEvent, startDate, plan.fermentationType);
-    switch (anchor) {
-      case "brewday":
-      case "":
-        anchorDate = new Date(plan.startDate);
-        break;
-      default:
-        anchorDate = new Date(plan.startDate);
-    }
+        console.log("📅 Task:", template.taskName);
+console.log("⛳ Anchor Event:", template.anchorEvent);
+console.log("📆 Start Date:", startDate);
+console.log("🧪 Ferm Type:", plan.fermentationType);
 
+  try {
+    const anchor = (template.anchorEvent || "").toLowerCase();
+    const anchorDate = resolveAnchorDate(anchor, new Date(plan.startDate), plan.fermentationType);
     const offset = Number(template.dayOffset) || 0;
     const scheduledDate = new Date(anchorDate.getTime() + offset * 86400000); // Firestore will store as native Timestamp
 

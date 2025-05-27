@@ -48,3 +48,6 @@
   color: #a1a1aa;
   margin-top: 0.25rem;
 }
+h1{
+   color: var(--color-gold)!important;
+}   
