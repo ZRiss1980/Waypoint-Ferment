@@ -116,4 +116,22 @@ function Schedule() {
           <h2>{dayOfWeek}'s Tasks</h2>
           <ul>
             {todayTasks.map(task => (
-              <li ke
+              <li key={task.id}>{task.beerName}: {task.taskName}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <h2>This Week’s Tasks</h2>
+          <ul>
+            {weekTasks.map(task => (
+              <li key={task.id}>{task.beerName}: {task.taskName} on {task.scheduledDate.toLocaleDateString()}</li>
+            ))}
+          </ul>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+export default Schedule;
