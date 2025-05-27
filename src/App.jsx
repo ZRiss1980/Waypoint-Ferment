@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 
 import NavBar from "./components/NavBar";
 import Home from "./screens/Home";
-import BrewSheet from "./screens/BrewSheet";
 import Fermentation from "./screens/Fermentation";
 import Sensory from "./screens/Sensory";
 import QAQC from "./screens/QAQC";
