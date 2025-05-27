@@ -57,7 +57,10 @@ function Home() {
                 console.log("plan:", plan.beerName, "→ assignedFermenter:", plan.assignedFermenter);
                 console.log("fermenters:", fermenters.map(f => f.id));
 
-                const assignedFV = fermenters.find(f => f.id === plan.assignedFermenter)?.id;
+                const match = fermenters.find(f => f.firestoreId === plan.assignedFermenter);
+console.log("Matching FV for", plan.beerName, "→", match);
+const assignedFV = match?.id;
+
                 return (
                   <li key={plan.id}>
                     {plan.beerName} – Brew Day: {new Date(plan.startDate).toLocaleDateString()} – FV: {assignedFV || "unassigned"}
