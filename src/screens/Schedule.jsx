@@ -114,12 +114,12 @@ setFermenters(fetchedFermenters);
 
   while (conflict) {
     const tryEnd = addDays(tryDate, duration);
-    conflict = fvBookings[fv.docId].some((booking) =>
+    conflict = fvBookings[fv.firestoreId].some((booking) =>
       dateRangesOverlap(tryDate, tryEnd, booking.start, booking.end)
     );
 
     if (!conflict) {
-      bestFV = fv.docId;
+      bestFV = fv.firestoreId;
       bestStart = new Date(tryDate);
       break;
     }
@@ -172,7 +172,7 @@ setFermenters(fetchedFermenters);
           ...doc.data(),
         }));
 
-        tasks.forEach((task) => {
+        tasks.forEach((task) => { 
           if (!task.scheduledDate) return;
 
           const taskDate =
@@ -215,6 +215,8 @@ setFermenters(fetchedFermenters);
       setTodayTasks(tasksForToday);
       setWeekTasks(tasksForWeek);
       setBrewDates(brewDatesList);
+
+
     };
 
     fetchScheduleData();
@@ -243,7 +245,7 @@ setFermenters(fetchedFermenters);
   {brewDates.map((brew) => {
     const startDate = new Date(brew.startDate);
     const matchedFV = fermenters.find(
-      (f) => f.firestoreId === brew.assignedFermenter
+      (f) => f.id === brew.assignedFermenter
     );
     const tankName = matchedFV?.id || "unassigned";
 
