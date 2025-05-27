@@ -18,6 +18,7 @@ function Schedule() {
   const [todayTasks, setTodayTasks] = useState([]);
   const [weekTasks, setWeekTasks] = useState([]);
   const [brewDates, setBrewDates] = useState([]);
+  
 
   useEffect(() => {
     const fetchScheduleData = async () => {
@@ -28,25 +29,28 @@ function Schedule() {
       endOfWeek.setDate(startOfWeek.getDate() + 6);
 
       const plansSnapshot = await getDocs(collection(db, "userPlans"));
+      
+
       const plans = plansSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      console.log("🔍 All Plans:", plans);
 
       const tasksForToday = [];
       const tasksForWeek = [];
       const brewDatesList = [];
 
-      for (const plan of plans) {
+      await Promise.all(plans.map(async (plan) => {
   const planStart = new Date(plan.startDate);
   brewDatesList.push({ beerName: plan.beerName, startDate: planStart });
 
   const tasksSnapshot = await getDocs(collection(db, "userPlans", plan.id, "tasks"));
   const tasks = tasksSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-  for (const task of tasks) {
-    if (!task.scheduledDate) continue;
-    const taskDate = task.scheduledDate instanceof Timestamp
-  ? task.scheduledDate.toDate()
-  : new Date(task.scheduledDate);
+  tasks.forEach((task) => {
+    if (!task.scheduledDate) return;
 
+    const taskDate = task.scheduledDate instanceof Timestamp
+      ? task.scheduledDate.toDate()
+      : new Date(task.scheduledDate);
 
     const taskWithMeta = {
       ...task,
@@ -62,14 +66,18 @@ function Schedule() {
     if (taskDate >= startOfWeek && taskDate <= endOfWeek) {
       tasksForWeek.push(taskWithMeta);
     }
-  }
-}
+  });
+}));
+
+
 
 
 
       setTodayTasks(tasksForToday);
       setWeekTasks(tasksForWeek);
       setBrewDates(brewDatesList);
+      console.log("🧪 Tasks for Today:", tasksForToday);
+      console.log("🧪 Tasks for Week:", tasksForWeek);
     };
 
     fetchScheduleData();
