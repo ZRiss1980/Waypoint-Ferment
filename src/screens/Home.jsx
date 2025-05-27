@@ -57,7 +57,7 @@ function Home() {
           <ul>
             {monthlyBrewPlans.length === 0 && <li>No brews scheduled this month</li>}
             {monthlyBrewPlans.map((plan) => {
-              const assignedFV = fermenters.find(f => f.docId === plan.assignedFermenter)?.id;
+              const assignedFV = fermenters.find(f => f.id === plan.assignedFermenter)?.id;
               return (
                 <li key={plan.id}>
                   {plan.beerName} – Brew Day: {new Date(plan.startDate).toLocaleDateString()}
