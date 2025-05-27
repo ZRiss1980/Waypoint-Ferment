@@ -112,3 +112,7 @@ nav {
   position: relative;
   background-color: #121212;
 }
+body {
+  padding-top: var(--navbar-height);
+}
+
