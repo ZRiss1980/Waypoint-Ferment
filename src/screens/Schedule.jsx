@@ -7,8 +7,6 @@ import { db } from "../firebase";
 import {
   collection,
   getDocs,
-  query,
-  where,
   Timestamp
 } from "firebase/firestore";
 import "./Schedule.css";
@@ -18,7 +16,6 @@ function Schedule() {
   const [todayTasks, setTodayTasks] = useState([]);
   const [weekTasks, setWeekTasks] = useState([]);
   const [brewDates, setBrewDates] = useState([]);
-  
 
   useEffect(() => {
     const fetchScheduleData = async () => {
@@ -29,8 +26,6 @@ function Schedule() {
       endOfWeek.setDate(startOfWeek.getDate() + 6);
 
       const plansSnapshot = await getDocs(collection(db, "userPlans"));
-      
-
       const plans = plansSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       console.log("🔍 All Plans:", plans);
 
@@ -39,57 +34,58 @@ function Schedule() {
       const brewDatesList = [];
 
       await Promise.all(plans.map(async (plan) => {
-  const planStart = new Date(plan.startDate);
-  brewDatesList.push({ beerName: plan.beerName, startDate: planStart });
+        const planStart = new Date(plan.startDate);
+        brewDatesList.push({ beerName: plan.beerName, startDate: planStart });
 
-  const tasksSnapshot = await getDocs(collection(db, "userPlans", plan.id, "tasks"));
-  const tasks = tasksSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const tasksSnapshot = await getDocs(collection(db, "userPlans", plan.id, "tasks"));
+        const tasks = tasksSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-  tasks.forEach((task) => {
-  if (!task.scheduledDate) {
-    console.warn("⚠️ Missing scheduledDate for task:", task.taskName || "Unnamed Task");
-    return;
-  }
+        tasks.forEach((task) => {
+          if (!task.scheduledDate) {
+            console.warn("⚠️ Missing scheduledDate for task:", task.taskName || "Unnamed Task");
+            return;
+          }
 
-  const taskDate = task.scheduledDate instanceof Timestamp
-    ? task.scheduledDate.toDate()
-    : new Date(task.scheduledDate);
+          const taskDate = task.scheduledDate instanceof Timestamp
+            ? task.scheduledDate.toDate()
+            : new Date(task.scheduledDate);
 
-  console.log("📆 Task Scheduled:", task.taskName, taskDate);
+          console.log("📆 Task Scheduled:", task.taskName, taskDate);
 
-  const taskWithMeta = {
-    ...task,
-    planId: plan.id,
-    beerName: plan.beerName,
-    scheduledDate: taskDate
-  };
+          const taskWithMeta = {
+            ...task,
+            planId: plan.id,
+            beerName: plan.beerName,
+            scheduledDate: taskDate
+          };
 
-  const normalizedToday = new Date(today);
-normalizedToday.setHours(0, 0, 0, 0);
+          const normalizedToday = new Date(today);
+          normalizedToday.setHours(0, 0, 0, 0);
 
-const normalizedTask = new Date(taskDate);
-normalizedTask.setHours(0, 0, 0, 0);
+          const normalizedTask = new Date(taskDate);
+          normalizedTask.setHours(0, 0, 0, 0);
 
-if (normalizedTask.getTime() === normalizedToday.getTime()) {
-  tasksForToday.push(taskWithMeta);
-}
+          if (normalizedTask.getTime() === normalizedToday.getTime()) {
+            tasksForToday.push(taskWithMeta);
+          }
 
+          const normalizedStart = new Date(startOfWeek);
+          normalizedStart.setHours(0, 0, 0, 0);
 
-  if (taskDate >= startOfWeek && taskDate <= endOfWeek) {
-    tasksForWeek.push(taskWithMeta);
-  }
-  });
-}));
+          const normalizedEnd = new Date(endOfWeek);
+          normalizedEnd.setHours(0, 0, 0, 0);
 
-
-
-
+          if (normalizedTask >= normalizedStart && normalizedTask <= normalizedEnd) {
+            tasksForWeek.push(taskWithMeta);
+          }
+        });
+      }));
 
       setTodayTasks(tasksForToday);
       setWeekTasks(tasksForWeek);
       setBrewDates(brewDatesList);
       console.log("🧪 Tasks for Today:", tasksForToday);
-      console.log("🧪 Tasks for Week:", tasksForWeek);  
+      console.log("🧪 Tasks for Week:", tasksForWeek);
     };
 
     fetchScheduleData();
@@ -139,4 +135,3 @@ if (normalizedTask.getTime() === normalizedToday.getTime()) {
 }
 
 export default Schedule;
-
