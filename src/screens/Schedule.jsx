@@ -46,26 +46,31 @@ function Schedule() {
   const tasks = tasksSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
   tasks.forEach((task) => {
-    if (!task.scheduledDate) return;
+  if (!task.scheduledDate) {
+    console.warn("⚠️ Missing scheduledDate for task:", task.taskName || "Unnamed Task");
+    return;
+  }
 
-    const taskDate = task.scheduledDate instanceof Timestamp
-      ? task.scheduledDate.toDate()
-      : new Date(task.scheduledDate);
+  const taskDate = task.scheduledDate instanceof Timestamp
+    ? task.scheduledDate.toDate()
+    : new Date(task.scheduledDate);
 
-    const taskWithMeta = {
-      ...task,
-      planId: plan.id,
-      beerName: plan.beerName,
-      scheduledDate: taskDate
-    };
+  console.log("📆 Task Scheduled:", task.taskName, taskDate);
 
-    if (taskDate.toDateString() === today.toDateString()) {
-      tasksForToday.push(taskWithMeta);
-    }
+  const taskWithMeta = {
+    ...task,
+    planId: plan.id,
+    beerName: plan.beerName,
+    scheduledDate: taskDate
+  };
 
-    if (taskDate >= startOfWeek && taskDate <= endOfWeek) {
-      tasksForWeek.push(taskWithMeta);
-    }
+  if (taskDate.toDateString() === today.toDateString()) {
+    tasksForToday.push(taskWithMeta);
+  }
+
+  if (taskDate >= startOfWeek && taskDate <= endOfWeek) {
+    tasksForWeek.push(taskWithMeta);
+  }
   });
 }));
 
