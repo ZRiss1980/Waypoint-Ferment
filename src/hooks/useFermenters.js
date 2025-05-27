@@ -13,7 +13,7 @@ export function useFermenters() {
     const unsub = onSnapshot(
       q,
       (snapshot) => {
-        const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const data = snapshot.docs.map((doc) => ({ firestoreId: doc.id, ...doc.data() }));
         setFermenters(data);
         setLoading(false);
       },
