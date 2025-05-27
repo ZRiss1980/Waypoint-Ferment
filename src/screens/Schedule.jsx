@@ -64,9 +64,16 @@ function Schedule() {
     scheduledDate: taskDate
   };
 
-  if (taskDate.toDateString() === today.toDateString()) {
-    tasksForToday.push(taskWithMeta);
-  }
+  const normalizedToday = new Date(today);
+normalizedToday.setHours(0, 0, 0, 0);
+
+const normalizedTask = new Date(taskDate);
+normalizedTask.setHours(0, 0, 0, 0);
+
+if (normalizedTask.getTime() === normalizedToday.getTime()) {
+  tasksForToday.push(taskWithMeta);
+}
+
 
   if (taskDate >= startOfWeek && taskDate <= endOfWeek) {
     tasksForWeek.push(taskWithMeta);
