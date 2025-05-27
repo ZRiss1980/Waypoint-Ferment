@@ -273,4 +273,50 @@ setFermenters(fetchedFermenters);
           <button
             onClick={() => alert("Assign recipe coming soon")}
             style={{
-              marginTop: "0.5
+              marginTop: "0.5rem",
+              backgroundColor: "#D4AF37",
+              color: "#2b2b2b",
+              fontWeight: "bold",
+            }}
+          >
+            Assign Recipe
+          </button>
+        )}
+      </div>
+    </li>
+  );
+})}
+
+</ul>
+
+      </aside>
+
+      <main className="schedule-main">
+        <section>
+          <h2>{dayOfWeek}'s Tasks</h2>
+          <ul>
+            {todayTasks.map((task) => (
+              <li key={task.id}>
+                {task.beerName}: {task.taskName}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <h2>This Week’s Tasks</h2>
+          <ul>
+            {weekTasks.map((task) => (
+              <li key={task.id}>
+                {task.beerName}: {task.taskName} on{" "}
+                {task.scheduledDate.toLocaleDateString()}
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+export default Schedule;
