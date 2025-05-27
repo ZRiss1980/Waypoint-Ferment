@@ -17,6 +17,8 @@ function Schedule() {
   const [todayTasks, setTodayTasks] = useState([]);
   const [weekTasks, setWeekTasks] = useState([]);
   const [brewDates, setBrewDates] = useState([]);
+  const [fermenters, setFermenters] = useState([]);
+
 
   useEffect(() => {
     const getDuration = (type) => {
@@ -68,7 +70,13 @@ function Schedule() {
         getDocs(collection(db, "fermenters")),
       ]);
 
-      const fermenters = fermentersSnap.docs.map((doc) => doc.id);
+      const fetchedFermenters = fermentersSnap.docs.map((doc) => ({
+  docId: doc.id,
+  id: doc.data().id || doc.id,
+}));
+setFermenters(fetchedFermenters);
+
+
       const plans = plansSnap.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -76,7 +84,10 @@ function Schedule() {
 
       // Build current FV occupancy map
       const fvBookings = {};
-      fermenters.forEach((fv) => (fvBookings[fv] = []));
+      fetchedFermenters.forEach((fv) => {
+  fvBookings[fv.docId] = [];
+});
+
 
       plans.forEach((plan) => {
         if (plan.assignedFermenter) {
@@ -97,25 +108,26 @@ function Schedule() {
           let bestFV = null;
           let bestStart = null;
 
-          for (const fv of fermenters) {
-            let tryDate = new Date(originalStart);
-            let conflict = true;
+          for (const fv of fetchedFermenters) {
+  let tryDate = new Date(originalStart);
+  let conflict = true;
 
-            while (conflict) {
-              const tryEnd = addDays(tryDate, duration);
-              conflict = fvBookings[fv].some((booking) =>
-                dateRangesOverlap(tryDate, tryEnd, booking.start, booking.end)
-              );
+  while (conflict) {
+    const tryEnd = addDays(tryDate, duration);
+    conflict = fvBookings[fv.docId].some((booking) =>
+      dateRangesOverlap(tryDate, tryEnd, booking.start, booking.end)
+    );
 
-              if (!conflict) {
-                bestFV = fv;
-                bestStart = new Date(tryDate);
-                break;
-              }
+    if (!conflict) {
+      bestFV = fv.docId;
+      bestStart = new Date(tryDate);
+      break;
+    }
 
-              tryDate.setDate(tryDate.getDate() + 1);
-            }
-          }
+    tryDate.setDate(tryDate.getDate() + 1);
+  }
+}
+
 
           if (bestFV && bestStart) {
             const newEnd = addDays(bestStart, duration);
@@ -232,8 +244,9 @@ function Schedule() {
             <li key={brew.beerName + brew.startDate.toISOString()}>
               {brew.beerName} – {brew.startDate.toLocaleDateString()}
               {brew.assignedFermenter && (
-                <> – {brew.assignedFermenter}</>
-              )}
+  <> – {fermenters.find(f => f.docId === brew.assignedFermenter)?.id || brew.assignedFermenter}</>
+)}
+
             </li>
           ))}
         </ul>

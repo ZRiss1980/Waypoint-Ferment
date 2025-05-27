@@ -51,7 +51,3 @@
 h1{
    color: var(--color-gold)!important;
 }   
-.schedule-screen {
-  padding-top: 80px; /* Adjust based on your actual nav height */
-  box-sizing: border-box;
-}
