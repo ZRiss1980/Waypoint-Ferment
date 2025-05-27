@@ -11,7 +11,7 @@ import Inventory from "./screens/Inventory";
 import Scheduling from "./screens/Scheduling";
 import Tasks from "./screens/Tasks";
 import NotFound from "./screens/NotFound";
-
+import BrewSheet from "./screens/BrewSheet";
 import RecipeBuilder from "./screens/recipe/RecipeBuilder";
 import Parameters from "./screens/recipe/Parameters";
 import GrainSelection from "./screens/recipe/GrainSelection";
@@ -34,6 +34,7 @@ function App() {
       <NavBar />
       <main>
         <Routes>
+          <Route path="/brewsheet/:id" element={<BrewSheet />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/plan" element={<BrewPlanner />} />
           <Route path="/brew-days" element={<BrewDays />} />

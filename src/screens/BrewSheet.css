@@ -1,0 +1,98 @@
+:root {
+  --brew-border: 1px solid #3c5a40;
+  --brew-bg: #2b2b2b;
+  --brew-bg-alt: #1e1e1e;
+  --brew-text: #d8cab8;
+  --brew-accent: #3c5a40;
+}
+
+.brewsheet-container {
+  padding: 2rem;
+  background-color: var(--brew-bg);
+  color: var(--brew-text);
+  font-family: sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brewsheet-header {
+  border-bottom: var(--brew-border);
+  margin-bottom: 2rem;
+}
+
+.brewsheet-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.brewsheet-header .meta {
+  display: flex;
+  gap: 2rem;
+  font-size: 0.9rem;
+  color: var(--brew-accent);
+}
+
+.brewsheet-section {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: var(--brew-bg-alt);
+  border: var(--brew-border);
+  border-radius: 8px;
+}
+
+.brewsheet-section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--brew-accent);
+}
+
+.brewsheet-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.brewsheet-label {
+  font-weight: 500;
+  color: var(--brew-text);
+}
+
+.brewsheet-value,
+.brewsheet-input {
+  background-color: #121212;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 0.4rem 0.6rem;
+  color: var(--brew-text);
+}
+
+.brewsheet-input:focus {
+  outline: 2px solid var(--brew-accent);
+}
+
+.brewsheet-savebar {
+  position: sticky;
+  bottom: 0;
+  background-color: var(--brew-bg);
+  padding: 1rem;
+  border-top: var(--brew-border);
+  text-align: right;
+  z-index: 10;
+}
+
+.brewsheet-savebar button {
+  background-color: var(--brew-accent);
+  color: var(--brew-text);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.brewsheet-savebar button:hover {
+  background-color: #2a4e35;
+}

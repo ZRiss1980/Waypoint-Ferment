@@ -248,18 +248,45 @@ setFermenters(fetchedFermenters);
         <h2>{thisMonth} Brew Dates</h2>
         <ul>
   {brewDates.map((brew) => {
-    const startDate = new Date(brew.startDate);
-    const matchedFV = fermenters.find(
-      (f) => f.id === brew.assignedFermenter
-    );
-    const tankName = matchedFV?.id || "unassigned";
+  const startDate = new Date(brew.startDate);
+  const matchedFV = fermenters.find(
+    (f) => f.id === brew.assignedFermenter
+  );
+  const tankName = matchedFV?.id || "unassigned";
+  const hasRecipe = !!brew.recipe;
 
-    return (
-      <li key={`${brew.beerName}-${startDate.toISOString()}`}>
-        {brew.beerName} – {startDate.toLocaleDateString()} – FV: {tankName}
-      </li>
-    );
-  })}
+  return (
+    <li key={`${brew.beerName}-${startDate.toISOString()}`} style={{ marginBottom: "1rem" }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <strong>{brew.beerName}</strong>
+        <span>
+          Brew Date: {startDate.toLocaleDateString()} – FV: {tankName}
+        </span>
+        {hasRecipe ? (
+          <button
+            onClick={() => navigate(`/brewsheet/${brew.id}`)}
+            style={{ marginTop: "0.5rem" }}
+          >
+            View Brew Sheet
+          </button>
+        ) : (
+          <button
+            onClick={() => alert("Assign recipe coming soon")}
+            style={{
+              marginTop: "0.5rem",
+              backgroundColor: "#D4AF37",
+              color: "#2b2b2b",
+              fontWeight: "bold",
+            }}
+          >
+            Assign Recipe
+          </button>
+        )}
+      </div>
+    </li>
+  );
+})}
+
 </ul>
 
       </aside>
