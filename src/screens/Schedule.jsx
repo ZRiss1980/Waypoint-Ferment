@@ -71,7 +71,7 @@ function Schedule() {
       ]);
 
       const fetchedFermenters = fermentersSnap.docs.map((doc) => ({
-  docId: doc.id,
+  firestoreId: doc.id,
   id: doc.data().id || doc.id,
 }));
 setFermenters(fetchedFermenters);
@@ -85,7 +85,7 @@ setFermenters(fetchedFermenters);
       // Build current FV occupancy map
       const fvBookings = {};
       fetchedFermenters.forEach((fv) => {
-  fvBookings[fv.docId] = [];
+  fvBookings[fv.firestoreId] = [];
 });
 
 
@@ -240,16 +240,21 @@ setFermenters(fetchedFermenters);
       <aside className="sidebar">
         <h2>{thisMonth} Brew Dates</h2>
         <ul>
-          {brewDates.map((brew) => (
-            <li key={brew.beerName + brew.startDate.toISOString()}>
-              {brew.beerName} – {brew.startDate.toLocaleDateString()}
-              {brew.assignedFermenter && (
-  <> – {fermenters.find(f => f.docId === brew.assignedFermenter)?.id || brew.assignedFermenter}</>
-)}
+  {brewDates.map((brew) => {
+    const startDate = new Date(brew.startDate);
+    const matchedFV = fermenters.find(
+      (f) => f.firestoreId === brew.assignedFermenter
+    );
+    const tankName = matchedFV?.id || "unassigned";
 
-            </li>
-          ))}
-        </ul>
+    return (
+      <li key={`${brew.beerName}-${startDate.toISOString()}`}>
+        {brew.beerName} – {startDate.toLocaleDateString()} – FV: {tankName}
+      </li>
+    );
+  })}
+</ul>
+
       </aside>
 
       <main className="schedule-main">
