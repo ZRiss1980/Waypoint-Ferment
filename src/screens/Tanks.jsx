@@ -1,23 +1,35 @@
-// /src/screens/Fermenters.jsx
+// /src/screens/tanks.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useFermenters } from "../hooks/useFermenters";
 import { useBrightTanks } from "../hooks/useBrightTanks";
-// TODO: Replace with useTanks() once bright tank logic is ready
 import "./Tanks.css";
 
 import { db } from "../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 function Tanks() {
   const navigate = useNavigate();
+
+  const { fermenters, loading: loadingFV, error: errorFV } = useFermenters();
+  const { brights, loading: loadingBT, error: errorBT } = useBrightTanks();
+  const [showForm, setShowForm] = React.useState(false);
+  const [formMode, setFormMode] = React.useState(null); // 'fermenter' or 'bright'
+  const [formData, setFormData] = React.useState({
+    id: "",
+    volumeBBL: "",
+    psiRating: "",
+    pressureCapable: false,
+    plaatoCapable: false,
+    tankType: "fermenter"
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const upperId = formData.id.trim().toUpperCase();
 
-    if (!upperId || !formData.volumeBBL || !formData.psiRating) {
-      alert("All fields are required.");
+    if (!upperId || isNaN(parseFloat(formData.volumeBBL)) || isNaN(parseFloat(formData.psiRating))) {
+      alert("All fields are required and must be valid numbers.");
       return;
     }
 
@@ -29,104 +41,93 @@ function Tanks() {
       }
 
       const collectionName = formData.tankType === "bright" ? "brights" : "fermenters";
-      await addDoc(collection(db, collectionName), {
+      await setDoc(doc(db, collectionName, upperId), {
         ...formData,
-        id: upperId,
         createdAt: serverTimestamp(),
         lastUpdated: serverTimestamp(),
         tankType: formData.tankType
       });
 
       setShowForm(false);
+      setFormMode(null);
       setFormData({
         id: "",
         volumeBBL: "",
         psiRating: "",
         pressureCapable: false,
         plaatoCapable: false,
-        tankType: formData.tankType
+        tankType: "fermenter"
       });
-
     } catch (err) {
       console.error("Error adding fermenter:", err);
       alert("Failed to add fermenter.");
     }
   };
-  const { fermenters, loading: loadingFV, error: errorFV } = useFermenters();
-  const { brights, loading: loadingBT, error: errorBT } = useBrightTanks();
-  const [showForm, setShowForm] = React.useState(false);
-  const [formData, setFormData] = React.useState({
-    id: "",
-    volumeBBL: "",
-    psiRating: "",
-    pressureCapable: false,
-    plaatoCapable: false,
-    tankType: "fermenter"
-  });
 
   return (
     <div className="fermenters-screen">
       <h1>Tank Management</h1>
-      <button className="return-home-button" onClick={() => navigate('/')}>
-        ← Return Home
-      </button>
+      <button className="return-home-button" onClick={() => navigate('/')}>← Return Home</button>
       <div className="add-fermenter-wrapper">
-        <button className="add-fermenter-button" onClick={() => {
-          setShowForm(!showForm);
-          setFormData({
-            id: "",
-            volumeBBL: "",
-            psiRating: "",
-            pressureCapable: false,
-            plaatoCapable: false,
-            tankType: "fermenter"
-          });
-        }}>
-          {showForm && formData.tankType === "fermenter" ? "× Cancel" : "+ Add Fermenter"}
+        <button
+          className="add-fermenter-button"
+          onClick={() => {
+            if (formMode === "fermenter") {
+              setShowForm(false);
+              setFormMode(null);
+            } else {
+              setShowForm(true);
+              setFormMode("fermenter");
+              setFormData({ id: "", volumeBBL: "", psiRating: "", pressureCapable: false, plaatoCapable: false, tankType: "fermenter" });
+            }
+          }}
+        >
+          {formMode === "fermenter" ? "× Cancel" : "+ Add Fermenter"}
         </button>
 
-        <button className="add-fermenter-button" onClick={() => {
-          setShowForm(!showForm);
-          setFormData({
-            id: "",
-            volumeBBL: "",
-            psiRating: "",
-            carbStone: false,
-            tapMinderCapable: false,
-            tankType: "bright"
-          });
-        }}>
-          {showForm && formData.tankType === "bright" ? "× Cancel" : "+ Add Bright Tank"}
+        <button
+          className="add-fermenter-button"
+          onClick={() => {
+            if (formMode === "bright") {
+              setShowForm(false);
+              setFormMode(null);
+            } else {
+              setShowForm(true);
+              setFormMode("bright");
+              setFormData({ id: "", volumeBBL: "", psiRating: "", carbStone: false, tapMinderCapable: false, tankType: "bright" });
+            }
+          }}
+        >
+          {formMode === "bright" ? "× Cancel" : "+ Add Bright Tank"}
         </button>
 
-        {showForm && (
+        {showForm && formMode && (
           <form className="add-fermenter-form" onSubmit={handleSubmit}>
-                        <label>
+            <label>
               Tank ID:
-              <input type="text" name="id" required value={formData.id} onChange={(e) => setFormData({ ...formData, id: e.target.value })} />
+              <input type="text" name="id" required placeholder="e.g. FV4" value={formData.id} onChange={(e) => setFormData({ ...formData, id: e.target.value })} />
             </label>
             <label>
               Volume (BBL):
-              <input type="number" name="volumeBBL" step="0.1" required value={formData.volumeBBL} onChange={(e) => setFormData({ ...formData, volumeBBL: e.target.value })} />
+              <input type="number" name="volumeBBL" step="0.1" required placeholder="15" value={formData.volumeBBL} onChange={(e) => setFormData({ ...formData, volumeBBL: parseFloat(e.target.value) })} />
             </label>
             <label>
               PSI Rating:
-              <input type="number" name="psiRating" step="1" required value={formData.psiRating} onChange={(e) => setFormData({ ...formData, psiRating: e.target.value })} />
+              <input type="number" name="psiRating" step="1" required placeholder="15" value={formData.psiRating} onChange={(e) => setFormData({ ...formData, psiRating: parseFloat(e.target.value) })} />
             </label>
-            {formData.tankType === "fermenter" && (
-            <label>
-              Ferments Under Pressure:
-              <input type="checkbox" name="pressureCapable" checked={formData.pressureCapable} onChange={(e) => setFormData({ ...formData, pressureCapable: e.target.checked })} />
-            </label>
+            {formMode === "fermenter" && (
+              <>
+                <label>
+                  Ferments Under Pressure:
+                  <input type="checkbox" name="pressureCapable" checked={formData.pressureCapable} onChange={(e) => setFormData({ ...formData, pressureCapable: e.target.checked })} />
+                </label>
+                <label>
+                  Plaato Connected:
+                  <input type="checkbox" name="plaatoCapable" checked={formData.plaatoCapable} onChange={(e) => setFormData({ ...formData, plaatoCapable: e.target.checked })} />
+                </label>
+              </>
             )}
-            {formData.tankType === "fermenter" && (
-            <label>
-              Plaato Connected:
-              <input type="checkbox" name="plaatoCapable" checked={formData.plaatoCapable} onChange={(e) => setFormData({ ...formData, plaatoCapable: e.target.checked })} />
-            </label>
-            )}
-
-            {formData.tankType === "bright" && (
+            {formMode === "bright" && (
               <>
                 <label>
                   Carb Stone Installed:
