@@ -1,4 +1,5 @@
 // /src/screens/Home.jsx
+
 import React, { useEffect, useState } from "react";
 import { useFermenters } from "../hooks/useFermenters";
 import { useNavigate } from "react-router-dom";
@@ -55,9 +56,15 @@ function Home() {
 
           <ul>
             {monthlyBrewPlans.length === 0 && <li>No brews scheduled this month</li>}
-            {monthlyBrewPlans.map((plan) => (
-              <li key={plan.id}>{plan.beerName} – Brew Day: {new Date(plan.startDate).toLocaleDateString()}</li>
-            ))}
+            {monthlyBrewPlans.map((plan) => {
+              const assignedFV = fermenters.find(f => f.docId === plan.assignedFermenter)?.id;
+              return (
+                <li key={plan.id}>
+                  {plan.beerName} – Brew Day: {new Date(plan.startDate).toLocaleDateString()}
+                  {assignedFV && <> – {assignedFV}</>}
+                </li>
+              );
+            })}
           </ul>
         </section>
 
