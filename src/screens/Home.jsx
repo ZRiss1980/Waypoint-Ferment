@@ -74,43 +74,4 @@ function Home() {
               const start = new Date(f.startDate);
               const today = new Date();
               const day = Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
-              const total = f.fermentationDaysExpected || "–";
-              const statusNote = f.currentStatus === "cold_crash" ? " (Cold Crash)" : "";
-              return (
-                <li key={f.id}>
-                  {`${f.id}: ${name} – Day ${day}/${total}${statusNote}`}
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-
-        <section className="card">
-          <h2>Recent Recipes</h2>
-          <ul>
-            <li>Daybreak IPA (Thiolized)</li>
-            <li>Hearthdeep Brown Ale</li>
-          </ul>
-        </section>
-
-        <section className="card">
-          <h2>Reminders</h2>
-          <ul>
-            <li>BT1 due for CIP</li>
-            <li>Yeast WLP300 at gen 5</li>
-          </ul>
-        </section>
-      </div>
-
-      <div className="quick-actions">
-        <h2>Quick Actions</h2>
-        <button onClick={handleNewRecipe}>+ New Recipe</button>
-        <button disabled>+ Brew Day Checklist</button>
-        <button disabled>+ Schedule Task</button>
-        <button disabled>+ PM Entry</button>
-      </div>
-    </div>
-  );
-}
-
-export default Home;
+              const tot
