@@ -18,6 +18,9 @@ function Schedule() {
   const [weekTasks, setWeekTasks] = useState([]);
   const [brewDates, setBrewDates] = useState([]);
   const [fermenters, setFermenters] = useState([]);
+  const [recipes, setRecipes] = useState([]);
+  const [selectedRecipes, setSelectedRecipes] = useState({});
+
 
 
   useEffect(() => {
@@ -57,6 +60,7 @@ function Schedule() {
         }
       }
     };
+    
 
     const fetchScheduleData = async () => {
       const today = new Date();
@@ -87,6 +91,7 @@ setFermenters(fetchedFermenters);
       fetchedFermenters.forEach((fv) => {
   fvBookings[fv.firestoreId] = [];
 });
+
 
 
       plans.forEach((plan) => {
@@ -229,6 +234,18 @@ setFermenters(fetchedFermenters);
 
     fetchScheduleData();
   }, []);
+  useEffect(() => {
+  const fetchRecipes = async () => {
+    const snapshot = await getDocs(collection(db, "recipes"));
+    const data = snapshot.docs.map(doc => ({
+      id: doc.id,
+      name: doc.data().name || doc.id,
+    }));
+    setRecipes(data);
+  };
+  fetchRecipes();
+}, []);
+
 
   const dayOfWeek = new Date().toLocaleDateString(undefined, {
     weekday: "long",
@@ -270,9 +287,40 @@ setFermenters(fetchedFermenters);
         View Brew Sheet
       </button>
     ) : (
-      <button className="assign-button" disabled>
-        Assign Recipe
-      </button>
+      <div className="assign-inline">
+  <select
+    value={selectedRecipes[brew.id] || ""}
+    onChange={(e) =>
+      setSelectedRecipes((prev) => ({
+        ...prev,
+        [brew.id]: e.target.value,
+      }))
+    }
+  >
+    <option value="">-- Select Recipe --</option>
+    {recipes.map((r) => (
+      <option key={r.id} value={r.id}>
+        {r.name}
+      </option>
+    ))}
+  </select>
+
+  <button
+    className="view-button"
+    onClick={async () => {
+      const recipeId = selectedRecipes[brew.id];
+      if (!recipeId) return;
+      await updateDoc(doc(db, "userPlans", brew.id), {
+        recipe: recipeId,
+      });
+      window.location.reload(); // Refresh to show updated button
+    }}
+    disabled={!selectedRecipes[brew.id]}
+  >
+    Save
+  </button>
+</div>
+
     )}
   </div>
 </li>
