@@ -70,7 +70,8 @@ function BrewSheet() {
             <tr>
               <th>Malt</th>
               <th>Percent</th>
-              <th>Weight (lbs)</th>
+              <th>Target Weight (lbs)</th>
+              <th>Actual Weights (lbs)</th>
             </tr>
           </thead>
           <tbody>
@@ -78,20 +79,18 @@ function BrewSheet() {
               <tr key={index}>
                 <td>{grain.grainId}</td>
                 <td>{grain.percent}%</td>
+                <td>{grain.weightLbs.toFixed(2)}</td>
                 <td>
-                  {grain.weightLbs.toFixed(2)}
-                    <br />
-                    <label style={{ fontSize: "0.75rem" }}>Actual:</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      placeholder="lbs"
-                      style={{ width: "70px", marginTop: "2px" }}
-                      onChange={() => {}}
-                      disabled/>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="lbs"
+                    style={{ width: "70px" }}
+                    onChange={() => {}}
+                    disabled/>
                 </td>
-
               </tr>
+
             ))}
           </tbody>
         </table>
@@ -133,6 +132,7 @@ function BrewSheet() {
               <th>Method</th>
               <th>Time / Temp</th>
               <th>Total Weight (lbs)</th>
+              <th>Actual Weight (lbs)</th>
             </tr>
           </thead>
           <tbody>
@@ -142,16 +142,16 @@ function BrewSheet() {
                 <td>{hop.method}</td>
                 <td>{hop.time || hop.temp}</td>
                 <td>
-                  {hop.totalWeightLbs || "-"}
-                    <br />
-                  <label style={{ fontSize: "0.75rem" }}>Actual:</label>
+                  <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                  <span>{hop.totalWeightLbs || "-"}</span>
                     <input
                       type="number"
                       step="0.01"
-                      placeholder="lbs"
-                      style={{ width: "70px", marginTop: "2px" }}
+                      placeholder="actual"
+                      style={{ width: "70px" }}
                       onChange={() => {}}
                       disabled/>
+                  </div>
                 </td>
 
               </tr>
