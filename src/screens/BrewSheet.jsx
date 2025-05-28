@@ -47,14 +47,14 @@ function BrewSheet() {
       <section className="card">
         <h2>Batch Info</h2>
         <ul>
-          <li>Batch Size: {plan.batchSize || "?"} BBL</li>
+          <li>Batch Size: {recipe.batchSizeBBL} BBL</li>
           <li>Fermenter: {plan.assignedFermenter || "Unassigned"}</li>
-          <li>Target OG: {recipe.OG || "?"}</li>
-          <li>Target TG: {recipe.TG || "?"}</li>
-          <li>ABV: {recipe.targetABV || "?"}%</li>
-          <li>SRM: {recipe.SRM || "?"}</li>
-          <li>IBU: {recipe.targetIBU || "?"}</li>
-          <li>Yeast Gen: {recipe.yeastGeneration || "?"}</li>
+          <li>Target OG: {recipe.OG}</li>
+          <li>Target TG: {recipe.TG}</li>
+          <li>ABV: {recipe.ABV}%</li>
+          <li>SRM: {recipe.SRM}</li>
+          <li>IBU: {recipe.IBU}</li>
+          <li>Yeast Gen: {recipe.yeastGeneration}</li>
         </ul>
       </section>
 
@@ -64,18 +64,16 @@ function BrewSheet() {
           <thead>
             <tr>
               <th>Malt</th>
-              <th>Target (lbs)</th>
-              <th>Actual (lbs)</th>
-              <th>SRM</th>
+              <th>Percent</th>
+              <th>Weight (lbs)</th>
             </tr>
           </thead>
           <tbody>
             {(recipe.grainBill || []).map((grain, index) => (
               <tr key={index}>
-                <td>{grain.name}</td>
-                <td>{grain.targetLbs}</td>
-                <td>{grain.actualLbs || "-"}</td>
-                <td>{grain.srm || "-"}</td>
+                <td>{grain.grainId}</td>
+                <td>{grain.percent}%</td>
+                <td>{grain.weightLbs.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -90,18 +88,16 @@ function BrewSheet() {
               <th>Hop</th>
               <th>Method</th>
               <th>Time / Temp</th>
-              <th>Target lbs/BBL</th>
-              <th>Actual lbs/BBL</th>
+              <th>Total Weight (lbs)</th>
             </tr>
           </thead>
           <tbody>
-            {(recipe.hops || []).map((hop, index) => (
+            {(recipe.hopAdditions || []).map((hop, index) => (
               <tr key={index}>
                 <td>{hop.name}</td>
                 <td>{hop.method}</td>
                 <td>{hop.time || hop.temp}</td>
-                <td>{hop.targetLbsPerBBL}</td>
-                <td>{hop.actualLbsPerBBL || "-"}</td>
+                <td>{hop.totalWeightLbs || "-"}</td>
               </tr>
             ))}
           </tbody>
@@ -110,27 +106,29 @@ function BrewSheet() {
 
       <section className="card">
         <h2>Water Chemistry</h2>
-        <p>Strike Volume: {recipe.strikeVolume || "?"} gal</p>
-        <p>Mash pH Target: {recipe.mashPHTarget || "?"}</p>
-        <p>Calcium: {recipe.calcium || "?"} ppm</p>
-        <p>Chloride: {recipe.chloride || "?"} ppm</p>
-        <p>Sulfate: {recipe.sulfate || "?"} ppm</p>
-      </section>
-
-      <section className="card">
-        <h2>Gravity / pH Tracking</h2>
-        <p>(Tracking UI coming soon...)</p>
+        <p>Water Source: {recipe.waterSource}</p>
+        <p>Mash pH Target: {recipe.mashPHTarget}</p>
+        <p>Chloride: {recipe.targetWaterProfile?.chloride} ppm</p>
+        <p>Sulfate: {recipe.targetWaterProfile?.sulfate} ppm</p>
+        <p>Calcium: {recipe.targetWaterProfile?.calcium} ppm</p>
       </section>
 
       <section className="card">
         <h2>Yeast Info</h2>
-        <p>Strain: {recipe.yeastStrain || "?"}</p>
-        <p>Generation: {recipe.yeastGeneration || "?"}</p>
+        <p>Strain: {recipe.yeastStrain}</p>
+        <p>Generation: {recipe.yeastGeneration}</p>
+        <p>Viability: {recipe.viability}%</p>
+        <p>Vitality: {recipe.vitality}%</p>
+        <p>To Pitch: {recipe.yeastToPitchLbs} lbs / {recipe.yeastToPitchML} mL</p>
       </section>
 
       <section className="card">
         <h2>Notes</h2>
-        <textarea placeholder="Brew notes, deviations, observations..." rows={5} />
+        <textarea
+          placeholder="Brew notes, deviations, observations..."
+          rows={5}
+          defaultValue={recipe.notes || ""}
+        />
       </section>
     </div>
   );
