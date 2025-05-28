@@ -42,9 +42,10 @@ function BrewSheet() {
     <div className="brewsheet">
       <header className="brewsheet-header">
         <h1>{recipe.beerName} Brew Sheet</h1>
-        <p style={{ fontSize: "1.1rem", fontWeight: "bold" }}>
+        <p>
           Brew Date: {new Date(plan.startDate).toLocaleDateString()}
         </p>
+        <p> Style:{recipe.styleName || "—"}</p>
       </header>
 
       <section className="card">
@@ -82,6 +83,33 @@ function BrewSheet() {
             ))}
           </tbody>
         </table>
+        <section className="card">
+  <h2>Grist Temp</h2>
+  <div style={{ display: "flex", gap: "1rem" }}>
+    <div>
+      <label>Measured (°F): </label>
+      <input
+        type="number"
+        value={recipe.gristTempF || ""}
+        onChange={() => {}}
+        disabled
+      />
+    </div>
+    <div>
+      <label>Measured (°C): </label>
+      <input
+        type="number"
+        value={
+          recipe.gristTempF
+            ? ((recipe.gristTempF - 32) * 5 / 9).toFixed(1)
+            : ""
+        }
+        disabled
+      />
+    </div>
+  </div>
+</section>
+
       </section>
 
       <section className="card">
