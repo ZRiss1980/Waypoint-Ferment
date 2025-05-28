@@ -164,10 +164,13 @@ setFermenters(fetchedFermenters);
       for (const plan of plans) {
         const planStart = new Date(plan.startDate);
         brewDatesList.push({
-          beerName: plan.beerName,
+          id: plan.id,
+          recipe: plan.recipe || null,
+          beerName: plan.beerName || "Untitled",
           startDate: planStart,
           assignedFermenter: plan.assignedFermenter || null,
         });
+
 
         const tasksSnap = await getDocs(
           collection(db, "userPlans", plan.id, "tasks")
