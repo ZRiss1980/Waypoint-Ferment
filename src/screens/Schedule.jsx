@@ -239,7 +239,7 @@ setFermenters(fetchedFermenters);
     const snapshot = await getDocs(collection(db, "recipes"));
     const data = snapshot.docs.map(doc => ({
       id: doc.id,
-      name: doc.data().name || doc.id,
+      name: doc.data().beerName || doc.id,
     }));
     setRecipes(data);
   };
