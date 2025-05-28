@@ -4,18 +4,26 @@
   --brew-bg-alt: #1e1e1e;
   --brew-text: #d8cab8;
   --brew-accent: #3c5a40;
+  --brew-highlight: #fbbf24;
 }
 
-.brewsheet-container {
+/* Grid Layout */
+.brewsheet {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 2rem;
   padding: 2rem;
   background-color: var(--brew-bg);
   color: var(--brew-text);
-  font-family: sans-serif;
   max-width: 1200px;
   margin: 0 auto;
+  font-family: sans-serif;
 }
 
+/* Header */
 .brewsheet-header {
+  grid-column: 1 / -1;
+  text-align: center;
   border-bottom: var(--brew-border);
   margin-bottom: 2rem;
 }
@@ -23,36 +31,57 @@
 .brewsheet-header h1 {
   font-size: 2rem;
   margin-bottom: 0.25rem;
+  color: var(--brew-highlight);
 }
 
-.brewsheet-header .meta {
-  display: flex;
-  gap: 2rem;
+.brewsheet-header .meta,
+.brewsheet-header p {
   font-size: 0.9rem;
   color: var(--brew-accent);
 }
 
-.brewsheet-section {
-  margin-bottom: 2rem;
-  padding: 1rem;
+/* Section Cards */
+.card {
   background-color: var(--brew-bg-alt);
   border: var(--brew-border);
-  border-radius: 8px;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
-.brewsheet-section h2 {
+.card h2 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
-  color: var(--brew-accent);
+  color: var(--brew-highlight);
 }
 
-.brewsheet-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 0.75rem;
+/* Table Styling */
+.card table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  color: var(--brew-text);
 }
 
+.card th,
+.card td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #444;
+  text-align: left;
+}
+
+/* Textarea */
+.card textarea {
+  width: 100%;
+  border-radius: 8px;
+  padding: 0.75rem;
+  background-color: #121212;
+  border: 1px solid #555;
+  color: #fff;
+  resize: vertical;
+}
+
+/* Value Display + Inputs */
 .brewsheet-label {
   font-weight: 500;
   color: var(--brew-text);
@@ -71,6 +100,7 @@
   outline: 2px solid var(--brew-accent);
 }
 
+/* Save Bar (Future) */
 .brewsheet-savebar {
   position: sticky;
   bottom: 0;
@@ -96,125 +126,11 @@
 .brewsheet-savebar button:hover {
   background-color: #2a4e35;
 }
-/* BrewSheet.css */
 
-.brewsheet {
-  padding: 2rem;
+/* Row Utility (optional use later) */
+.brewsheet-row {
   display: grid;
-  gap: 2rem;
-  background-color: #1e1e1e;
-  color: #f4f4f4;
-}
-
-.brewsheet-header {
-  grid-column: 1 / -1;
-  text-align: center;
-}
-
-.brewsheet-header h1 {
-  font-size: 2rem;
-  margin-bottom: 0.25rem;
-  color: var(--color-gold, #fbbf24);
-}
-
-.brewsheet-header p {
-  font-size: 1rem;
-  color: #d4d4d4;
-}
-
-.card {
-  background-color: #2a2a2a;
-  border-radius: 1rem;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-}
-
-/* Grid layout for wider screens */
-@media (min-width: 768px) {
-  .brewsheet {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-}
-
-/* Table styling */
-.card table {
-  width: 100%;
-  border-collapse: collapse;
-  color: #e4e4e7;
-  font-size: 0.9rem;
-}
-
-.card th,
-.card td {
-  padding: 0.5rem;
-  border-bottom: 1px solid #444;
-  text-align: left;
-}
-
-.card h2 {
-  color: #fbbf24;
-  font-size: 1.2rem;
-  margin-bottom: 0.75rem;
-}
-
-/* Textarea styling */
-.card textarea {
-  width: 100%;
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-  background-color: #1e1e1e;
-  color: #fff;
-  border: 1px solid #444;
-  resize: vertical;
-}
-.brewsheet {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  padding: 2rem;
-  background-color: #111; /* optional for dark mode */
-  color: #eee; /* text contrast */
-}
-
-.brewsheet-header {
-  grid-column: 1 / -1;
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.card {
-  background: #1e1e1e;
-  border: 1px solid #333;
-  padding: 1rem 1.25rem;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-
-.card h2 {
-  font-size: 1.25rem;
   margin-bottom: 0.75rem;
 }
-
-.card table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.card th,
-.card td {
-  border: 1px solid #444;
-  padding: 0.5rem;
-  text-align: left;
-}
-
-textarea {
-  width: 100%;
-  background: #222;
-  color: #eee;
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 0.75rem;
-  resize: vertical;
-}
-
-
