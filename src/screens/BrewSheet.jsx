@@ -35,13 +35,14 @@ function BrewSheet() {
     return <div className="brewsheet"><p>Loading brew sheet...</p></div>;
   }
 
+  const displayTG = recipe.TG && recipe.TG !== 0 ? recipe.TG : "—";
+  const srmColorHex = recipe.SRMHex || "#dddddd";
+
   return (
     <div className="brewsheet">
       <header className="brewsheet-header">
         <h1>{recipe.beerName} Brew Sheet</h1>
-        <p>
-          Style: {recipe.style || "Unknown"} — Batch Date: {new Date(plan.startDate).toLocaleDateString()}
-        </p>
+        <p>Brew Date: {new Date(plan.startDate).toLocaleDateString()}</p>
       </header>
 
       <section className="card">
@@ -50,11 +51,12 @@ function BrewSheet() {
           <li>Batch Size: {recipe.batchSizeBBL} BBL</li>
           <li>Fermenter: {plan.assignedFermenter || "Unassigned"}</li>
           <li>Target OG: {recipe.OG}</li>
-          <li>Target TG: {recipe.TG}</li>
+          <li>Target TG: {displayTG}</li>
           <li>ABV: {recipe.ABV}%</li>
-          <li>SRM: {recipe.SRM}</li>
+          <li>
+            SRM: {recipe.SRM} <span style={{ backgroundColor: srmColorHex, padding: "0 10px" }}></span>
+          </li>
           <li>IBU: {recipe.IBU}</li>
-          <li>Yeast Gen: {recipe.yeastGeneration}</li>
         </ul>
       </section>
 
@@ -111,29 +113,33 @@ function BrewSheet() {
         <p>Chloride: {recipe.targetWaterProfile?.chloride} ppm</p>
         <p>Sulfate: {recipe.targetWaterProfile?.sulfate} ppm</p>
         <p>Calcium: {recipe.targetWaterProfile?.calcium} ppm</p>
+        <p>Magnesium: {recipe.targetWaterProfile?.magnesium} ppm</p>
+        <p>Sodium: {recipe.targetWaterProfile?.sodium} ppm</p>
+        <p>Potassium: {recipe.targetWaterProfile?.potassium} ppm</p>
+        <p>Bicarbonate: {recipe.targetWaterProfile?.bicarbonate} ppm</p>
       </section>
+
       <section className="card">
         <h2>Salt Additions</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Salt</th>
-                <th>Corrects</th>
-                <th>Total (g)</th>
-              </tr>
-            </thead>
+        <table>
+          <thead>
+            <tr>
+              <th>Salt</th>
+              <th>Corrects</th>
+              <th>Total (g)</th>
+            </tr>
+          </thead>
           <tbody>
             {(recipe.saltRecommendations || []).map((salt, index) => (
               <tr key={index}>
-              <td>{salt.salt}</td>
-              <td>{salt.corrects}</td>
-              <td>{salt.totalGrams}</td>
-          </tr>
-          ))}
+                <td>{salt.salt}</td>
+                <td>{salt.corrects}</td>
+                <td>{salt.totalGrams}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </section>
-
 
       <section className="card">
         <h2>Yeast Info</h2>
@@ -143,7 +149,7 @@ function BrewSheet() {
         <p>Vitality: {recipe.vitality}%</p>
         <p>To Pitch: {recipe.yeastToPitchLbs} lbs / {recipe.yeastToPitchML} mL</p>
       </section>
-      
+
       <section className="card">
         <h2>Fermentation Profile</h2>
         <p>Type: {recipe.isLager ? "Lager" : "Ale"}</p>
@@ -163,7 +169,6 @@ function BrewSheet() {
         <p>Knockout Loss: {recipe.knockoutLossBBL} BBL</p>
       </section>
 
-      
       <section className="card">
         <h2>Notes</h2>
         <textarea
