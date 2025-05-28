@@ -112,6 +112,28 @@ function BrewSheet() {
         <p>Sulfate: {recipe.targetWaterProfile?.sulfate} ppm</p>
         <p>Calcium: {recipe.targetWaterProfile?.calcium} ppm</p>
       </section>
+      <section className="card">
+        <h2>Salt Additions</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Salt</th>
+                <th>Corrects</th>
+                <th>Total (g)</th>
+              </tr>
+            </thead>
+          <tbody>
+            {(recipe.saltRecommendations || []).map((salt, index) => (
+              <tr key={index}>
+              <td>{salt.salt}</td>
+              <td>{salt.corrects}</td>
+              <td>{salt.totalGrams}</td>
+          </tr>
+          ))}
+          </tbody>
+        </table>
+      </section>
+
 
       <section className="card">
         <h2>Yeast Info</h2>
@@ -121,7 +143,27 @@ function BrewSheet() {
         <p>Vitality: {recipe.vitality}%</p>
         <p>To Pitch: {recipe.yeastToPitchLbs} lbs / {recipe.yeastToPitchML} mL</p>
       </section>
+      
+      <section className="card">
+        <h2>Fermentation Profile</h2>
+        <p>Type: {recipe.isLager ? "Lager" : "Ale"}</p>
+        <p>Target Temp: {recipe.fermentationTempTarget}°F</p>
+        <p>Expected Days: {recipe.fermentationDaysExpected}</p>
+        <p>Pressure Ferment: {recipe.pressureFerment}</p>
+        <p>Final pH: {recipe.finalPH ?? "—"}</p>
+      </section>
 
+      <section className="card">
+        <h2>Losses & Efficiencies</h2>
+        <p>Brewhouse Efficiency: {(recipe.brewhouseEfficiency * 100).toFixed(1)}%</p>
+        <p>Mash Efficiency: {(recipe.mashEfficiency * 100).toFixed(1)}%</p>
+        <p>Lauter Efficiency: {(recipe.lauterEfficiency * 100).toFixed(1)}%</p>
+        <p>Boil Loss: {recipe.boilLossBBL} BBL</p>
+        <p>Whirlpool Loss: {recipe.whirlpoolLossBBL} BBL</p>
+        <p>Knockout Loss: {recipe.knockoutLossBBL} BBL</p>
+      </section>
+
+      
       <section className="card">
         <h2>Notes</h2>
         <textarea
