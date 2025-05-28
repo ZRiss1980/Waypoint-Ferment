@@ -94,8 +94,8 @@ function BrewSheet() {
             ))}
           </tbody>
         </table>
-        <section className="card">
-  <h2>Grist Temp</h2>
+<section className="card">
+  <h4>Grist Temp</h4>
   <div className="grist-temp-row">
     <div>
       <label>Measured (°F): </label>
@@ -108,15 +108,14 @@ function BrewSheet() {
     </div>
     <div>
       <label>Measured (°C): </label>
-      <input
-        type="number"
-        value={
-          recipe.gristTempF
+      <p>
+        <strong>
+          {recipe.gristTempF
             ? ((recipe.gristTempF - 32) * 5 / 9).toFixed(1)
-            : ""
-        }
-        disabled
-      />
+            : "—"}
+          °C
+        </strong>
+      </p>
     </div>
   </div>
 </section>
@@ -147,7 +146,7 @@ function BrewSheet() {
                     <input
                       type="number"
                       step="0.01"
-                      placeholder="actual"
+                      placeholder="lbs"
                       className="compact-input"
                       onChange={() => {}}
                       disabled/>
