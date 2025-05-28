@@ -42,7 +42,9 @@ function BrewSheet() {
     <div className="brewsheet">
       <header className="brewsheet-header">
         <h1>{recipe.beerName} Brew Sheet</h1>
-        <p>Brew Date: {new Date(plan.startDate).toLocaleDateString()}</p>
+        <p style={{ fontSize: "1.1rem", fontWeight: "bold" }}>
+          Brew Date: {new Date(plan.startDate).toLocaleDateString()}
+        </p>
       </header>
 
       <section className="card">
