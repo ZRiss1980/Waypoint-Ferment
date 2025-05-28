@@ -103,6 +103,7 @@ function BrewSheet() {
         type="number"
         value={recipe.gristTempF || ""}
         onChange={() => {}}
+        className="compact-input"
         disabled
       />
     </div>
