@@ -36,7 +36,7 @@ function BrewSheet() {
   }
 
   const displayTG = recipe.TG && recipe.TG !== 0 ? recipe.TG : "—";
-  const srmColorHex = recipe.SRMHex || "#dddddd";
+  const srmColorHex = recipe.SRMHex || "#dddddd";//need to add srmHex db in firestore
 
   return (
     <div className="brewsheet">
@@ -45,7 +45,7 @@ function BrewSheet() {
         <p>
           Brew Date: {new Date(plan.startDate).toLocaleDateString()}
         </p>
-        <p> Style:{recipe.styleName || "—"}</p>
+        <p> Style:{recipe.style || "—"}</p>
       </header>
 
       <section className="card">
@@ -78,7 +78,19 @@ function BrewSheet() {
               <tr key={index}>
                 <td>{grain.grainId}</td>
                 <td>{grain.percent}%</td>
-                <td>{grain.weightLbs.toFixed(2)}</td>
+                <td>
+                  {grain.weightLbs.toFixed(2)}
+                    <br />
+                    <label style={{ fontSize: "0.75rem" }}>Actual:</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      placeholder="lbs"
+                      style={{ width: "70px", marginTop: "2px" }}
+                      onChange={() => {}}
+                      disabled/>
+                </td>
+
               </tr>
             ))}
           </tbody>
@@ -129,7 +141,19 @@ function BrewSheet() {
                 <td>{hop.name}</td>
                 <td>{hop.method}</td>
                 <td>{hop.time || hop.temp}</td>
-                <td>{hop.totalWeightLbs || "-"}</td>
+                <td>
+                  {hop.totalWeightLbs || "-"}
+                    <br />
+                  <label style={{ fontSize: "0.75rem" }}>Actual:</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      placeholder="lbs"
+                      style={{ width: "70px", marginTop: "2px" }}
+                      onChange={() => {}}
+                      disabled/>
+                </td>
+
               </tr>
             ))}
           </tbody>
