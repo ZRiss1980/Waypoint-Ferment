@@ -96,7 +96,7 @@ function BrewSheet() {
         </table>
         <section className="card">
   <h2>Grist Temp</h2>
-  <div style={{ display: "flex", gap: "1rem" }}>
+  <div className="grist-temp-row">
     <div>
       <label>Measured (°F): </label>
       <input
@@ -142,7 +142,7 @@ function BrewSheet() {
                 <td>{hop.method}</td>
                 <td>{hop.time || hop.temp}</td>
                 <td>
-                  <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                  <div className="weight-cell">
                   <span>{hop.totalWeightLbs || "-"}</span>
                     <input
                       type="number"
