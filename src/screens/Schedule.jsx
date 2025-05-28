@@ -259,34 +259,42 @@ setFermenters(fetchedFermenters);
   const hasRecipe = !!brew.recipe;
 
   return (
-    <li key={`${brew.beerName}-${startDate.toISOString()}`} style={{ marginBottom: "1rem" }}>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <strong>{brew.beerName}</strong>
-        <span>
-          Brew Date: {startDate.toLocaleDateString()} – FV: {tankName}
-        </span>
-        {hasRecipe ? (
-          <button
-            onClick={() => navigate(`/brewsheet/${brew.id}`)}
-            style={{ marginTop: "0.5rem" }}
-          >
-            View Brew Sheet
-          </button>
-        ) : (
-          <button
-            onClick={() => alert("Assign recipe coming soon")}
-            style={{
-              marginTop: "0.5rem",
-              backgroundColor: "#D4AF37",
-              color: "#2b2b2b",
-              fontWeight: "bold",
-            }}
-          >
-            Assign Recipe
-          </button>
-        )}
-      </div>
-    </li>
+    <li
+  key={`${brew.beerName}-${startDate.toISOString()}`}
+  style={{
+    marginBottom: "1rem",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "1rem",
+    borderBottom: "1px solid #444",
+    paddingBottom: "0.5rem",
+  }}
+>
+  <div>
+    <strong>{brew.beerName}</strong>
+    <div>
+      Brew Date: {startDate.toLocaleDateString()} – FV: {tankName}
+    </div>
+  </div>
+
+  {hasRecipe ? (
+    <button onClick={() => navigate(`/brewsheet/${brew.id}`)}>View Brew Sheet</button>
+  ) : (
+    <button
+      disabled
+      style={{
+        backgroundColor: "#333",
+        color: "#777",
+        border: "none",
+        cursor: "not-allowed",
+      }}
+    >
+      Assign Recipe
+    </button>
+  )}
+</li>
+
   );
 })}
 
@@ -316,3 +324,10 @@ setFermenters(fetchedFermenters);
               </li>
             ))}
           </ul>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+export default Schedule;
