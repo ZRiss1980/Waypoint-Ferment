@@ -316,10 +316,3 @@ setFermenters(fetchedFermenters);
               </li>
             ))}
           </ul>
-        </section>
-      </main>
-    </div>
-  );
-}
-
-export default Schedule;
