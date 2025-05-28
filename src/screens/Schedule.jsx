@@ -259,41 +259,24 @@ setFermenters(fetchedFermenters);
   const hasRecipe = !!brew.recipe;
 
   return (
-    <li
-  key={`${brew.beerName}-${startDate.toISOString()}`}
-  style={{
-    marginBottom: "1rem",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: "1rem",
-    borderBottom: "1px solid #444",
-    paddingBottom: "0.5rem",
-  }}
->
-  <div>
-    <strong>{brew.beerName}</strong>
-    <div>
+    <li className="brew-date-item">
+  <div className="brew-date-details">
+    <strong className="beer-name">{brew.beerName}</strong>
+    <span className="brew-meta">
       Brew Date: {startDate.toLocaleDateString()} – FV: {tankName}
-    </div>
+    </span>
+    {hasRecipe ? (
+      <button className="view-button" onClick={() => navigate(`/brewsheet/${brew.id}`)}>
+        View Brew Sheet
+      </button>
+    ) : (
+      <button className="assign-button" disabled>
+        Assign Recipe
+      </button>
+    )}
   </div>
-
-  {hasRecipe ? (
-    <button onClick={() => navigate(`/brewsheet/${brew.id}`)}>View Brew Sheet</button>
-  ) : (
-    <button
-      disabled
-      style={{
-        backgroundColor: "#333",
-        color: "#777",
-        border: "none",
-        cursor: "not-allowed",
-      }}
-    >
-      Assign Recipe
-    </button>
-  )}
 </li>
+
 
   );
 })}
