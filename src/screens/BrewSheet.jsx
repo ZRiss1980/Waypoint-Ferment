@@ -49,7 +49,7 @@ function BrewSheet() {
     data[index][field] = value;
     type === "vorlauf" ? setVorlaufData(data) : setRunoffData(data);
   };
-  
+
 
   if (!plan || !recipe ) {
     return <div className="brewsheet"><p>Loading brew sheet...</p></div>;
@@ -113,10 +113,10 @@ function BrewSheet() {
             <label>Grain Temp (°F):</label>
             <input
               type="number"
+              placeholder="°F"
               className="compact-input"
               value={recipe.strikeTempF || ""}
               onChange={() => {}}
-              disabled
             />
             <span className="subinline">
               {recipe.strikeTempC ? `${recipe.strikeTempC} °C` : "— °C"}
