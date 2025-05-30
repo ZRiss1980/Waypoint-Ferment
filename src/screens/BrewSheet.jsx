@@ -1,4 +1,4 @@
-// /src/screens/BrewSheet.jsx
+/// /src/screens/BrewSheet.jsx
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -35,12 +35,8 @@ function BrewSheet() {
     return <div className="brewsheet"><p>Loading brew sheet...</p></div>;
   }
 
-  let displayTG = "—";
-  if (recipe.TG && recipe.TG !== 0) {
-    displayTG = recipe.TG;
-  }
-
-  const srmColorHex = recipe.SRMHex ? recipe.SRMHex : "#dddddd";
+  const displayTG = typeof recipe.TG === "number" && recipe.TG !== 0 ? recipe.TG : "—";
+  const srmColorHex = typeof recipe.SRMHex === "string" && recipe.SRMHex.trim() !== "" ? recipe.SRMHex : "#dddddd";
 
   const [vorlaufData, setVorlaufData] = useState([]);
   const [runoffData, setRunoffData] = useState([]);
