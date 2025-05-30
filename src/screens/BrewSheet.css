@@ -216,4 +216,7 @@ a:hover {
   color: var(--brew-white);
 }
 
-.a
+.add-row-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #D4AF37;
+}

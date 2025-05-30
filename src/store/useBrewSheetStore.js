@@ -11,4 +11,15 @@ export const useBrewSheetStore = create((set, get) => ({
   updateGrainWeight: async (index, value, planId) => {
     const updated = [...get().actualGrainWeights];
     updated[index] = value;
- 
+    set({ actualGrainWeights: updated });
+
+    if (planId) {
+      try {
+        const planRef = doc(db, "userPlans", planId);
+        await updateDoc(planRef, { actualGrainWeights: updated });
+      } catch (error) {
+        console.error("🔥 Firestore update error:", error);
+      }
+    }
+  },
+}));
