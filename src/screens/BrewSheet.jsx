@@ -36,16 +36,14 @@ function BrewSheet() {
   }
 
   const displayTG = recipe.TG && recipe.TG !== 0 ? recipe.TG : "—";
-  const srmColorHex = recipe.SRMHex || "#dddddd";//need to add srmHex db in firestore
+  const srmColorHex = recipe.SRMHex || "#dddddd";
 
   return (
     <div className="brewsheet">
       <header className="brewsheet-header">
         <h1>{recipe.beerName} Brew Sheet</h1>
-        <p>
-          Brew Date: {new Date(plan.startDate).toLocaleDateString()}
-        </p>
-        <p> Style:{recipe.style || "—"}</p>
+        <p>Brew Date: {new Date(plan.startDate).toLocaleDateString()}</p>
+        <p>Style: {recipe.style || "—"}</p>
       </header>
 
       <section className="card">
@@ -56,15 +54,15 @@ function BrewSheet() {
           <li>Target OG: {recipe.OG}</li>
           <li>Target TG: {displayTG}</li>
           <li>ABV: {recipe.ABV}%</li>
-          <li>
-            SRM: {recipe.SRM} <span style={{ backgroundColor: srmColorHex, padding: "0 10px" }}></span>
-          </li>
+          <li>SRM: {recipe.SRM} <span style={{ backgroundColor: srmColorHex, padding: "0 10px" }}></span></li>
           <li>IBU: {recipe.IBU}</li>
         </ul>
       </section>
 
       <section className="card">
-        <h2>Grain Bill</h2>
+        <h2>Mash In</h2>
+
+        <h3>Grain Bill</h3>
         <table>
           <thead>
             <tr>
@@ -80,71 +78,17 @@ function BrewSheet() {
                 <td>{grain.grainId}</td>
                 <td>{grain.percent}%</td>
                 <td>{grain.weightLbs.toFixed(2)}</td>
-                <td>
-                  <input
-                    type="number"
-                    step="0.01"
-                    placeholder="lbs"
-                    className="compact-input"
-                    onChange={() => {}}
-                    disabled/>
-                </td>
-              </tr>
-
-            ))}
-          </tbody>
-        </table>
-        </section>
-
-      <section className="card">
-        <h2>Hop Schedule</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Hop</th>
-              <th>Method</th>
-              <th>Time / Temp</th>
-              <th>Total Weight (lbs)</th>
-              <th>Actual Weight (lbs)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(recipe.hopAdditions || []).map((hop, index) => (
-              <tr key={index}>
-                <td>{hop.name}</td>
-                <td>{hop.method}</td>
-                <td>{hop.time || hop.temp}</td>
-                <td>{hop.totalWeightLbs || "-"}</td>
-                <td>
-                  <div className="weight-cell">
-                    <input
-                      type="number"
-                      step="0.01"
-                      placeholder="lbs"
-                      className="compact-input"
-                      onChange={() => {}}
-                      disabled/>
-                  </div>
-                </td>
-
+                <td><input type="number" step="0.01" placeholder="lbs" className="compact-input" disabled /></td>
               </tr>
             ))}
           </tbody>
         </table>
-      </section>
 
-      <section className="card">
-        <h2>Strike Water</h2>
+        <h3>Strike Water</h3>
         <div className="brewsheet-row">
           <div>
             <label>Grain Temp (°F):</label>
-            <input
-              type="number"
-              value={recipe.gristTempF || ""}
-              className="compact-input"
-              onChange={() => {}}
-              disabled
-            />
+            <input type="number" value={recipe.gristTempF || ""} className="compact-input" onChange={() => {}} disabled />
           </div>
           <div>
             <label>Grain Temp (°C):</label>
@@ -170,65 +114,47 @@ function BrewSheet() {
       </section>
 
       <section className="card">
-        <h2>Gravities and pH</h2>
-          <section className="card">
-            <h3>Vorlof</h3>
-              <table>
-                <thead>
-                  <tr>
-                  <th>°P</th>
-                  <th>pH</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-          </section> 
-          <section className="card">
-            <h3>Run Off</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>°P</th>
-                    <th>pH</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                </tbody>
-              </table>
-          </section>
-          <section className="card">
-            <h3>PreBoil</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>°P</th>
-                    <th>pH</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                </tbody>
-              </table>
-            </section>
-          <section className="card">
-            <h3>Final OG</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>°P</th>
-                    <th>pH</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                </tbody>
-              </table>
-            <label>
-              O₂ Rate (L/min):
-              <input type="number" step="0.1" className="compact-input" disabled />
-            </label>
+        <h2>Lauter and Boil</h2>
 
-          </section> 
-     </section>   
+        <h3>Hop Schedule</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Hop</th>
+              <th>Method</th>
+              <th>Time / Temp</th>
+              <th>Total Weight (lbs)</th>
+              <th>Actual Weight (lbs)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(recipe.hopAdditions || []).map((hop, index) => (
+              <tr key={index}>
+                <td>{hop.name}</td>
+                <td>{hop.method}</td>
+                <td>{hop.time || hop.temp}</td>
+                <td>{hop.totalWeightLbs || "-"}</td>
+                <td><input type="number" step="0.01" placeholder="lbs" className="compact-input" disabled /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <h3>Gravities and pH</h3>
+        <section className="card"><h4>Vorlauf</h4><table><thead><tr><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
+        <section className="card"><h4>Run Off</h4><table><thead><tr><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
+        <section className="card"><h4>PreBoil</h4><table><thead><tr><th>°P</th><th>pH</th><th>Volume</th></tr></thead><tbody></tbody></table></section>
+        <section className="card"><h4>Final OG</h4><table><thead><tr><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
+      </section>
+
+      <section className="card">
+        <h2>Knockout & Fermentation Start</h2>
+        <label>Knockout Volume (gal): <input type="number" className="compact-input" disabled /></label>
+        <label>Knockout Temp (°F): <input type="number" className="compact-input" disabled /></label>
+        <label>O₂ Rate (L/min): <input type="number" step="0.1" className="compact-input" disabled /></label>
+        <label>Pitch Temp (°F): <input type="number" className="compact-input" disabled /></label>
+        <label>Pressure Ferment?: <input type="text" className="compact-input" disabled /></label>
+      </section>
 
       <section className="card">
         <h2>Water Chemistry</h2>
@@ -246,13 +172,7 @@ function BrewSheet() {
       <section className="card">
         <h2>Salt Additions</h2>
         <table>
-          <thead>
-            <tr>
-              <th>Salt</th>
-              <th>Corrects</th>
-              <th>Total (g)</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Salt</th><th>Corrects</th><th>Total (g)</th></tr></thead>
           <tbody>
             {(recipe.saltRecommendations || []).map((salt, index) => (
               <tr key={index}>
@@ -266,16 +186,14 @@ function BrewSheet() {
       </section>
 
       <section className="card">
-        <h2>Yeast Info</h2>
+        <h2>Yeast & Fermentation</h2>
         <p>Strain: {recipe.yeastStrain}</p>
         <p>Generation: {recipe.yeastGeneration}</p>
         <p>Viability: {recipe.viability}%</p>
         <p>Vitality: {recipe.vitality}%</p>
         <p>To Pitch: {recipe.yeastToPitchLbs} lbs / {recipe.yeastToPitchML} mL</p>
-      </section>
 
-      <section className="card">
-        <h2>Fermentation Profile</h2>
+        <h3>Fermentation Profile</h3>
         <p>Type: {recipe.isLager ? "Lager" : "Ale"}</p>
         <p>Target Temp: {recipe.fermentationTempTarget}°F</p>
         <p>Expected Days: {recipe.fermentationDaysExpected}</p>
@@ -295,11 +213,7 @@ function BrewSheet() {
 
       <section className="card">
         <h2>Notes</h2>
-        <textarea
-          placeholder="Brew notes, deviations, observations..."
-          rows={5}
-          defaultValue={recipe.notes || ""}
-        />
+        <textarea placeholder="Brew notes, deviations, observations..." rows={5} defaultValue={recipe.notes || ""} />
       </section>
     </div>
   );
