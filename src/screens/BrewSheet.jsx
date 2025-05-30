@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import "./BrewSheet.css";
-import { useBrewSheetStore } from "../stores/useBrewSheetStore";
+import { useBrewSheetStore } from "../store/useBrewSheetStore";
 
 
 function BrewSheet() {
@@ -328,4 +328,24 @@ function BrewSheet() {
   <h2>Losses & Efficiencies</h2>
   <p>Brewhouse Efficiency: {(recipe.brewhouseEfficiency * 100).toFixed(1)}%</p>
   <p>Mash Efficiency: {(recipe.mashEfficiency * 100).toFixed(1)}%</p>
-  <p>Lauter Efficiency:
+  <p>Lauter Efficiency: {(recipe.lauterEfficiency * 100).toFixed(1)}%</p>
+  <p>Boil Loss: {recipe.boilLossBBL} BBL</p>
+  <p>Whirlpool Loss: {recipe.whirlpoolLossBBL} BBL</p>
+  <p>Knockout Loss: {recipe.knockoutLossBBL} BBL</p>
+</section>
+
+<section className="card">
+  <h2>Notes</h2>
+  <textarea placeholder="Brew notes, deviations, observations..." rows={5} defaultValue={recipe.notes || ""} />
+</section>
+
+</div>
+  );
+}
+
+export default BrewSheet;
+
+
+
+
+
