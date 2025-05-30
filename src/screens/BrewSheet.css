@@ -162,4 +162,55 @@ h4 {
   border-radius: 4px;
 }
 
-.subin
+.subinline {
+  font-size: 0.75rem;
+  color: var(--brew-accent);
+  margin-top: 0.25rem;
+}
+
+
+.brewsheet-savebar button {
+  background-color: var(--brew-accent);
+  color: var(--brew-text);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.brewsheet-savebar button:hover {
+  background-color: #2a4e35;
+}
+
+/* Row Utility (optional use later) */
+.brewsheet-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+.add-row-button {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+  background-color: #3C5A40;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.add-row-button:hover {
+  background-color: #2b412f;
+}
+
+.add-row-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #D4AF37;
+}
+
