@@ -1,15 +1,20 @@
-// src/stores/useBrewSheetStore.js
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export function useBrewSheetStore(initialRecipe = {}) {
-  const [actualGrainWeights, setActualGrainWeights] = useState(
-    () => (initialRecipe.grainBill || []).map(() => "")
-  );
+export function useBrewSheetStore(recipe) {
+  const [actualGrainWeights, setActualGrainWeights] = useState([]);
+
+  useEffect(() => {
+    if (recipe?.grainBill?.length) {
+      setActualGrainWeights(recipe.grainBill.map(() => ""));
+    }
+  }, [recipe]);
 
   const updateGrainWeight = (index, value) => {
-    const updated = [...actualGrainWeights];
-    updated[index] = value;
-    setActualGrainWeights(updated);
+    setActualGrainWeights((prev) => {
+      const copy = [...prev];
+      copy[index] = value;
+      return copy;
+    });
   };
 
   return {
