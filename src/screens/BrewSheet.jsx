@@ -37,6 +37,24 @@ function BrewSheet() {
 
   const displayTG = recipe.TG && recipe.TG !== 0 ? recipe.TG : "—";
   const srmColorHex = recipe.SRMHex || "#dddddd";
+  const [vorlaufData, setVorlaufData] = useState([]);
+const [runoffData, setRunoffData] = useState([]);
+
+const handleAddRow = (type) => {
+  const newRow = { time: "", gravity: "", pH: "" };
+  if (type === "vorlauf") {
+    setVorlaufData([...vorlaufData, newRow]);
+  } else {
+    setRunoffData([...runoffData, newRow]);
+  }
+};
+
+const handleRowChange = (type, index, field, value) => {
+  const data = type === "vorlauf" ? [...vorlaufData] : [...runoffData];
+  data[index][field] = value;
+  type === "vorlauf" ? setVorlaufData(data) : setRunoffData(data);
+};
+
 
   return (
     <div className="brewsheet">
@@ -121,8 +139,49 @@ function BrewSheet() {
   </div>
 </div>
 
-        <section className="card"><h4>Vorlauf</h4><table><thead><tr><th>Time</th><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
-        <section className="card"><h4>Run Off</h4><table><thead><tr><th>Time</th><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
+        <section className="card">
+          <h4>Vorlauf</h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>°P</th>
+                  <th>pH</th>
+                </tr>
+              </thead>
+          <tbody>
+            {vorlaufData.map((row, index) => (
+              <tr key={index}>
+                <td><input type="text" value={row.time} onChange={(e) => handleRowChange("vorlauf", index, "time", e.target.value)} className="compact-input" /></td>
+                <td><input type="number" step="0.01" value={row.gravity} onChange={(e) => handleRowChange("vorlauf", index, "gravity", e.target.value)} className="compact-input" /></td>
+                <td><input type="number" step="0.01" value={row.pH} onChange={(e) => handleRowChange("vorlauf", index, "pH", e.target.value)} className="compact-input" /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+          <button type="button" onClick={() => handleAddRow("vorlauf")} className="add-row-button">+ Add Row</button>
+</section>
+        <section className="card">
+          <h4>Run Off</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>°P</th>
+                <th>pH</th>
+              </tr>
+            </thead>
+            <tbody>
+              {runoffData.map((row, index) => (
+              <tr key={index}>
+                <td><input type="text" value={row.time} onChange={(e) => handleRowChange("runoff", index, "time", e.target.value)} className="compact-input" /></td>
+                <td><input type="number" step="0.01" value={row.gravity} onChange={(e) => handleRowChange("runoff", index, "gravity", e.target.value)} className="compact-input" /></td>
+                <td><input type="number" step="0.01" value={row.pH} onChange={(e) => handleRowChange("runoff", index, "pH", e.target.value)} className="compact-input" /></td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </section>
       </section>
 
       <section className="card">
@@ -151,12 +210,47 @@ function BrewSheet() {
             ))}
           </tbody>
         </table>
-        <section className="card"><h4>PreBoil</h4><table><thead><tr><th>°P</th><th>pH</th><th>Volume</th></tr></thead><tbody></tbody></table></section>
+        <section className="card">
+          <h4>PreBoil</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>°P</th>
+                <th>pH</th>
+                <th>Volume</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="number" step="0.01" placeholder="°P"/></td>
+                <td><input type="number" step="0.01" placeholder="pH"/></td>
+                <td><input type="number" step="0.01" placeholder="BBL"/></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
       </section>
 
       <section className="card">
         <h2>Knockout & Fermentation Start</h2>
-        <section className="card"><h4>Final OG</h4><table><thead><tr><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
+        <section className="card">
+          <h4>Final OG</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>°P</th>
+                <th>pH</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="number" step="0.01" placeholder="°P"/></td>
+                <td><input type="number" step="0.01" placeholder="pH"/></td>
+                <td><input type="number" step="0.01" placeholder="BBL"/></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
         <label>Knockout Volume (gal): <input type="number" className="compact-input" disabled /></label>
         <label>Knockout Temp (°F): <input type="number" className="compact-input" disabled /></label>
         <label>O₂ Rate (L/min): <input type="number" step="0.1" className="compact-input" disabled /></label>

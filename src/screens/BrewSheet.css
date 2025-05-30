@@ -192,3 +192,25 @@ h4 {
   gap: 1rem;
   margin-bottom: 0.75rem;
 }
+.add-row-button {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+  background-color: #3C5A40;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.add-row-button:hover {
+  background-color: #2b412f;
+}
+
+.add-row-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #D4AF37;
+}
+
