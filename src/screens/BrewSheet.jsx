@@ -85,43 +85,42 @@ function BrewSheet() {
         </table>
 
         <h3>Strike Water</h3>
-        <div className="brewsheet-row">
-          <div>
-            <label>Strike Temp (°F):</label>
-              <input
-                type="number"
-                className="compact-input"
-                value={recipe.strikeTempF || ""}
-                onChange={() => {}}
-                disabled/>
-              <small className="subtext">
-                {recipe.strikeTempC ? `${recipe.strikeTempC} °C` : "— °C"}
-              </small>
-            </div>
+<div className="brewsheet-row strike-water-group">
+  <div className="strike-grouped">
+    <label>Grain Temp (°F):</label>
+    <input
+      type="number"
+      className="compact-input"
+      value={recipe.strikeTempF || ""}
+      onChange={() => {}}
+      disabled
+    />
+    <span className="subinline">
+      {recipe.strikeTempC ? `${recipe.strikeTempC} °C` : "— °C"}
+    </span>
+  </div>
 
-          <div>
-            <label>Strike Volume (L):</label>
-            <small className="subtext">
-              {recipe.strikeWaterVolumeL ?? "—"} L
-            </small>
-          </div>
-          <div>
-            <label>Strike Temp (°C):</label>
-            <small className="subtext">{recipe.strikeTempC ?? "—"} °C</small>
-          </div>
-          <div>
-            <label>Strike Volume (BBL):</label>
-            <small className="subtext">
-              {recipe.strikeWaterVolumeL ? (recipe.strikeWaterVolumeL / 117.3478).toFixed(2) : "—"} BBL
-            </small>
-          </div>
-          <div>
-            <label>Strike Temp (°F):</label>
-            <small className="subtext">
-              {recipe.strikeTempC ? ((recipe.strikeTempC * 9) / 5 + 32).toFixed(1) : "—"} °F 
-            </small>
-          </div>
-        </div>
+  <div className="strike-grouped">
+    <label>Strike Volume:</label>
+    <span className="subinline">
+      {recipe.strikeWaterVolumeL ?? "—"} L /
+      {recipe.strikeWaterVolumeL
+        ? ` ${(recipe.strikeWaterVolumeL / 117.3478).toFixed(2)} BBL`
+        : " — BBL"}
+    </span>
+  </div>
+
+  <div className="strike-grouped">
+    <label>Strike Temp:</label>
+    <span className="subinline">
+      {recipe.strikeTempC ?? "—"} °C /
+      {recipe.strikeTempC
+        ? ` ${((recipe.strikeTempC * 9) / 5 + 32).toFixed(1)} °F`
+        : " — °F"}
+    </span>
+  </div>
+</div>
+
         <section className="card"><h4>Vorlauf</h4><table><thead><tr><th>Time</th><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
         <section className="card"><h4>Run Off</h4><table><thead><tr><th>Time</th><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
       </section>

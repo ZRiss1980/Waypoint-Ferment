@@ -136,9 +136,8 @@
 .strike-water-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
-  align-items: center;
-  margin-bottom: 1rem;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 .strike-grouped {
@@ -147,9 +146,19 @@
   min-width: 200px;
 }
 
+.strike-grouped input {
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+  background-color: #121212;
+  border: 1px solid #444;
+  color: var(--brew-text);
+  border-radius: 4px;
+}
+
 .subinline {
-  font-size: 0.8rem;
-  color: #888;
+  font-size: 0.75rem;
+  color: var(--brew-accent);
   margin-top: 0.25rem;
 }
 
