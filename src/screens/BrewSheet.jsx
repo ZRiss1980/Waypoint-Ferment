@@ -3,11 +3,14 @@ import { useParams } from "react-router-dom";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import "./BrewSheet.css";
+import { useBrewSheetStore } from "../stores/useBrewSheetStore";
+
 
 function BrewSheet() {
   const { id } = useParams();
   const [plan, setPlan] = useState(null);
   const [recipe, setRecipe] = useState(null);
+  const { actualGrainWeights, updateGrainWeight } = useBrewSheetStore(recipe);
   const [vorlaufData, setVorlaufData] = useState([]);
   const [runoffData, setRunoffData] = useState([]);
 
@@ -93,7 +96,9 @@ function BrewSheet() {
                 <td>{grain.grainId}</td>
                 <td>{grain.percent}%</td>
                 <td>{grain.weightLbs.toFixed(2)}</td>
-                <td><input type="number" step="0.01" placeholder="lbs" className="compact-input" disabled /></td>
+                <td><input type="number" step="0.01" placeholder="lbs" className="compact-input"value={actualGrainWeights[index]}
+                    onChange={(e) => updateGrainWeight(index, e.target.value)}/>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -323,24 +328,4 @@ function BrewSheet() {
   <h2>Losses & Efficiencies</h2>
   <p>Brewhouse Efficiency: {(recipe.brewhouseEfficiency * 100).toFixed(1)}%</p>
   <p>Mash Efficiency: {(recipe.mashEfficiency * 100).toFixed(1)}%</p>
-  <p>Lauter Efficiency: {(recipe.lauterEfficiency * 100).toFixed(1)}%</p>
-  <p>Boil Loss: {recipe.boilLossBBL} BBL</p>
-  <p>Whirlpool Loss: {recipe.whirlpoolLossBBL} BBL</p>
-  <p>Knockout Loss: {recipe.knockoutLossBBL} BBL</p>
-</section>
-
-<section className="card">
-  <h2>Notes</h2>
-  <textarea placeholder="Brew notes, deviations, observations..." rows={5} defaultValue={recipe.notes || ""} />
-</section>
-
-</div>
-  );
-}
-
-export default BrewSheet;
-
-
-
-
-
+  <p>Lauter Efficiency:
