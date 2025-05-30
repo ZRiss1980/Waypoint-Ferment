@@ -102,8 +102,8 @@ function BrewSheet() {
       <input
         type="number"
         value={recipe.gristTempF || ""}
-        onChange={() => {}}
         className="compact-input"
+        onChange={() => {}}
         disabled
       />
     </div>
@@ -193,6 +193,42 @@ function BrewSheet() {
             ))}
           </tbody>
         </table>
+        <section className="card">
+  <h2>Strike Water</h2>
+  <div className="brewsheet-row">
+    <div>
+      <label>Grain Temp (°F):</label>
+      <input
+        type="number"
+        value={recipe.gristTempF || ""}
+        className="compact-input"
+        onChange={() => {}}
+        disabled
+      />
+    </div>
+    <div>
+      <label>Grain Temp (°C):</label>
+      <p><strong>{recipe.gristTempF ? ((recipe.gristTempF - 32) * 5 / 9).toFixed(1) : "—"} °C</strong></p>
+    </div>
+    <div>
+      <label>Strike Volume (L):</label>
+      <p><strong>{recipe.strikeWaterVolumeL ?? "—"} L</strong></p>
+    </div>
+    <div>
+      <label>Strike Temp (°C):</label>
+      <p><strong>{recipe.strikeTempC ?? "—"} °C</strong></p>
+    </div>
+    <div>
+      <label>Strike Volume (BBL):</label>
+      <p><strong>{recipe.strikeWaterVolumeL ? (recipe.strikeWaterVolumeL / 117.3478).toFixed(2) : "—"} BBL</strong></p>
+    </div>
+    <div>
+      <label>Strike Temp (°F):</label>
+      <p><strong>{recipe.strikeTempC ? ((recipe.strikeTempC * 9) / 5 + 32).toFixed(1) : "—"} °F</strong></p>
+    </div>
+  </div>
+</section>
+
       </section>
 
       <section className="card">
