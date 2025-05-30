@@ -1,9 +1,9 @@
 :root {
-  --brew-border: 1px solid #3c5a40;
+  --brew-border: 1px solid #cccc;
   --brew-bg: #2b2b2b;
   --brew-bg-alt: #1e1e1e;
   --brew-text: #d8cab8;
-  --brew-accent: #3c5a40;
+  --brew-accent: #d8cab8;
   --brew-highlight: #fbbf24;
 }
 

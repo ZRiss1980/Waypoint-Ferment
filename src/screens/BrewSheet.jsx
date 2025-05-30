@@ -101,7 +101,7 @@ function BrewSheet() {
   </div>
 
   <div className="strike-grouped">
-    <label>Strike Volume:</label>
+    <p>Strike Volume:</p>
     <span className="subinline">
       {recipe.strikeWaterVolumeL ?? "—"} L /
       {recipe.strikeWaterVolumeL
@@ -111,7 +111,7 @@ function BrewSheet() {
   </div>
 
   <div className="strike-grouped">
-    <label>Strike Temp:</label>
+    <p>Strike Temp:</p>
     <span className="subinline">
       {recipe.strikeTempC ?? "—"} °C /
       {recipe.strikeTempC
