@@ -19,6 +19,9 @@
   margin: 0 auto;
   font-family: sans-serif;
 }
+h4 {
+  color: var(--brew-highlight);
+}
 
 /* Header */
 .brewsheet-header {
@@ -31,6 +34,9 @@
 .brewsheet-header h1 {
   font-size: 2rem;
   margin-bottom: 0.25rem;
+  color: var(--brew-highlight);
+}
+.brewsheet-header h4 {
   color: var(--brew-highlight);
 }
 
