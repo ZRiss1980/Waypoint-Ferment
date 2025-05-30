@@ -87,34 +87,47 @@ function BrewSheet() {
         <h3>Strike Water</h3>
         <div className="brewsheet-row">
           <div>
-            <label>Grain Temp (°F):</label>
-            <input type="number" value={recipe.gristTempF || ""} className="compact-input" onChange={() => {}} disabled />
-          </div>
-          <div>
-            <label>Grain Temp (°C):</label>
-            <p><strong>{recipe.gristTempF ? ((recipe.gristTempF - 32) * 5 / 9).toFixed(1) : "—"} °C</strong></p>
-          </div>
+            <label>Strike Temp (°F):</label>
+              <input
+                type="number"
+                className="compact-input"
+                value={recipe.strikeTempF || ""}
+                onChange={() => {}}
+                disabled/>
+              <small className="subtext">
+                {recipe.strikeTempC ? `${recipe.strikeTempC} °C` : "— °C"}
+              </small>
+            </div>
+
           <div>
             <label>Strike Volume (L):</label>
-            <p><strong>{recipe.strikeWaterVolumeL ?? "—"} L</strong></p>
+            <small className="subtext">
+              {recipe.strikeWaterVolumeL ?? "—"} L
+            </small>
           </div>
           <div>
             <label>Strike Temp (°C):</label>
-            <p><strong>{recipe.strikeTempC ?? "—"} °C</strong></p>
+            <small className="subtext">{recipe.strikeTempC ?? "—"} °C</small>
           </div>
           <div>
             <label>Strike Volume (BBL):</label>
-            <p><strong>{recipe.strikeWaterVolumeL ? (recipe.strikeWaterVolumeL / 117.3478).toFixed(2) : "—"} BBL</strong></p>
+            <small className="subtext">
+              {recipe.strikeWaterVolumeL ? (recipe.strikeWaterVolumeL / 117.3478).toFixed(2) : "—"} BBL
+            </small>
           </div>
           <div>
             <label>Strike Temp (°F):</label>
-            <p><strong>{recipe.strikeTempC ? ((recipe.strikeTempC * 9) / 5 + 32).toFixed(1) : "—"} °F</strong></p>
+            <small className="subtext">
+              {recipe.strikeTempC ? ((recipe.strikeTempC * 9) / 5 + 32).toFixed(1) : "—"} °F 
+            </small>
           </div>
         </div>
+        <section className="card"><h4>Vorlauf</h4><table><thead><tr><th>Time</th><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
+        <section className="card"><h4>Run Off</h4><table><thead><tr><th>Time</th><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
       </section>
 
       <section className="card">
-        <h2>Lauter and Boil</h2>
+        <h2>Boil</h2>
 
         <h3>Hop Schedule</h3>
         <table>
@@ -139,16 +152,12 @@ function BrewSheet() {
             ))}
           </tbody>
         </table>
-
-        <h3>Gravities and pH</h3>
-        <section className="card"><h4>Vorlauf</h4><table><thead><tr><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
-        <section className="card"><h4>Run Off</h4><table><thead><tr><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
         <section className="card"><h4>PreBoil</h4><table><thead><tr><th>°P</th><th>pH</th><th>Volume</th></tr></thead><tbody></tbody></table></section>
-        <section className="card"><h4>Final OG</h4><table><thead><tr><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
       </section>
 
       <section className="card">
         <h2>Knockout & Fermentation Start</h2>
+        <section className="card"><h4>Final OG</h4><table><thead><tr><th>°P</th><th>pH</th></tr></thead><tbody></tbody></table></section>
         <label>Knockout Volume (gal): <input type="number" className="compact-input" disabled /></label>
         <label>Knockout Temp (°F): <input type="number" className="compact-input" disabled /></label>
         <label>O₂ Rate (L/min): <input type="number" step="0.1" className="compact-input" disabled /></label>
