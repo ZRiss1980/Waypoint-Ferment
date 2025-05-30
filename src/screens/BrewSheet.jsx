@@ -180,6 +180,13 @@ function BrewSheet() {
             ))}
           </tbody>
         </table>
+        <button
+          type="button"
+          onClick={() => handleAddRow("runoff")}
+          className="add-row-button">
+          + Add Row
+        </button>
+
       </section>
 
 <section className="card">
