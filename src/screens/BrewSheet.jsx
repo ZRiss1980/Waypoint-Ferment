@@ -94,34 +94,7 @@ function BrewSheet() {
             ))}
           </tbody>
         </table>
-<section className="card">
-  <h4>Grist Temp</h4>
-  <div className="grist-temp-row">
-    <div>
-      <label>Measured (°F): </label>
-      <input
-        type="number"
-        value={recipe.gristTempF || ""}
-        className="compact-input"
-        onChange={() => {}}
-        disabled
-      />
-    </div>
-    <div>
-      <label>Measured (°C): </label>
-      <p>
-        <strong>
-          {recipe.gristTempF
-            ? ((recipe.gristTempF - 32) * 5 / 9).toFixed(1)
-            : "—"}
-          °C
-        </strong>
-      </p>
-    </div>
-  </div>
-</section>
-
-      </section>
+        </section>
 
       <section className="card">
         <h2>Hop Schedule</h2>
@@ -197,9 +170,65 @@ function BrewSheet() {
       </section>
 
       <section className="card">
-        <h2>To Add: Vorlauf, Runoff, Gravity, Knockout</h2>
-        <p>// Placeholder for future sections to be implemented</p>
-      </section>
+        <h2>Gravities and pH</h2>
+          <section className="card">
+            <h3>Vorlof</h3>
+              <table>
+                <thead>
+                  <tr>
+                  <th>°P</th>
+                  <th>pH</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+          </section> 
+          <section className="card">
+            <h3>Run Off</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>°P</th>
+                    <th>pH</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                </tbody>
+              </table>
+          </section>
+          <section className="card">
+            <h3>PreBoil</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>°P</th>
+                    <th>pH</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </section>
+          <section className="card">
+            <h3>Final OG</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>°P</th>
+                    <th>pH</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                </tbody>
+              </table>
+            <label>
+              O₂ Rate (L/min):
+              <input type="number" step="0.1" className="compact-input" disabled />
+            </label>
+
+          </section> 
+     </section>   
 
       <section className="card">
         <h2>Water Chemistry</h2>
