@@ -8,6 +8,7 @@
   --brew-white: #ffffff;
 }
 
+
 .brewsheet {
   display: flex;
   flex-direction: column;
@@ -174,6 +175,7 @@ a:hover {
 .brewsheet-savebar button {
   background-color: var(--brew-accent);
   color: var(--brew-text);
+  border: none;
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   font-weight: bold;
@@ -183,7 +185,7 @@ a:hover {
 }
 
 .brewsheet-savebar button:hover {
-  background-color: #444;
+  background-color: #2a4e35;
   color: var(--brew-white);
 }
 
@@ -199,7 +201,7 @@ a:hover {
   margin-top: 0.5rem;
   padding: 0.3rem 0.6rem;
   font-size: 0.9rem;
-  background-color: var(--brew-bg-alt);
+  background-color: #3C5A40;
   color: var(--brew-text);
   border: none;
   border-radius: 6px;
@@ -208,7 +210,7 @@ a:hover {
 }
 
 .add-row-button:hover {
-  background-color: #444;
+  background-color: #2b412f;
   color: var(--brew-white);
 }
 
