@@ -236,4 +236,44 @@ function BrewSheet() {
         </table>
       </section>
 
-     
+      <section className="card">
+        <h2>Yeast Info</h2>
+        <p>Strain: {recipe.yeastStrain}</p>
+        <p>Generation: {recipe.yeastGeneration}</p>
+        <p>Viability: {recipe.viability}%</p>
+        <p>Vitality: {recipe.vitality}%</p>
+        <p>To Pitch: {recipe.yeastToPitchLbs} lbs / {recipe.yeastToPitchML} mL</p>
+      </section>
+
+      <section className="card">
+        <h2>Fermentation Profile</h2>
+        <p>Type: {recipe.isLager ? "Lager" : "Ale"}</p>
+        <p>Target Temp: {recipe.fermentationTempTarget}°F</p>
+        <p>Expected Days: {recipe.fermentationDaysExpected}</p>
+        <p>Pressure Ferment: {recipe.pressureFerment}</p>
+        <p>Final pH: {recipe.finalPH ?? "—"}</p>
+      </section>
+
+      <section className="card">
+        <h2>Losses & Efficiencies</h2>
+        <p>Brewhouse Efficiency: {(recipe.brewhouseEfficiency * 100).toFixed(1)}%</p>
+        <p>Mash Efficiency: {(recipe.mashEfficiency * 100).toFixed(1)}%</p>
+        <p>Lauter Efficiency: {(recipe.lauterEfficiency * 100).toFixed(1)}%</p>
+        <p>Boil Loss: {recipe.boilLossBBL} BBL</p>
+        <p>Whirlpool Loss: {recipe.whirlpoolLossBBL} BBL</p>
+        <p>Knockout Loss: {recipe.knockoutLossBBL} BBL</p>
+      </section>
+
+      <section className="card">
+        <h2>Notes</h2>
+        <textarea
+          placeholder="Brew notes, deviations, observations..."
+          rows={5}
+          defaultValue={recipe.notes || ""}
+        />
+      </section>
+    </div>
+  );
+}
+
+export default BrewSheet;
