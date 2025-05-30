@@ -1,24 +1,14 @@
-import { useEffect, useState } from "react";
+import { create } from "zustand";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
-export function useBrewSheetStore(recipe) {
-  const [actualGrainWeights, setActualGrainWeights] = useState([]);
-
-  useEffect(() => {
-    if (recipe?.grainBill?.length) {
-      setActualGrainWeights(recipe.grainBill.map(() => ""));
-    }
-  }, [recipe]);
-
-  const updateGrainWeight = (index, value) => {
-    setActualGrainWeights((prev) => {
-      const copy = [...prev];
-      copy[index] = value;
-      return copy;
-    });
-  };
-
-  return {
-    actualGrainWeights,
-    updateGrainWeight,
-  };
-}
+export const useBrewSheetStore = create((set, get) => ({
+  actualGrainWeights: [],
+  setInitialGrainWeights: (grainBill = []) => {
+    const weights = grainBill.map(() => "");
+    set({ actualGrainWeights: weights });
+  },
+  updateGrainWeight: async (index, value, planId) => {
+    const updated = [...get().actualGrainWeights];
+    updated[index] = value;
+ 

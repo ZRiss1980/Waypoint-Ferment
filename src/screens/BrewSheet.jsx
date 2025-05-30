@@ -6,13 +6,18 @@ import "./BrewSheet.css";
 import { useBrewSheetStore } from "../store/useBrewSheetStore";
 
 
-function BrewSheet() {
-  const { id } = useParams();
-  const [plan, setPlan] = useState(null);
-  const [recipe, setRecipe] = useState(null);
-  const [vorlaufData, setVorlaufData] = useState([]);
-  const [runoffData, setRunoffData] = useState([]);
-  const store = useBrewSheetStore(recipe);
+  function BrewSheet() {
+    const { id } = useParams();
+    const [plan, setPlan] = useState(null);
+    const [recipe, setRecipe] = useState(null);
+    const [vorlaufData, setVorlaufData] = useState([]);
+    const [runoffData, setRunoffData] = useState([]);
+    const brewSheetStore = useBrewSheetStore();
+    const actualGrainWeights = brewSheetStore.actualGrainWeights;
+    const setInitialGrainWeights = brewSheetStore.setInitialGrainWeights;
+    const updateGrainWeight = brewSheetStore.updateGrainWeight;
+
+
 
 
   useEffect(() => {
@@ -23,14 +28,18 @@ function BrewSheet() {
         const planData = planSnap.data();
         setPlan(planData);
 
-        if (planData.recipe) {
-          const recipeRef = doc(db, "recipes", planData.recipe);
-          const recipeSnap = await getDoc(recipeRef);
-          if (recipeSnap.exists()) {
-            setRecipe(recipeSnap.data());
-          }
+      if (planData.recipe) {
+        const recipeRef = doc(db, "recipes", planData.recipe);
+        const recipeSnap = await getDoc(recipeRef);
+        if (recipeSnap.exists()) {
+        const recipeData = recipeSnap.data();
+        setRecipe(recipeData);
+        if (recipeData.grainBill) {
+          brewSheetStore.setInitialGrainWeights(recipeData.grainBill);
         }
       }
+    }
+  }
     };
     fetchData();
   }, [id]);
@@ -55,7 +64,8 @@ function BrewSheet() {
     return <div className="brewsheet"><p>Loading brew sheet...</p></div>;
   }
 
-  const { actualGrainWeights, updateGrainWeight } = store;
+  
+
   const displayTG = typeof recipe.TG === "number" && recipe.TG !== 0 ? recipe.TG : "—";
   const srmColorHex = typeof recipe.SRMHex === "string" && recipe.SRMHex.trim() !== "" ? recipe.SRMHex : "#dddddd";
 
@@ -99,7 +109,7 @@ function BrewSheet() {
                 <td>{grain.grainId}</td>
                 <td>{grain.percent}%</td>
                 <td>{grain.weightLbs.toFixed(2)}</td>
-                <td><input type="number" step="0.01" placeholder="lbs" className="compact-input"value={actualGrainWeights[index]}
+                <td><input type="number" step="0.01" placeholder="lbs" className="compact-input"value={brewSheetStore.actualGrainWeights[index]}
                     onChange={(e) => updateGrainWeight(index, e.target.value)}/>
                 </td>
               </tr>
