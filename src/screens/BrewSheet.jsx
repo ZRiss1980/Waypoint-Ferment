@@ -12,9 +12,8 @@ function BrewSheet() {
   const [recipe, setRecipe] = useState(null);
   const [vorlaufData, setVorlaufData] = useState([]);
   const [runoffData, setRunoffData] = useState([]);
+  const store = useBrewSheetStore(recipe);
 
-  // Init store hooks only once recipe is available
-  const store = recipe ? useBrewSheetStore(recipe) : null;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +50,7 @@ function BrewSheet() {
     type === "vorlauf" ? setVorlaufData(data) : setRunoffData(data);
   };
 
-  if (!plan || !recipe || !store) {
+  if (!plan || !recipe ) {
     return <div className="brewsheet"><p>Loading brew sheet...</p></div>;
   }
 
