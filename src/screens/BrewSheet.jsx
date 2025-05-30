@@ -95,10 +95,10 @@ function BrewSheet() {
           </tbody>
         </table>
 <section className="card">
-  <h2>Strike Water</h2>
-  <div className="brewsheet-row">
+  <h4>Grist Temp</h4>
+  <div className="grist-temp-row">
     <div>
-      <label>Grain Temp (°F):</label>
+      <label>Measured (°F): </label>
       <input
         type="number"
         value={recipe.gristTempF || ""}
@@ -108,24 +108,15 @@ function BrewSheet() {
       />
     </div>
     <div>
-      <label>Grain Temp (°C):</label>
-      <p><strong>{recipe.gristTempF ? ((recipe.gristTempF - 32) * 5 / 9).toFixed(1) : "—"} °C</strong></p>
-    </div>
-    <div>
-      <label>Strike Volume (L):</label>
-      <p><strong>{recipe.strikeWaterVolumeL ?? "—"} L</strong></p>
-    </div>
-    <div>
-      <label>Strike Temp (°C):</label>
-      <p><strong>{recipe.strikeTempC ?? "—"} °C</strong></p>
-    </div>
-    <div>
-      <label>Strike Volume (BBL):</label>
-      <p><strong>{recipe.strikeWaterVolumeL ? (recipe.strikeWaterVolumeL / 117.3478).toFixed(2) : "—"} BBL</strong></p>
-    </div>
-    <div>
-      <label>Strike Temp (°F):</label>
-      <p><strong>{recipe.strikeTempC ? ((recipe.strikeTempC * 9) / 5 + 32).toFixed(1) : "—"} °F</strong></p>
+      <label>Measured (°C): </label>
+      <p>
+        <strong>
+          {recipe.gristTempF
+            ? ((recipe.gristTempF - 32) * 5 / 9).toFixed(1)
+            : "—"}
+          °C
+        </strong>
+      </p>
     </div>
   </div>
 </section>
@@ -170,6 +161,47 @@ function BrewSheet() {
       </section>
 
       <section className="card">
+        <h2>Strike Water</h2>
+        <div className="brewsheet-row">
+          <div>
+            <label>Grain Temp (°F):</label>
+            <input
+              type="number"
+              value={recipe.gristTempF || ""}
+              className="compact-input"
+              onChange={() => {}}
+              disabled
+            />
+          </div>
+          <div>
+            <label>Grain Temp (°C):</label>
+            <p><strong>{recipe.gristTempF ? ((recipe.gristTempF - 32) * 5 / 9).toFixed(1) : "—"} °C</strong></p>
+          </div>
+          <div>
+            <label>Strike Volume (L):</label>
+            <p><strong>{recipe.strikeWaterVolumeL ?? "—"} L</strong></p>
+          </div>
+          <div>
+            <label>Strike Temp (°C):</label>
+            <p><strong>{recipe.strikeTempC ?? "—"} °C</strong></p>
+          </div>
+          <div>
+            <label>Strike Volume (BBL):</label>
+            <p><strong>{recipe.strikeWaterVolumeL ? (recipe.strikeWaterVolumeL / 117.3478).toFixed(2) : "—"} BBL</strong></p>
+          </div>
+          <div>
+            <label>Strike Temp (°F):</label>
+            <p><strong>{recipe.strikeTempC ? ((recipe.strikeTempC * 9) / 5 + 32).toFixed(1) : "—"} °F</strong></p>
+          </div>
+        </div>
+      </section>
+
+      <section className="card">
+        <h2>To Add: Vorlauf, Runoff, Gravity, Knockout</h2>
+        <p>// Placeholder for future sections to be implemented</p>
+      </section>
+
+      <section className="card">
         <h2>Water Chemistry</h2>
         <p>Water Source: {recipe.waterSource}</p>
         <p>Mash pH Target: {recipe.mashPHTarget}</p>
@@ -202,50 +234,6 @@ function BrewSheet() {
             ))}
           </tbody>
         </table>
-        <section className="card">
-  
-</section>
-
       </section>
 
-      <section className="card">
-        <h2>Yeast Info</h2>
-        <p>Strain: {recipe.yeastStrain}</p>
-        <p>Generation: {recipe.yeastGeneration}</p>
-        <p>Viability: {recipe.viability}%</p>
-        <p>Vitality: {recipe.vitality}%</p>
-        <p>To Pitch: {recipe.yeastToPitchLbs} lbs / {recipe.yeastToPitchML} mL</p>
-      </section>
-
-      <section className="card">
-        <h2>Fermentation Profile</h2>
-        <p>Type: {recipe.isLager ? "Lager" : "Ale"}</p>
-        <p>Target Temp: {recipe.fermentationTempTarget}°F</p>
-        <p>Expected Days: {recipe.fermentationDaysExpected}</p>
-        <p>Pressure Ferment: {recipe.pressureFerment}</p>
-        <p>Final pH: {recipe.finalPH ?? "—"}</p>
-      </section>
-
-      <section className="card">
-        <h2>Losses & Efficiencies</h2>
-        <p>Brewhouse Efficiency: {(recipe.brewhouseEfficiency * 100).toFixed(1)}%</p>
-        <p>Mash Efficiency: {(recipe.mashEfficiency * 100).toFixed(1)}%</p>
-        <p>Lauter Efficiency: {(recipe.lauterEfficiency * 100).toFixed(1)}%</p>
-        <p>Boil Loss: {recipe.boilLossBBL} BBL</p>
-        <p>Whirlpool Loss: {recipe.whirlpoolLossBBL} BBL</p>
-        <p>Knockout Loss: {recipe.knockoutLossBBL} BBL</p>
-      </section>
-
-      <section className="card">
-        <h2>Notes</h2>
-        <textarea
-          placeholder="Brew notes, deviations, observations..."
-          rows={5}
-          defaultValue={recipe.notes || ""}
-        />
-      </section>
-    </div>
-  );
-}
-
-export default BrewSheet;
+     
