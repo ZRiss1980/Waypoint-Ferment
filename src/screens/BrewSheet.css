@@ -29,7 +29,7 @@
   box-sizing: border-box;
 }
 table input {
-  max-width: 100%;
+  max-width: 70px;
   width: 100%; /* fills the table cell */
 }
 
