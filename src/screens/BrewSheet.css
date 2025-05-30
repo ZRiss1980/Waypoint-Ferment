@@ -7,8 +7,6 @@
   --brew-highlight: #fbbf24;
   --brew-white: #ffffff;
 }
-
-
 .brewsheet {
   display: flex;
   flex-direction: column;
