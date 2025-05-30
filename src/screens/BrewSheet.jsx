@@ -35,27 +35,30 @@ function BrewSheet() {
     return <div className="brewsheet"><p>Loading brew sheet...</p></div>;
   }
 
-  const displayTG = recipe.TG && recipe.TG !== 0 ? recipe.TG : "—";
-  const srmColorHex = recipe.SRMHex || "#dddddd";
-  const [vorlaufData, setVorlaufData] = useState([]);
-const [runoffData, setRunoffData] = useState([]);
-
-const handleAddRow = (type) => {
-  const newRow = { time: "", gravity: "", pH: "" };
-  if (type === "vorlauf") {
-    setVorlaufData([...vorlaufData, newRow]);
-  } else {
-    setRunoffData([...runoffData, newRow]);
+  let displayTG = "—";
+  if (recipe.TG && recipe.TG !== 0) {
+    displayTG = recipe.TG;
   }
-};
 
-const handleRowChange = (type, index, field, value) => {
-  const data = type === "vorlauf" ? [...vorlaufData] : [...runoffData];
-  data[index][field] = value;
-  type === "vorlauf" ? setVorlaufData(data) : setRunoffData(data);
-};
+  const srmColorHex = recipe.SRMHex ? recipe.SRMHex : "#dddddd";
 
+  const [vorlaufData, setVorlaufData] = useState([]);
+  const [runoffData, setRunoffData] = useState([]);
 
+  const handleAddRow = (type) => {
+    const newRow = { time: "", gravity: "", pH: "" };
+    if (type === "vorlauf") {
+      setVorlaufData([...vorlaufData, newRow]);
+    } else {
+      setRunoffData([...runoffData, newRow]);
+    }
+  };
+
+  const handleRowChange = (type, index, field, value) => {
+    const data = type === "vorlauf" ? [...vorlaufData] : [...runoffData];
+    data[index][field] = value;
+    type === "vorlauf" ? setVorlaufData(data) : setRunoffData(data);
+  };
   return (
     <div className="brewsheet">
       <header className="brewsheet-header">
