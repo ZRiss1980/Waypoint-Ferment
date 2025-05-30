@@ -1,3 +1,11 @@
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import "./BrewSheet.css";
+import { useBrewSheetStore } from "../store/useBrewSheetStore";
+
+
 function BrewSheet() {
   const { id } = useParams();
   const [plan, setPlan] = useState(null);
