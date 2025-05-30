@@ -49,6 +49,7 @@ function BrewSheet() {
     data[index][field] = value;
     type === "vorlauf" ? setVorlaufData(data) : setRunoffData(data);
   };
+  
 
   if (!plan || !recipe ) {
     return <div className="brewsheet"><p>Loading brew sheet...</p></div>;
