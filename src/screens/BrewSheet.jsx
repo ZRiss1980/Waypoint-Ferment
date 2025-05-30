@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
-import "./BrewSheet.css";
-import { useBrewSheetStore } from "../store/useBrewSheetStore";
-
-
 function BrewSheet() {
   const { id } = useParams();
   const [plan, setPlan] = useState(null);
   const [recipe, setRecipe] = useState(null);
-  const { actualGrainWeights, updateGrainWeight } = useBrewSheetStore(recipe);
   const [vorlaufData, setVorlaufData] = useState([]);
   const [runoffData, setRunoffData] = useState([]);
+
+  // Init store hooks only once recipe is available
+  const store = recipe ? useBrewSheetStore(recipe) : null;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,10 +43,11 @@ function BrewSheet() {
     type === "vorlauf" ? setVorlaufData(data) : setRunoffData(data);
   };
 
-  if (!plan || !recipe) {
+  if (!plan || !recipe || !store) {
     return <div className="brewsheet"><p>Loading brew sheet...</p></div>;
   }
 
+  const { actualGrainWeights, updateGrainWeight } = store;
   const displayTG = typeof recipe.TG === "number" && recipe.TG !== 0 ? recipe.TG : "—";
   const srmColorHex = typeof recipe.SRMHex === "string" && recipe.SRMHex.trim() !== "" ? recipe.SRMHex : "#dddddd";
 
