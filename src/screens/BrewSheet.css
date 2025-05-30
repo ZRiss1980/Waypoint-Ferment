@@ -21,13 +21,14 @@
 
 .card {
   background-color: var(--brew-bg-alt);
-  border: var(--brew-border);
+  border: 2px solid #cccc !important;
   border-radius: 12px;
   padding: 1.25rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   width: 100%;
   box-sizing: border-box;
 }
+
 
 h1 {
   color: var(--brew-highlight);
