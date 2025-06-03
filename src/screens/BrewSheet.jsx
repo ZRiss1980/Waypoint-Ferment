@@ -149,32 +149,34 @@ function BrewSheet() {
       </section>
 
       <section className="salt-section">
-        <h2>Salt Additions</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Salt</th>
-              <th>Amount (g)</th>
-              <th>Actual (g)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(salts || []).map((salt, i) => (
-              <tr key={i}>
-                <td>{salt.name}</td>
-                <td>{salt.amount}</td>
-                <td>
-                  <input
-                    type="number"
-                    value={salt.actual || ""}
-                    onChange={(e) => updateSalt(i, e.target.value)}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
+  <h2>Salt Additions</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Salt</th>
+        <th>Target (g)</th>
+        <th>Actual (g)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {(salts || []).map((salt, index) => (
+        <tr key={index}>
+          <td>{salt.name}</td>
+          <td>{salt.amount}</td>
+          <td>
+            <input
+              type="number"
+              placeholder="Actual"
+              value={salt.actual || ""}
+              onChange={(e) => updateSalt(index, e.target.value)}
+            />
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</section>
+
 
       <section className="water-section">
         <h2>Water Chemistry</h2>
