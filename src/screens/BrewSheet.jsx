@@ -206,33 +206,57 @@ function BrewSheet() {
 
 
 
-      <section className="MashIn-section">
-        <h2>Mash In</h2>
-        <label>
-          Mash pH Target:
-          <input
-            type="text"
-            value={mashPH || ""}
-            onChange={(e) => updateField("mashPH", e.target.value)}
-          />
-        </label>
-        <label>
-          Strike Temp (°F):
-          <input
-            type="text"
-            value={strikeTemp || ""}
-            onChange={(e) => updateField("strikeTemp", e.target.value)}
-          />
-        </label>
-        <label>
-          Sparge Temp (°F):
-          <input
-            type="text"
-            value={spargeTemp || ""}
-            onChange={(e) => updateField("spargeTemp", e.target.value)}
-          />
-        </label>
-      </section>
+     <section className="MashIn-section">
+  <h2>Mash In</h2>
+
+  <div className="mash-field">
+    <strong>Mash pH Target:</strong>{" "}
+    {recipe.mashPHTarget ?? "—"}
+    <input
+      type="text"
+      placeholder="Actual pH"
+      value={mashPH || ""}
+      onChange={(e) => updateField("mashPH", e.target.value)}
+    />
+  </div>
+
+  <div className="mash-field">
+    <strong>Liquor to Grist Ratio:</strong>{" "}
+    {recipe.liquorToGristRatio ?? "—"} qt/lb
+  </div>
+
+  <div className="mash-field">
+    <strong>Mash Temp Target:</strong>{" "}
+    {recipe.mashTemp ?? "—"} °F
+    <input
+      type="text"
+      placeholder="Actual Mash Temp"
+      value={strikeTemp || ""}
+      onChange={(e) => updateField("strikeTemp", e.target.value)}
+    />
+  </div>
+
+  <div className="mash-field">
+    <strong>Strike Volume (calc):</strong>{" "}
+    {recipe.totalGristWeightLbs && recipe.liquorToGristRatio
+      ? (recipe.totalGristWeightLbs * recipe.liquorToGristRatio).toFixed(2)
+      : "—"} gal
+  </div>
+
+  <div className="mash-field">
+    <strong>Strike Temp Estimate:</strong>{" "}
+    {recipe.mashTemp
+      ? (parseFloat(recipe.mashTemp) + 10).toFixed(1)
+      : "—"} °F
+    <input
+      type="text"
+      placeholder="Actual Strike Temp"
+      value={spargeTemp || ""}
+      onChange={(e) => updateField("spargeTemp", e.target.value)}
+    />
+  </div>
+</section>
+
 
       <section className="vorlauf-section">
         <h2>Vorlauf Tracking</h2>
