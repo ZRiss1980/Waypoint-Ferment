@@ -8,9 +8,12 @@ export const useBrewSheetStore = create((set, get) => ({
   vorlaufData: [],
   runoffData: [],
   salts: [],
-  mashPH: "",
-  strikeTemp: "",
-  spargeTemp: "",
+  mashPH: "",            // Target
+  actualMashPH: "",      // Actual (new)
+  strikeTemp: "",        // Target
+  actualStrikeTemp: "",  // Actual (new)
+  spargeTemp: "",        // Target
+  actualSpargeTemp: "",  // Actual (new)
   efficiencies: { mash: "", brewhouse: "" },
   preBoil: "",
   finalOG: "",
