@@ -20,19 +20,19 @@
 }
 
 section {
-  background-color: var(--black);
-  border: var(--border);
-  border-radius: 12px;
-  padding: 1.25rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-  width: 100%;
-  box-sizing: border-box;
+  background-color: var(--black)!important;
+  border: var(--border)!important;
+  border-radius: 12px !important;
+  padding: 1.25rem!important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4)!important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 table input {
   max-width: 70px;
   width: 100%;
-  border: 1px solid var(--gray-mid);
+  border: 1px solid var(--gray-mid)!important;
   background-color: var(--black);
   color: var(--white);
   padding: 0.4rem;
@@ -53,7 +53,7 @@ h2, h3, h4 {
 
 .brewsheet-header {
   text-align: center;
-  border-bottom: var(--border);
+  border-bottom: var(--border)!important;
   margin-bottom: 2rem;
 }
 
@@ -81,7 +81,7 @@ section table {
   font-size: 0.9rem;
   color: var(--gray-light);
   margin-top: 1rem;
-  border: var(--border);
+  border: var(--border)!important;
 }
 
 section th,
