@@ -11,16 +11,26 @@ function BrewSheet() {
   const [recipe, setRecipe] = useState(null);
   const {
     actualGrainWeights,
+    actualHopWeights,
     vorlaufData,
     runoffData,
     preBoil,
     finalOG,
     notes,
+    efficiencies,
+    salts,
+    mashPH,
+    strikeTemp,
+    spargeTemp,
     setInitialGrainWeights,
+    setInitialHopWeights,
+    setInitialSalts,
     updateGrainWeight,
-    addRow,
+    updateHopWeight,
+    updateSalt,
+    updateField,
     updateRow,
-    updateField
+    addRow,
   } = useBrewSheetStore();
 
   useEffect(() => {
@@ -38,12 +48,14 @@ function BrewSheet() {
             const recipeData = recipeSnap.data();
             setRecipe(recipeData);
             setInitialGrainWeights(recipeData.grainBill);
+            setInitialHopWeights(recipeData.hopAdditions);
+            setInitialSalts(recipeData.salts || []);
           }
         }
       }
     };
     fetchData();
-  }, [id, setInitialGrainWeights]);
+  }, [id, setInitialGrainWeights, setInitialHopWeights, setInitialSalts]);
 
   if (!plan || !recipe) return <div>Loading...</div>;
 
@@ -58,9 +70,9 @@ function BrewSheet() {
       <section className="grain-section">
         <h2>Grain Bill</h2>
         <ul>
-          {recipe.grainBill.map((grain, i) => (
+          {(recipe.grainBill || []).map((grain, i) => (
             <li key={i}>
-              {grain.name}: {grain.amount} lbs
+              {grain.grainId}: {grain.weightLbs} lbs
               <input
                 type="text"
                 placeholder="Actual Weight"
@@ -74,13 +86,93 @@ function BrewSheet() {
 
       <section className="hop-section">
         <h2>Hop Schedule</h2>
-        <ul>
-          {recipe.hops && recipe.hops.map((hop, i) => (
-            <li key={i}>
-              {hop.name} — {hop.amount} oz — {hop.method} @ {hop.time} min — {hop.temp}°F
-            </li>
-          ))}
-        </ul>
+        <table>
+          <thead>
+            <tr>
+              <th>Hop</th>
+              <th>Method</th>
+              <th>Time / Temp</th>
+              <th>Total Weight (lbs)</th>
+              <th>Actual Weight (lbs)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(recipe.hopAdditions || []).map((hop, index) => (
+              <tr key={index}>
+                <td>{hop.name}</td>
+                <td>{hop.method}</td>
+                <td>{hop.time || hop.temp}</td>
+                <td>{hop.totalWeightLbs || "-"}</td>
+                <td>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="lbs"
+                    className="compact-input"
+                    value={actualHopWeights[index] || ""}
+                    onChange={(e) => updateHopWeight(index, e.target.value, id)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      <section className="salt-section">
+        <h2>Salt Additions</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Salt</th>
+              <th>Amount (g)</th>
+              <th>Actual (g)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(salts || []).map((salt, i) => (
+              <tr key={i}>
+                <td>{salt.name}</td>
+                <td>{salt.amount}</td>
+                <td>
+                  <input
+                    type="number"
+                    value={salt.actual || ""}
+                    onChange={(e) => updateSalt(i, e.target.value)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      <section className="water-section">
+        <h2>Water Chemistry</h2>
+        <label>
+          Mash pH Target:
+          <input
+            type="text"
+            value={mashPH || ""}
+            onChange={(e) => updateField("mashPH", e.target.value)}
+          />
+        </label>
+        <label>
+          Strike Temp (°F):
+          <input
+            type="text"
+            value={strikeTemp || ""}
+            onChange={(e) => updateField("strikeTemp", e.target.value)}
+          />
+        </label>
+        <label>
+          Sparge Temp (°F):
+          <input
+            type="text"
+            value={spargeTemp || ""}
+            onChange={(e) => updateField("spargeTemp", e.target.value)}
+          />
+        </label>
       </section>
 
       <section className="vorlauf-section">
@@ -152,6 +244,38 @@ function BrewSheet() {
           <textarea
             value={notes}
             onChange={(e) => updateField("notes", e.target.value)}
+          />
+        </label>
+      </section>
+
+      <section className="efficiency-section">
+        <h2>Efficiencies</h2>
+        <label>
+          Mash Efficiency:
+          <input
+            type="number"
+            placeholder="%"
+            value={efficiencies?.mash || ""}
+            onChange={(e) =>
+              updateField("efficiencies", {
+                ...efficiencies,
+                mash: e.target.value,
+              })
+            }
+          />
+        </label>
+        <label>
+          Brewhouse Efficiency:
+          <input
+            type="number"
+            placeholder="%"
+            value={efficiencies?.brewhouse || ""}
+            onChange={(e) =>
+              updateField("efficiencies", {
+                ...efficiencies,
+                brewhouse: e.target.value,
+              })
+            }
           />
         </label>
       </section>
