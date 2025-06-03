@@ -68,21 +68,50 @@ function BrewSheet() {
       </header>
 
       <section className="grain-section">
-        <h2>Grain Bill</h2>
-        <ul>
-          {(recipe.grainBill || []).map((grain, i) => (
-            <li key={i}>
-              {grain.grainId}: {grain.weightLbs} lbs
+  <h2>Grain Bill</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Grain</th>
+        <th>Target Weight (lbs)</th>
+        <th>% of Grist</th>
+        <th>Actual Weight (lbs)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {(recipe.grainBill || []).map((grain, i) => {
+        const totalWeight = recipe.grainBill.reduce(
+          (sum, g) => sum + parseFloat(g.weightLbs || 0),
+          0
+        );
+        const percent = totalWeight
+          ? ((grain.weightLbs / totalWeight) * 100).toFixed(1)
+          : "—";
+
+        return (
+          <tr key={i}>
+            <td>{grain.grainId}</td>
+            <td>{grain.weightLbs}</td>
+            <td>{percent}%</td>
+            <td>
               <input
-                type="text"
-                placeholder="Actual Weight"
+                type="number"
+                step="0.01"
+                placeholder="lbs"
+                className="compact-input"
                 value={actualGrainWeights[i] || ""}
-                onChange={(e) => updateGrainWeight(i, e.target.value, id)}
+                onChange={(e) =>
+                  updateGrainWeight(i, e.target.value, id)
+                }
               />
-            </li>
-          ))}
-        </ul>
-      </section>
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</section>
+
 
       <section className="hop-section">
         <h2>Hop Schedule</h2>
