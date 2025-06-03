@@ -146,8 +146,40 @@ function BrewSheet() {
         <p>Whirlpool Loss: {recipe.whirlpoolLossBBL} BBL</p>
         <p>Knockout Loss: {recipe.knockoutLossBBL} BBL</p>
       </section>
-    </div>
 
+      <section className="card">
+        <h2>Runoff Tracking</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Volume (gal)</th>
+              <th>Gravity (°P)</th>
+              <th>pH</th>
+            </tr>
+          </thead>
+          <tbody>
+            {runoffData.map((row, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td><input type="number" value={row.volume} onChange={(e) => updateRow("runoffData", index, "volume", e.target.value)} /></td>
+                <td><input type="number" value={row.gravity} onChange={(e) => updateRow("runoffData", index, "gravity", e.target.value)} /></td>
+                <td><input type="number" value={row.ph} onChange={(e) => updateRow("runoffData", index, "ph", e.target.value)} /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button onClick={() => addRow("runoffData")}>Add Row</button>
+      </section>
+
+      <section className="card">
+        <h2>Final Checks</h2>
+        <p>Pre-Boil Gravity: <input type="number" value={preBoil} onChange={(e) => updateField("preBoil", e.target.value)} /></p>
+        <p>Final OG: <input type="number" value={finalOG} onChange={(e) => updateField("finalOG", e.target.value)} /></p>
+        <p>Notes:</p>
+        <textarea value={notes} onChange={(e) => updateField("notes", e.target.value)} />
+      </section>
+    </div>
   );
 }
 
