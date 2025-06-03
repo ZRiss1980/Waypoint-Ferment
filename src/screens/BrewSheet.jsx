@@ -258,53 +258,99 @@ function BrewSheet() {
 </section>
 
 
-      <section className="vorlauf-section">
-        <h2>Vorlauf Tracking</h2>
-        {vorlaufData.map((row, i) => (
-          <div key={i}>
+<section className="Vorlauf-section">
+  <h2>Vorlauf Tracking</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Volume (L)</th>
+        <th>Gravity (°P)</th>
+        <th>pH</th>
+      </tr>
+    </thead>
+    <tbody>
+      {vorlaufData.map((row, index) => (
+        <tr key={index}>
+          <td>
             <input
-              placeholder="Volume"
+              type="text"
               value={row.volume}
-              onChange={(e) => updateRow("vorlaufData", i, "volume", e.target.value)}
+              onChange={(e) =>
+                updateRow("vorlaufData", index, "volume", e.target.value)
+              }
             />
+          </td>
+          <td>
             <input
-              placeholder="Gravity"
+              type="text"
               value={row.gravity}
-              onChange={(e) => updateRow("vorlaufData", i, "gravity", e.target.value)}
+              onChange={(e) =>
+                updateRow("vorlaufData", index, "gravity", e.target.value)
+              }
             />
+          </td>
+          <td>
             <input
-              placeholder="pH"
+              type="text"
               value={row.ph}
-              onChange={(e) => updateRow("vorlaufData", i, "ph", e.target.value)}
+              onChange={(e) =>
+                updateRow("vorlaufData", index, "ph", e.target.value)
+              }
             />
-          </div>
-        ))}
-        <button onClick={() => addRow("vorlaufData")}>Add Vorlauf Row</button>
-      </section>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <button onClick={() => addRow("vorlaufData")}>+ Add Row</button>
+</section>
 
-      <section className="runoff-section">
-        <h2>Runoff Tracking</h2>
-        {runoffData.map((row, i) => (
-          <div key={i}>
+<section className="Runoff-section">
+  <h2>Runoff Tracking</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Volume (L)</th>
+        <th>Gravity (°P)</th>
+        <th>pH</th>
+      </tr>
+    </thead>
+    <tbody>
+      {runoffData.map((row, index) => (
+        <tr key={index}>
+          <td>
             <input
-              placeholder="Volume"
+              type="text"
               value={row.volume}
-              onChange={(e) => updateRow("runoffData", i, "volume", e.target.value)}
+              onChange={(e) =>
+                updateRow("runoffData", index, "volume", e.target.value)
+              }
             />
+          </td>
+          <td>
             <input
-              placeholder="Gravity"
+              type="text"
               value={row.gravity}
-              onChange={(e) => updateRow("runoffData", i, "gravity", e.target.value)}
+              onChange={(e) =>
+                updateRow("runoffData", index, "gravity", e.target.value)
+              }
             />
+          </td>
+          <td>
             <input
-              placeholder="pH"
+              type="text"
               value={row.ph}
-              onChange={(e) => updateRow("runoffData", i, "ph", e.target.value)}
+              onChange={(e) =>
+                updateRow("runoffData", index, "ph", e.target.value)
+              }
             />
-          </div>
-        ))}
-        <button onClick={() => addRow("runoffData")}>Add Runoff Row</button>
-      </section>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <button onClick={() => addRow("runoffData")}>+ Add Row</button>
+</section>
 
       <section className="final-section">
         <h2>Final Readings</h2>
