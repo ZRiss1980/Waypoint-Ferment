@@ -4,10 +4,17 @@ import { db } from "../firebase";
 
 export const useBrewSheetStore = create((set, get) => ({
   actualGrainWeights: [],
+  vorlaufData: [],
+  runoffData: [],
+  preBoil: "",
+  finalOG: "",
+  notes: "",
+
   setInitialGrainWeights: (grainBill = []) => {
     const weights = grainBill.map(() => "");
     set({ actualGrainWeights: weights });
   },
+
   updateGrainWeight: async (index, value, planId) => {
     const updated = [...get().actualGrainWeights];
     updated[index] = value;
@@ -22,4 +29,21 @@ export const useBrewSheetStore = create((set, get) => ({
       }
     }
   },
+
+  addRow: (field) => {
+    const current = [...get()[field]];
+    current.push({ volume: "", gravity: "", ph: "" });
+    set({ [field]: current });
+  },
+
+  updateRow: (field, index, key, value) => {
+    const data = [...get()[field]];
+    if (!data[index]) return;
+    data[index][key] = value;
+    set({ [field]: data });
+  },
+
+  updateField: (field, value) => {
+    set({ [field]: value });
+  }
 }));
