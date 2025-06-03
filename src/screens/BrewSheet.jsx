@@ -159,7 +159,7 @@ function BrewSheet() {
             </tr>
           </thead>
           <tbody>
-            {runoffData.map((row, index) => (
+            {(runoffData || []).map((row, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td><input type="number" value={row.volume} onChange={(e) => updateRow("runoffData", index, "volume", e.target.value)} /></td>
