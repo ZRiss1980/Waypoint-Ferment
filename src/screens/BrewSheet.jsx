@@ -9,21 +9,19 @@ function BrewSheet() {
   const { id } = useParams();
   const [plan, setPlan] = useState(null);
   const [recipe, setRecipe] = useState(null);
-
-  const brewSheetStore = useBrewSheetStore();
   const {
     actualGrainWeights,
-    setInitialGrainWeights,
-    updateGrainWeight,
     vorlaufData,
     runoffData,
     preBoil,
     finalOG,
     notes,
+    setInitialGrainWeights,
+    updateGrainWeight,
     addRow,
     updateRow,
     updateField
-  } = brewSheetStore;
+  } = useBrewSheetStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,22 +37,15 @@ function BrewSheet() {
           if (recipeSnap.exists()) {
             const recipeData = recipeSnap.data();
             setRecipe(recipeData);
-            if (recipeData.grainBill) {
-              setInitialGrainWeights(recipeData.grainBill);
-            }
+            setInitialGrainWeights(recipeData.grainBill);
           }
         }
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, setInitialGrainWeights]);
 
-  if (!plan || !recipe) {
-    return <div className="brewsheet"><p>Loading brew sheet...</p></div>;
-  }
-
-  const displayTG = typeof recipe.TG === "number" && recipe.TG !== 0 ? recipe.TG : "—";
-  const srmColorHex = typeof recipe.SRMHex === "string" && recipe.SRMHex.trim() !== "" ? recipe.SRMHex : "#dddddd";
+  if (!plan || !recipe) return <div>Loading...</div>;
 
   return (
     <div className="brewsheet">
@@ -64,120 +55,105 @@ function BrewSheet() {
         <p>Style: {recipe.style || "—"}</p>
       </header>
 
-      <section className="card">
-        <h2>Batch Info</h2>
+      <section className="grain-section">
+        <h2>Grain Bill</h2>
         <ul>
-          <li>Batch Size: {recipe.batchSizeBBL} BBL</li>
-          <li>Fermenter: {plan.assignedFermenter || "Unassigned"}</li>
-          <li>Target OG: {recipe.OG}</li>
-          <li>Target TG: {displayTG}</li>
-          <li>ABV: {recipe.ABV}%</li>
-          <li>SRM: {recipe.SRM} <span style={{ backgroundColor: srmColorHex, padding: "0 10px" }}></span></li>
-          <li>IBU: {recipe.IBU}</li>
+          {recipe.grainBill.map((grain, i) => (
+            <li key={i}>
+              {grain.name}: {grain.amount} lbs
+              <input
+                type="text"
+                placeholder="Actual Weight"
+                value={actualGrainWeights[i] || ""}
+                onChange={(e) => updateGrainWeight(i, e.target.value, id)}
+              />
+            </li>
+          ))}
         </ul>
       </section>
 
-      <section className="card">
-        <h2>Water Chemistry</h2>
-        <p>Water Source: {recipe.waterSource}</p>
-        <p>Mash pH Target: {recipe.mashPHTarget}</p>
-        <p>Chloride: {recipe.targetWaterProfile?.chloride} ppm</p>
-        <p>Sulfate: {recipe.targetWaterProfile?.sulfate} ppm</p>
-        <p>Calcium: {recipe.targetWaterProfile?.calcium} ppm</p>
-        <p>Magnesium: {recipe.targetWaterProfile?.magnesium} ppm</p>
-        <p>Sodium: {recipe.targetWaterProfile?.sodium} ppm</p>
-        <p>Potassium: {recipe.targetWaterProfile?.potassium} ppm</p>
-        <p>Bicarbonate: {recipe.targetWaterProfile?.bicarbonate} ppm</p>
+      <section className="hop-section">
+        <h2>Hop Schedule</h2>
+        <ul>
+          {recipe.hops && recipe.hops.map((hop, i) => (
+            <li key={i}>
+              {hop.name} — {hop.amount} oz — {hop.method} @ {hop.time} min — {hop.temp}°F
+            </li>
+          ))}
+        </ul>
       </section>
 
-      <section className="card">
-        <h2>Salt Additions</h2>
-        <table>
-          <thead>
-            <tr><th>Salt</th><th>Corrects</th><th>Total (g)</th></tr>
-          </thead>
-          <tbody>
-            {(recipe.saltRecommendations || []).map((salt, index) => (
-              <tr key={index}>
-                <td>{salt.salt}</td>
-                <td>{salt.corrects}</td>
-                <td>{salt.totalGrams}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <section className="vorlauf-section">
+        <h2>Vorlauf Tracking</h2>
+        {vorlaufData.map((row, i) => (
+          <div key={i}>
+            <input
+              placeholder="Volume"
+              value={row.volume}
+              onChange={(e) => updateRow("vorlaufData", i, "volume", e.target.value)}
+            />
+            <input
+              placeholder="Gravity"
+              value={row.gravity}
+              onChange={(e) => updateRow("vorlaufData", i, "gravity", e.target.value)}
+            />
+            <input
+              placeholder="pH"
+              value={row.ph}
+              onChange={(e) => updateRow("vorlaufData", i, "ph", e.target.value)}
+            />
+          </div>
+        ))}
+        <button onClick={() => addRow("vorlaufData")}>Add Vorlauf Row</button>
       </section>
 
-      <section className="card">
-        <h2>Boil</h2>
-        <h3>Hop Schedule</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Hop</th>
-              <th>Method</th>
-              <th>Time / Temp</th>
-              <th>Total Weight (lbs)</th>
-              <th>Actual Weight (lbs)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(recipe.hopAdditions || []).map((hop, index) => (
-              <tr key={index}>
-                <td>{hop.name}</td>
-                <td>{hop.method}</td>
-                <td>{hop.time || hop.temp}</td>
-                <td>{hop.totalWeightLbs || "-"}</td>
-                <td>
-                  <input type="number" step="0.01" placeholder="lbs" className="compact-input" disabled />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-
-      <section className="card">
-        <h2>Losses & Efficiencies</h2>
-        <p>Brewhouse Efficiency: {(recipe.brewhouseEfficiency * 100).toFixed(1)}%</p>
-        <p>Mash Efficiency: {(recipe.mashEfficiency * 100).toFixed(1)}%</p>
-        <p>Lauter Efficiency: {(recipe.lauterEfficiency * 100).toFixed(1)}%</p>
-        <p>Boil Loss: {recipe.boilLossBBL} BBL</p>
-        <p>Whirlpool Loss: {recipe.whirlpoolLossBBL} BBL</p>
-        <p>Knockout Loss: {recipe.knockoutLossBBL} BBL</p>
-      </section>
-
-      <section className="card">
+      <section className="runoff-section">
         <h2>Runoff Tracking</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Step</th>
-              <th>Volume (gal)</th>
-              <th>Gravity (°P)</th>
-              <th>pH</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(runoffData || []).map((row, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td><input type="number" value={row.volume} onChange={(e) => updateRow("runoffData", index, "volume", e.target.value)} /></td>
-                <td><input type="number" value={row.gravity} onChange={(e) => updateRow("runoffData", index, "gravity", e.target.value)} /></td>
-                <td><input type="number" value={row.ph} onChange={(e) => updateRow("runoffData", index, "ph", e.target.value)} /></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button onClick={() => addRow("runoffData")}>Add Row</button>
+        {runoffData.map((row, i) => (
+          <div key={i}>
+            <input
+              placeholder="Volume"
+              value={row.volume}
+              onChange={(e) => updateRow("runoffData", i, "volume", e.target.value)}
+            />
+            <input
+              placeholder="Gravity"
+              value={row.gravity}
+              onChange={(e) => updateRow("runoffData", i, "gravity", e.target.value)}
+            />
+            <input
+              placeholder="pH"
+              value={row.ph}
+              onChange={(e) => updateRow("runoffData", i, "ph", e.target.value)}
+            />
+          </div>
+        ))}
+        <button onClick={() => addRow("runoffData")}>Add Runoff Row</button>
       </section>
 
-      <section className="card">
-        <h2>Final Checks</h2>
-        <p>Pre-Boil Gravity: <input type="number" value={preBoil} onChange={(e) => updateField("preBoil", e.target.value)} /></p>
-        <p>Final OG: <input type="number" value={finalOG} onChange={(e) => updateField("finalOG", e.target.value)} /></p>
-        <p>Notes:</p>
-        <textarea value={notes} onChange={(e) => updateField("notes", e.target.value)} />
+      <section className="final-section">
+        <h2>Final Readings</h2>
+        <label>
+          Pre-boil Gravity:
+          <input
+            value={preBoil}
+            onChange={(e) => updateField("preBoil", e.target.value)}
+          />
+        </label>
+        <label>
+          Final OG:
+          <input
+            value={finalOG}
+            onChange={(e) => updateField("finalOG", e.target.value)}
+          />
+        </label>
+        <label>
+          Notes:
+          <textarea
+            value={notes}
+            onChange={(e) => updateField("notes", e.target.value)}
+          />
+        </label>
       </section>
     </div>
   );
