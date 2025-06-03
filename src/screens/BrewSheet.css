@@ -19,7 +19,7 @@
   font-family: sans-serif;
 }
 
-.section {
+section {
   background-color: var(--black);
   border: var(--border);
   border-radius: 12px;
@@ -59,23 +59,23 @@ h2, h3, h4 {
 
 .brewsheet-header .meta,
 .brewsheet-header p,
-.section p,
-.section small {
+section p,
+section small {
   font-size: 0.9rem;
   color: var(--gray-light);
 }
 
-.section h2 {
+section h2 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
 }
 
-.section h4 {
+section h4 {
   font-size: 1rem;
   margin-bottom: 0.75rem;
 }
 
-.section table {
+section table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
@@ -84,20 +84,20 @@ h2, h3, h4 {
   border: var(--border);
 }
 
-.section th,
-.section td {
+section th,
+section td {
   padding: 0.5rem;
   border-bottom: 1px solid var(--gray-mid);
   text-align: left;
   border-right: 1px solid var(--gray-mid);
 }
 
-.section th:last-child,
-.section td:last-child {
+section th:last-child,
+section td:last-child {
   border-right: none;
 }
 
-.section textarea {
+section textarea {
   width: 100%;
   border-radius: 8px;
   padding: 0.75rem;
