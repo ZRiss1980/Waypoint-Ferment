@@ -377,37 +377,31 @@ function BrewSheet() {
         </label>
       </section>
 
-      <section className="efficiency-section">
-        <h2>Efficiencies</h2>
-        <label>
-          Mash Efficiency:
-          <input
-            type="number"
-            placeholder="%"
-            value={efficiencies?.mash || ""}
-            onChange={(e) =>
-              updateField("efficiencies", {
-                ...efficiencies,
-                mash: e.target.value,
-              })
-            }
-          />
-        </label>
-        <label>
-          Brewhouse Efficiency:
-          <input
-            type="number"
-            placeholder="%"
-            value={efficiencies?.brewhouse || ""}
-            onChange={(e) =>
-              updateField("efficiencies", {
-                ...efficiencies,
-                brewhouse: e.target.value,
-              })
-            }
-          />
-        </label>
-      </section>
+      <section className="Efficiency-section">
+  <h2>Efficiencies</h2>
+
+  <div className="efficiency-row">
+    <strong>Mash Efficiency:</strong>{" "}
+    {recipe?.mashEfficiency !== undefined
+      ? `${(recipe.mashEfficiency * 100).toFixed(1)}%`
+      : "N/A"}
+  </div>
+
+  <div className="efficiency-row">
+    <strong>Lauter Efficiency:</strong>{" "}
+    {recipe?.lauterEfficiency !== undefined
+      ? `${(recipe.lauterEfficiency * 100).toFixed(1)}%`
+      : "N/A"}
+  </div>
+
+  <div className="efficiency-row">
+    <strong>Brewhouse Efficiency:</strong>{" "}
+    {recipe?.brewhouseEfficiency !== undefined
+      ? `${(recipe.brewhouseEfficiency * 100).toFixed(1)}%`
+      : "N/A"}
+  </div>
+</section>
+
     </div>
   );
 }
