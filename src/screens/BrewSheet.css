@@ -1,11 +1,11 @@
 :root {
-  --brew-border: 2px solid #cccc;
-  --brew-bg: #2b2b2b;
-  --brew-bg-alt: #1e1e1e;
-  --brew-text: #cccc;
-  --brew-accent: #cccc;
-  --brew-highlight: #fbbf24;
-  --brew-white: #ffffff;
+  --gold: #D4AF37;
+  --gray-light: #cccccc;
+  --gray-mid: #888888;
+  --gray-dark: #2b2b2b;
+  --black: #1e1e1e;
+  --white: #ffffff;
+  --border: 2px solid var(--gray-light);
 }
 
 .brewsheet {
@@ -13,41 +13,47 @@
   flex-direction: column;
   gap: 2rem;
   padding: 2rem;
-  background-color: var(--brew-bg);
-  color: var(--brew-text);
+  background-color: var(--gray-dark);
+  color: var(--gray-light);
   margin: 0 auto;
   font-family: sans-serif;
 }
 
 .card {
-  background-color: var(--brew-bg-alt);
-  border: 2px solid #cccc !important;
+  background-color: var(--black);
+  border: var(--border);
   border-radius: 12px;
   padding: 1.25rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   width: 100%;
   box-sizing: border-box;
 }
+
 table input {
   max-width: 70px;
-  width: 100%; /* fills the table cell */
+  width: 100%;
+  border: 1px solid var(--gray-mid);
+  background-color: var(--black);
+  color: var(--white);
+  padding: 0.4rem;
+  border-radius: 4px;
 }
 
 h1 {
-  color: var(--brew-highlight);
+  color: var(--gold);
   font-size: 2.5rem;
-  border-bottom: 2px solid var(--brew-highlight);
+  border-bottom: 2px solid var(--gold);
   padding-bottom: 0.5rem;
   margin-bottom: 1.5rem;
 }
 
 h2, h3, h4 {
-  color: var(--brew-text);
+  color: var(--gray-light);
 }
 
 .brewsheet-header {
   text-align: center;
-  border-bottom: var(--brew-border);
+  border-bottom: var(--border);
   margin-bottom: 2rem;
 }
 
@@ -56,7 +62,7 @@ h2, h3, h4 {
 .card p,
 .card small {
   font-size: 0.9rem;
-  color: var(--brew-text);
+  color: var(--gray-light);
 }
 
 .card h2 {
@@ -73,53 +79,60 @@ h2, h3, h4 {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
-  color: var(--brew-text);
+  color: var(--gray-light);
   margin-top: 1rem;
+  border: var(--border);
 }
 
 .card th,
 .card td {
   padding: 0.5rem;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid var(--gray-mid);
   text-align: left;
+  border-right: 1px solid var(--gray-mid);
+}
+
+.card th:last-child,
+.card td:last-child {
+  border-right: none;
 }
 
 .card textarea {
   width: 100%;
   border-radius: 8px;
   padding: 0.75rem;
-  background-color: #121212;
-  border: 1px solid #555;
-  color: var(--brew-white);
+  background-color: var(--black);
+  border: 1px solid var(--gray-mid);
+  color: var(--white);
   resize: vertical;
 }
 
 .brewsheet-label {
   font-weight: 500;
-  color: var(--brew-text);
+  color: var(--gray-light);
 }
 
 .brewsheet-value,
 .brewsheet-input {
-  background-color: #121212;
-  border: 1px solid #444;
+  background-color: var(--black);
+  border: 1px solid var(--gray-mid);
   border-radius: 4px;
   padding: 0.4rem 0.6rem;
-  color: var(--brew-text);
+  color: var(--gray-light);
 }
 
 .brewsheet-input:focus,
 button:hover,
 a:hover {
-  color: var(--brew-white);
+  color: var(--white);
 }
 
 .brewsheet-savebar {
   position: sticky;
   bottom: 0;
-  background-color: var(--brew-bg);
+  background-color: var(--gray-dark);
   padding: 1rem;
-  border-top: var(--brew-border);
+  border-top: var(--border);
   text-align: right;
   z-index: 10;
 }
@@ -138,9 +151,9 @@ a:hover {
 
 .compact-input {
   width: 70px;
-  background-color: var(--brew-bg-alt);
-  border: 1px solid #555;
-  color: var(--brew-text);
+  background-color: var(--black);
+  border: 1px solid var(--gray-mid);
+  color: var(--gray-light);
   border-radius: 4px;
   padding: 0.25rem 0.4rem;
 }
@@ -163,21 +176,21 @@ a:hover {
   margin-top: 0.25rem;
   padding: 0.4rem 0.6rem;
   font-size: 0.9rem;
-  background-color: #121212;
-  border: 1px solid #444;
-  color: var(--brew-text);
+  background-color: var(--black);
+  border: 1px solid var(--gray-mid);
+  color: var(--gray-light);
   border-radius: 4px;
 }
 
 .subinline {
   font-size: 0.75rem;
-  color: var(--brew-text);
+  color: var(--gray-light);
   margin-top: 0.25rem;
 }
 
 .brewsheet-savebar button {
-  background-color: var(--brew-accent);
-  color: var(--brew-text);
+  background-color: var(--gray-light);
+  color: var(--gray-dark);
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   font-weight: bold;
@@ -187,8 +200,8 @@ a:hover {
 }
 
 .brewsheet-savebar button:hover {
-  background-color: #444;
-  color: var(--brew-white);
+  background-color: var(--gray-mid);
+  color: var(--white);
 }
 
 .brewsheet-row {
@@ -203,20 +216,6 @@ a:hover {
   margin-top: 0.5rem;
   padding: 0.3rem 0.6rem;
   font-size: 0.9rem;
-  background-color: var(--brew-bg-alt);
-  color: var(--brew-text);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.add-row-button:hover {
-  background-color: #444;
-  color: var(--brew-white);
-}
-
-.add-row-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #D4AF37;
-}
+  background-color: var(--black);
+  color: var(--gray-light);
+  border: 1px
