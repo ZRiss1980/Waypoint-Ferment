@@ -29,6 +29,13 @@
   box-sizing: border-box;
 }
 
+.card-section {
+  border: var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
 table input {
   max-width: 70px;
   width: 100%;
@@ -170,6 +177,9 @@ a:hover {
   flex-direction: column;
   flex: 1 1 220px;
   min-width: 200px;
+  border: var(--border);
+  padding: 0.75rem;
+  border-radius: 8px;
 }
 
 .strike-grouped input {
@@ -218,4 +228,18 @@ a:hover {
   font-size: 0.9rem;
   background-color: var(--black);
   color: var(--gray-light);
-  border: 1px
+  border: 1px solid var(--gray-mid);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.add-row-button:hover {
+  background-color: var(--gray-mid);
+  color: var(--white);
+}
+
+.add-row-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--gold);
+}
