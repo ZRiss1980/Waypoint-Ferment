@@ -170,11 +170,44 @@ function BrewSheet() {
     </tbody>
   </table>
 </section>
+<section className="water-chemistry-section">
+  <h2>Water Chemistry Profile</h2>
+  {recipe?.targetWaterProfile ? (
+    <table>
+      <thead>
+        <tr>
+          <th>Profile</th>
+          <th>pH</th>
+          <th>Calcium (Ca⁺⁺)</th>
+          <th>Magnesium (Mg⁺⁺)</th>
+          <th>Sodium (Na⁺)</th>
+          <th>Chloride (Cl⁻)</th>
+          <th>Sulfate (SO₄²⁻)</th>
+          <th>Bicarbonate (HCO₃⁻)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{recipe.targetWaterProfile.profileName || "—"}</td>
+          <td>{recipe.targetWaterProfile.ph ?? "—"}</td>
+          <td>{recipe.targetWaterProfile.calcium ?? "—"}</td>
+          <td>{recipe.targetWaterProfile.magnesium ?? "—"}</td>
+          <td>{recipe.targetWaterProfile.sodium ?? "—"}</td>
+          <td>{recipe.targetWaterProfile.chloride ?? "—"}</td>
+          <td>{recipe.targetWaterProfile.sulfate ?? "—"}</td>
+          <td>{recipe.targetWaterProfile.bicarbonate ?? "—"}</td>
+        </tr>
+      </tbody>
+    </table>
+  ) : (
+    <p>No water profile data available.</p>
+  )}
+</section>
 
 
 
-      <section className="water-section">
-        <h2>Water Chemistry</h2>
+      <section className="MashIn-section">
+        <h2>Mash In</h2>
         <label>
           Mash pH Target:
           <input
