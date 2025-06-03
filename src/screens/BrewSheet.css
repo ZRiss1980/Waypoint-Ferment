@@ -19,7 +19,7 @@
   font-family: sans-serif;
 }
 
-.card {
+.section {
   background-color: var(--black);
   border: var(--border);
   border-radius: 12px;
@@ -27,13 +27,6 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   width: 100%;
   box-sizing: border-box;
-}
-
-.card-section {
-  border: var(--border);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
 }
 
 table input {
@@ -66,23 +59,23 @@ h2, h3, h4 {
 
 .brewsheet-header .meta,
 .brewsheet-header p,
-.card p,
-.card small {
+.section p,
+.section small {
   font-size: 0.9rem;
   color: var(--gray-light);
 }
 
-.card h2 {
+.section h2 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
 }
 
-.card h4 {
+.section h4 {
   font-size: 1rem;
   margin-bottom: 0.75rem;
 }
 
-.card table {
+.section table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
@@ -91,20 +84,20 @@ h2, h3, h4 {
   border: var(--border);
 }
 
-.card th,
-.card td {
+.section th,
+.section td {
   padding: 0.5rem;
   border-bottom: 1px solid var(--gray-mid);
   text-align: left;
   border-right: 1px solid var(--gray-mid);
 }
 
-.card th:last-child,
-.card td:last-child {
+.section th:last-child,
+.section td:last-child {
   border-right: none;
 }
 
-.card textarea {
+.section textarea {
   width: 100%;
   border-radius: 8px;
   padding: 0.75rem;
