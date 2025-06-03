@@ -1,23 +1,32 @@
 import { create } from "zustand";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 export const useBrewSheetStore = create((set, get) => ({
+  // Actuals state
   actualGrainWeights: [],
   actualHopWeights: [],
   vorlaufData: [],
   runoffData: [],
   salts: [],
   mashPH: "",            // Target
-  actualMashPH: "",      // Actual (new)
+  actualMashPH: "",      // Actual
   strikeTemp: "",        // Target
-  actualStrikeTemp: "",  // Actual (new)
+  actualStrikeTemp: "",  // Actual
   spargeTemp: "",        // Target
-  actualSpargeTemp: "",  // Actual (new)
+  actualSpargeTemp: "",  // Actual
   efficiencies: { mash: "", brewhouse: "" },
   preBoil: "",
   finalOG: "",
   notes: "",
+
+  // Used for routing writes
+  recipeId: "",
+  batchId: "",
+
+  setRecipeAndBatch: (recipeId, batchId) => {
+    set({ recipeId, batchId });
+  },
 
   setInitialGrainWeights: (grainBill = []) => {
     const weights = grainBill.map(() => "");
@@ -33,48 +42,38 @@ export const useBrewSheetStore = create((set, get) => ({
     set({ salts: saltAdditions });
   },
 
-  updateGrainWeight: async (index, value, planId) => {
-    const updated = [...get().actualGrainWeights];
+  updateGrainWeight: (index, value) => {
+    const { actualGrainWeights, recipeId, batchId } = get();
+    const updated = [...actualGrainWeights];
     updated[index] = value;
     set({ actualGrainWeights: updated });
-
-    if (planId) {
-      try {
-        const planRef = doc(db, "userPlans", planId);
-        await updateDoc(planRef, { actualGrainWeights: updated });
-      } catch (error) {
-        console.error("🔥 Firestore update error (grain):", error);
-      }
-    }
+    writeActualsToFirestore({ actualGrainWeights: updated }, recipeId, batchId);
   },
 
-  updateHopWeight: async (index, value, planId) => {
-    const updated = [...get().actualHopWeights];
+  updateHopWeight: (index, value) => {
+    const { actualHopWeights, recipeId, batchId } = get();
+    const updated = [...actualHopWeights];
     updated[index] = value;
     set({ actualHopWeights: updated });
-
-    if (planId) {
-      try {
-        const planRef = doc(db, "userPlans", planId);
-        await updateDoc(planRef, { actualHopWeights: updated });
-      } catch (error) {
-        console.error("🔥 Firestore update error (hop):", error);
-      }
-    }
+    writeActualsToFirestore({ actualHopWeights: updated }, recipeId, batchId);
   },
 
   updateSalt: (index, value) => {
-    const updated = [...get().salts];
+    const { salts, recipeId, batchId } = get();
+    const updated = [...salts];
     if (!updated[index]) return;
     updated[index].actual = value;
     set({ salts: updated });
+    writeActualsToFirestore({ salts: updated }, recipeId, batchId);
   },
 
   updateRow: (field, index, key, value) => {
+    const { recipeId, batchId } = get();
     const data = [...get()[field]];
     if (!data[index]) return;
     data[index][key] = value;
     set({ [field]: data });
+    writeActualsToFirestore({ [field]: data }, recipeId, batchId);
   },
 
   addRow: (field) => {
@@ -85,5 +84,17 @@ export const useBrewSheetStore = create((set, get) => ({
 
   updateField: (field, value) => {
     set({ [field]: value });
+    const { recipeId, batchId } = get();
+    writeActualsToFirestore({ [field]: value }, recipeId, batchId);
   }
 }));
+
+async function writeActualsToFirestore(data, recipeId, batchId) {
+  if (!recipeId || !batchId) return;
+  try {
+    const ref = doc(db, `recipes/${recipeId}/actuals/${batchId}`);
+    await setDoc(ref, data, { merge: true });
+  } catch (err) {
+    console.error("🔥 Firestore actuals write error:", err);
+  }
+}
