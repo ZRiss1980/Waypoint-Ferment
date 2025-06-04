@@ -1,31 +1,37 @@
 // /src/screens/Home.jsx
 
 import React, { useEffect, useState } from "react";
-import { useFermenters } from "../hooks/useFermenters";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
+import useGlobalSyncStore from "../store/globalSyncStore";
 import "./Home.css";
 
 function Home() {
   const navigate = useNavigate();
-  const { fermenters, loading, error } = useFermenters();
+  const fermenters = useGlobalSyncStore((state) => state.globalFermenters);
   const [monthlyBrewPlans, setMonthlyBrewPlans] = useState([]);
 
   useEffect(() => {
     const fetchMonthlyPlans = async () => {
       try {
         const snapshot = await getDocs(collection(db, "userPlans"));
-        const allPlans = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const allPlans = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
         const now = new Date();
         const currentMonth = now.getMonth();
         const currentYear = now.getFullYear();
 
-        const plansThisMonth = allPlans.filter(plan => {
+        const plansThisMonth = allPlans.filter((plan) => {
           if (!plan.startDate) return false;
           const date = new Date(plan.startDate);
-          return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+          return (
+            date.getMonth() === currentMonth &&
+            date.getFullYear() === currentYear
+          );
         });
 
         setMonthlyBrewPlans(plansThisMonth);
@@ -45,46 +51,56 @@ function Home() {
     <div className="home dashboard">
       <h1>Waypoint Ferment – Mission Control</h1>
       <p className="subheading">
-        This dashboard will show fermenters, BTs, the weekly schedule, tasks, and active brews.
+        This dashboard will show fermenters, BTs, the weekly schedule, tasks,
+        and active brews.
       </p>
 
       <div className="dashboard-grid">
         <section className="card">
-          <h2 className="home-link" onClick={() => navigate("/schedule")}>Brew Schedule</h2>
-          {!loading && monthlyBrewPlans.length > 0 && fermenters.length > 0 && (
+          <h2
+            className="home-link"
+            onClick={() => navigate("/schedule")}
+          >
+            Brew Schedule
+          </h2>
+          {monthlyBrewPlans.length > 0 && fermenters.length > 0 && (
             <ul>
               {monthlyBrewPlans.map((plan) => {
-                console.log("plan:", plan.beerName, "→ assignedFermenter:", plan.assignedFermenter);
-                console.log("fermenters:", fermenters.map(f => f.id));
-
-                const match = fermenters.find(f => f.firestoreId === plan.assignedFermenter);
-console.log("Matching FV for", plan.beerName, "→", match);
-const assignedFV = match?.id;
+                const match = fermenters.find(
+                  (f) => f.firestoreId === plan.assignedFermenter
+                );
+                const assignedFV = match?.id;
 
                 return (
                   <li key={plan.id}>
-                    {plan.beerName} – Brew Day: {new Date(plan.startDate).toLocaleDateString()} – FV: {assignedFV || "unassigned"}
+                    {plan.beerName} – Brew Day:{" "}
+                    {new Date(plan.startDate).toLocaleDateString()} – FV:{" "}
+                    {assignedFV || "unassigned"}
                   </li>
                 );
               })}
             </ul>
           )}
-          {monthlyBrewPlans.length === 0 && <li>No brews scheduled this month</li>}
+          {monthlyBrewPlans.length === 0 && (
+            <li>No brews scheduled this month</li>
+          )}
         </section>
 
         <section className="card">
-          <h2 style={{ cursor: 'pointer' }} onClick={() => navigate('/tanks')}>Fermenters</h2>
+          <h2 style={{ cursor: "pointer" }} onClick={() => navigate("/tanks")}>
+            Fermenters
+          </h2>
           <ul>
-            {loading && <li>Loading fermenters...</li>}
-            {error && <li>Error loading tanks</li>}
-            {!loading && fermenters.length === 0 && <li>No active fermenters</li>}
+            {fermenters.length === 0 && <li>No active fermenters</li>}
             {fermenters.map((f) => {
               const name = f.currentBatch?.beerName || "Unknown";
               const start = new Date(f.startDate);
               const today = new Date();
-              const day = Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
+              const day =
+                Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
               const total = f.fermentationDaysExpected || "–";
-              const statusNote = f.currentStatus === "cold_crash" ? " (Cold Crash)" : "";
+              const statusNote =
+                f.currentStatus === "cold_crash" ? " (Cold Crash)" : "";
               return (
                 <li key={f.id}>
                   {`${f.id}: ${name} – Day ${day}/${total}${statusNote}`}
