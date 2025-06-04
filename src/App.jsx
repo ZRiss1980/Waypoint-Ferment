@@ -25,7 +25,9 @@ import Tanks from "./screens/Tanks";
 import {
   subscribeToFermenters,
   subscribeToUserPlans,
+  subscribeToRecipes,
 } from "./store/globalSync";
+
 
 import "./App.css";
 
@@ -35,10 +37,13 @@ function App() {
      console.log("✅ App mounted");
     const unsubFermenters = subscribeToFermenters();
     const unsubUserPlans = subscribeToUserPlans();
+    const unsubReecipes = subscribeToRecipes();
     return () => {
       unsubFermenters();
       unsubUserPlans();
+      unsubReecipes(); 
     };
+
   }, []);
 
   return (

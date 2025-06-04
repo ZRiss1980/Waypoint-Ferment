@@ -7,6 +7,8 @@ import { collection, onSnapshot } from "firebase/firestore";
 const useGlobalSyncStore = create((set) => ({
   globalFermenters: [],
   globalUserPlans: [],
+  globalRecipes: [],
+  setGlobalRecipes: (recipes) => set({ globalRecipes: recipes }),
   setGlobalFermenters: (fermenters) => set({ globalFermenters: fermenters }),
   setGlobalUserPlans: (plans) => set({ globalUserPlans: plans }),
 }));
@@ -44,5 +46,22 @@ export const subscribeToUserPlans = () => {
 
   return unsubscribe;
 };
+
+export const subscribeToRecipes = () => {
+  const recipesRef = collection(db, "recipes");
+  console.log("📡 Subscribing to recipes...");
+
+  const unsubscribe = onSnapshot(recipesRef, (snapshot) => {
+    const recipes = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    console.log("📥 Recipes updated:", recipes);
+    useGlobalSyncStore.getState().setGlobalRecipes(recipes);
+  });
+
+  return unsubscribe;
+};
+
 
 export default useGlobalSyncStore;

@@ -112,11 +112,16 @@ function Home() {
 
         <section className="card">
           <h2>Recent Recipes</h2>
-          <ul>
-            <li>Daybreak IPA (Thiolized)</li>
-            <li>Hearthdeep Brown Ale</li>
-          </ul>
+            <ul>
+              {[...useGlobalSyncStore(state => state.globalRecipes)]
+                .sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds)
+                .slice(0, 5)
+                .map((recipe) => (
+                <li key={recipe.id}>{recipe.beerName || "Unnamed"}</li>
+              ))}
+            </ul>
         </section>
+
 
         <section className="card">
           <h2>Reminders</h2>
