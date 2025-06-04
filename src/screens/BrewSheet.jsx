@@ -70,7 +70,7 @@ function BrewSheet() {
 
     // For now: reset submit state and redirect
     alert("Brew logged to fermenter!");
-    window.location.href = "/home";
+    window.location.href = "/";
 
   } catch (error) {
     console.error("🔥 Error submitting batch:", error.message);
