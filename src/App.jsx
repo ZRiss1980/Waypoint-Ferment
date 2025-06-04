@@ -62,4 +62,16 @@ function App() {
             <Route index element={<Navigate to="parameters" />} />
             <Route path="parameters" element={<Parameters />} />
             <Route path="grain-selection" element={<GrainSelection />} />
-            <Route path="hop-selection" element={<HopSelection />} /
+            <Route path="hop-selection" element={<HopSelection />} />
+            <Route path="water-chemistry" element={<WaterChemistry />} />
+            <Route path="yeast-health" element={<YeastHealth />} />
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+    </Router>
+  );
+}
+
+export default App;
