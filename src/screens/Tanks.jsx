@@ -166,7 +166,7 @@ function Tanks() {
             <tr key={f.id}>
               <td>{f.id}</td>
               <td>{f.currentStatus || "n/a"}</td>
-              <td>{f.currentBatch?.beerName || "—"}</td>
+              <td>{f.beerName || "—"}</td>
               <td>{f.startDate || "—"}</td>
               <td>{f.fermentationDaysExpected || "—"}</td>
               <td>{f.lastCIP || "—"}</td>
