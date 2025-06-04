@@ -4,6 +4,15 @@ import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import "./BrewSheet.css";
 import { useBrewSheetStore } from "../store/useBrewSheetStore";
+import {
+  getDocs,
+  query,
+  collection,
+  where,
+  setDoc,
+} from "firebase/firestore";
+
+
 
 function BrewSheet() {
   const { id } = useParams();
@@ -32,6 +41,44 @@ function BrewSheet() {
     updateRow,
     addRow,
   } = useBrewSheetStore();
+  const handleSubmitBatch = async () => {
+  if (!plan || !recipe || !selectedFV) {
+    alert("Missing plan, recipe, or fermenter selection.");
+    return;
+  }
+  try {
+    setIsSubmitting(true);
+
+    const finalOGValue = parseFloat(finalOG) || null;
+    const finalVolumeValue =
+      parseFloat(runoffData?.[runoffData.length - 1]?.volume) || null;
+
+    const fermenterRef = doc(db, "fermenters", selectedFV);
+    await setDoc(
+      fermenterRef,
+      {
+        beerName: plan.beerName || "Unnamed",
+        volume: finalVolumeValue,
+        OG: finalOGValue,
+      },
+      { merge: true } // preserve other fields in doc
+    );
+
+    console.log(`✅ Fermenter ${selectedFV} updated`);
+
+    // Proceed to next step in future: batch creation
+
+    // For now: reset submit state and redirect
+    alert("Brew logged to fermenter!");
+    window.location.href = "/home";
+
+  } catch (error) {
+    console.error("🔥 Error submitting batch:", error.message);
+    alert("Something went wrong. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +105,32 @@ function BrewSheet() {
   }, [id, setInitialGrainWeights, setInitialHopWeights, setInitialSalts]);
 
   if (!plan || !recipe) return <div>Loading...</div>;
+
+  // Add this inside your component function before return:
+const [availableFVs, setAvailableFVs] = useState([]);
+const [selectedFV, setSelectedFV] = useState("");
+const [isSubmitting, setIsSubmitting] = useState(false);
+
+useEffect(() => {
+  // Fetch available fermenters from Firestore (those without a beerName assigned)
+  const fetchAvailableFermenters = async () => {
+    try {
+      const snapshot = await getDocs(
+        query(collection(db, "fermenters"), where("beerName", "==", ""))
+      );
+      const fvs = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAvailableFVs(fvs);
+    } catch (err) {
+      console.error("Error fetching fermenters", err);
+    }
+  };
+
+  fetchAvailableFermenters();
+}, []);
+
 
   return (
     <div className="brewsheet">
@@ -401,6 +474,44 @@ function BrewSheet() {
       : "N/A"}
   </div>
 </section>
+<section>
+  <h2>Finalize Brew Entry</h2>
+
+  <div className="brewsheet-row">
+    {/* Fermenter dropdown selector */}
+    <div>
+      <label htmlFor="fermenterSelect" className="brewsheet-label">
+        Select Open Fermenter
+      </label>
+      <select
+        id="fermenterSelect"
+        value={selectedFV}
+        onChange={(e) => setSelectedFV(e.target.value)}
+        className="brewsheet-input"
+      >
+        <option value="">-- Choose Fermenter --</option>
+        {availableFVs.map((fv) => (
+          <option key={fv.id} value={fv.id}>
+            {fv.id} ({fv.volumeBBL} BBL)
+          </option>
+        ))}
+      </select>
+    </div>
+
+    {/* Submit button triggers batch creation */}
+    <div>
+      <label className="brewsheet-label">&nbsp;</label> {/* spacing hack */}
+      <button
+        onClick={handleSubmitBatch}
+        disabled={!selectedFV || isSubmitting}
+        className="brewsheet-input"
+      >
+        {isSubmitting ? "Saving..." : "Submit Brew to FV"}
+      </button>
+    </div>
+  </div>
+</section>
+
 
     </div>
   );
