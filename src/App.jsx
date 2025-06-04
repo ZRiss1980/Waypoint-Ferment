@@ -30,8 +30,9 @@ import {
 import "./App.css";
 
 function App() {
-  console.log("✅ App mounted");
+ 
   useEffect(() => {
+     console.log("✅ App mounted");
     const unsubFermenters = subscribeToFermenters();
     const unsubUserPlans = subscribeToUserPlans();
     return () => {
