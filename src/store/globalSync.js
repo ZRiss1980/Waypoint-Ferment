@@ -1,21 +1,40 @@
+// /src/store/globalSync.js
+import { create } from "zustand";
 import { db } from "../firebase";
 import { collection, onSnapshot } from "firebase/firestore";
-import { useBrewSheetStore } from "./useBrewSheetStore";
 
-export function subscribeToFermenters() {
+// Global Zustand Store
+const useGlobalSyncStore = create((set) => ({
+  globalFermenters: [],
+  globalUserPlans: [],
+  setGlobalFermenters: (fermenters) => set({ globalFermenters: fermenters }),
+  setGlobalUserPlans: (plans) => set({ globalUserPlans: plans }),
+}));
+
+// Subscribe to fermenters Firestore collection
+export const subscribeToFermenters = () => {
   const fermentersRef = collection(db, "fermenters");
-  const unsub = onSnapshot(fermentersRef, (snapshot) => {
-    const fermenters = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    useBrewSheetStore.getState().setGlobalFermenters(fermenters);
+  const unsubscribe = onSnapshot(fermentersRef, (snapshot) => {
+    const fermenters = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    useGlobalSyncStore.getState().setGlobalFermenters(fermenters);
   });
-  return unsub;
-}
+  return unsubscribe;
+};
 
-export function subscribeToUserPlans() {
+// Subscribe to userPlans Firestore collection
+export const subscribeToUserPlans = () => {
   const plansRef = collection(db, "userPlans");
-  const unsub = onSnapshot(plansRef, (snapshot) => {
-    const plans = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    useBrewSheetStore.getState().setGlobalUserPlans(plans);
+  const unsubscribe = onSnapshot(plansRef, (snapshot) => {
+    const plans = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    useGlobalSyncStore.getState().setGlobalUserPlans(plans);
   });
-  return unsub;
-}
+  return unsubscribe;
+};
+
+export default useGlobalSyncStore;
