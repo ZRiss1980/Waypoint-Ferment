@@ -1,3 +1,4 @@
+// /src/App.jsx
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import NavBar from "./components/NavBar";
@@ -20,18 +21,23 @@ import Schedule from "./screens/Schedule";
 import BrewPlanner from "./screens/BrewPlanner";
 import BrewDays from "./screens/BrewDays";
 import Tanks from "./screens/Tanks"; 
-import { subscribeToFermenters } from "./store/globalSync";
+
+import {
+  subscribeToFermenters,
+  subscribeToUserPlans,
+} from "./store/globalSync";
+
 import "./App.css";
 
 function App() {
   useEffect(() => {
-  const unsubFerm = subscribeToFermenters();
-  const unsubPlans = subscribeToUserPlans();
-  return () => {
-    unsubFerm();
-    unsubPlans();
-  };
-}, []);
+    const unsubFermenters = subscribeToFermenters();
+    const unsubUserPlans = subscribeToUserPlans();
+    return () => {
+      unsubFermenters();
+      unsubUserPlans();
+    };
+  }, []);
 
   return (
     <Router>
