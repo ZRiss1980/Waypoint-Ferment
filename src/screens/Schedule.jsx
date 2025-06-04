@@ -338,23 +338,37 @@ setFermenters(fetchedFermenters);
           <h2>{dayOfWeek}'s Tasks</h2>
           <ul>
             {todayTasks.map((task) => (
-              <li key={task.id}>
-                {task.beerName}: {task.taskName}
-              </li>
-            ))}
-          </ul>
+            <li key={task.id}>
+            <label>
+              <input
+                type="checkbox"
+                checked={task.completed || false}
+                onChange={() => {}} />
+        {task.beerName}: {task.taskName}
+      </label>
+    </li>
+  ))}
+</ul>
+
         </section>
 
         <section>
           <h2>This Week’s Tasks</h2>
           <ul>
             {weekTasks.map((task) => (
-              <li key={task.id}>
-                {task.beerName}: {task.taskName} on{" "}
-                {task.scheduledDate.toLocaleDateString()}
-              </li>
-            ))}
-          </ul>
+            <li key={task.id}>
+            <label>
+              <input
+                type="checkbox"
+                checked={task.completed || false}
+                onChange={() => {}} />
+        {task.beerName}: {task.taskName} on{" "}
+        {task.scheduledDate.toLocaleDateString()}
+      </label>
+    </li>
+  ))}
+</ul>
+
         </section>
       </main>
     </div>
