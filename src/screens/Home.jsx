@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
-import useGlobalSyncStore from "../store/globalSyncStore";
+import useGlobalSyncStore from "../store/globalSync";
 import "./Home.css";
 
 function Home() {
