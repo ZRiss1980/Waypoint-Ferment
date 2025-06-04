@@ -126,6 +126,8 @@ const [isSubmitting, setIsSubmitting] = useState(false);
 
   fetchAvailableFermenters();
 }, []);
+if (!plan || !recipe) return <div>Loading...</div>;
+
 
 
 
