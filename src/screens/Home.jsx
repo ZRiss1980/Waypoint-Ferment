@@ -93,7 +93,7 @@ function Home() {
           <ul>
             {fermenters.length === 0 && <li>No active fermenters</li>}
             {fermenters.map((f) => {
-              const name = f.currentBatch?.beerName || "Unknown";
+              const name = f.beerName || "Unknown";
               const start = new Date(f.startDate);
               const today = new Date();
               const day =
