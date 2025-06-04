@@ -103,13 +103,14 @@ function BrewSheet() {
     };
     fetchData();
   }, [id, setInitialGrainWeights, setInitialHopWeights, setInitialSalts]);
-
-  if (!plan || !recipe) return <div>Loading...</div>;
-
-  // Add this inside your component function before return:
 const [availableFVs, setAvailableFVs] = useState([]);
 const [selectedFV, setSelectedFV] = useState("");
 const [isSubmitting, setIsSubmitting] = useState(false);
+
+  if (!plan || !recipe) return <div>Loading...</div>;
+
+  
+
 
 useEffect(() => {
   // Fetch available fermenters from Firestore (those without a beerName assigned)
