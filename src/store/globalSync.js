@@ -39,9 +39,7 @@ export const subscribeToUserPlans = () => {
       ...doc.data(),
     }));
     console.log("📥 User plans updated:", plans);
-    console.log("📥 Fermenters updated:", fermenters);
-      useGlobalSyncStore.getState().setGlobalFermenters(fermenters);
-
+    useGlobalSyncStore.getState().setGlobalUserPlans(plans);
   });
 
   return unsubscribe;
