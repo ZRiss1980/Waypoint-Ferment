@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-
 import NavBar from "./components/NavBar";
 import Home from "./screens/Home";
 import Fermentation from "./screens/Fermentation";
@@ -17,17 +16,23 @@ import GrainSelection from "./screens/recipe/GrainSelection";
 import HopSelection from "./screens/recipe/HopSelection";
 import WaterChemistry from "./screens/recipe/WaterChemistry";
 import YeastHealth from "./screens/recipe/YeastHealth";
-
 import Schedule from "./screens/Schedule";
 import BrewPlanner from "./screens/BrewPlanner";
 import BrewDays from "./screens/BrewDays";
-
-
-import Tanks from "./screens/Tanks"; // 🔥 the new unified tank screen
-
+import Tanks from "./screens/Tanks"; 
+import { subscribeToFermenters } from "./store/globalSync";
 import "./App.css";
 
 function App() {
+  useEffect(() => {
+  const unsubFerm = subscribeToFermenters();
+  const unsubPlans = subscribeToUserPlans();
+  return () => {
+    unsubFerm();
+    unsubPlans();
+  };
+}, []);
+
   return (
     <Router>
       <NavBar />
