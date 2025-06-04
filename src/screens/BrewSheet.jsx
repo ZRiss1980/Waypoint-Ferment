@@ -107,12 +107,7 @@ const [availableFVs, setAvailableFVs] = useState([]);
 const [selectedFV, setSelectedFV] = useState("");
 const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (!plan || !recipe) return <div>Loading...</div>;
-
-  
-
-
-useEffect(() => {
+  useEffect(() => {
   // Fetch available fermenters from Firestore (those without a beerName assigned)
   const fetchAvailableFermenters = async () => {
     try {
@@ -131,6 +126,7 @@ useEffect(() => {
 
   fetchAvailableFermenters();
 }, []);
+
 
 
   return (
