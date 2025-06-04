@@ -111,14 +111,17 @@ const [isSubmitting, setIsSubmitting] = useState(false);
   // Fetch available fermenters from Firestore (those without a beerName assigned)
   const fetchAvailableFermenters = async () => {
     try {
-      const snapshot = await getDocs(
-        query(collection(db, "fermenters"), where("beerName", "==", ""))
-      );
-      const fvs = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setAvailableFVs(fvs);
+      const snapshot = await getDocs(collection(db, "fermenters"));
+const fvs = snapshot.docs
+  .map(doc => ({
+    id: doc.id,
+    ...doc.data(),
+  }))
+  .filter(fv => !fv.beerName); // catches undefined, null, or ""
+
+setAvailableFVs(fvs);
+console.log("Open fermenters:", fvs.length);
+
     } catch (err) {
       console.error("Error fetching fermenters", err);
     }
