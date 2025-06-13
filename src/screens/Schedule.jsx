@@ -11,6 +11,8 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import "./Schedule.css";
+import { archiveTask } from "../firebase/archiving"; 
+
 
 function Schedule() {
   const navigate = useNavigate();
@@ -20,6 +22,8 @@ function Schedule() {
   const [fermenters, setFermenters] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipes, setSelectedRecipes] = useState({});
+  const [checkedTasks, setCheckedTasks] = useState({}); 
+
 
 
 
@@ -353,23 +357,41 @@ setFermenters(fetchedFermenters);
         </section>
 
         <section>
-          <h2>This Week’s Tasks</h2>
-          <ul>
-            {weekTasks.map((task) => (
-            <li key={task.id}>
-            <label>
-              <input
-                type="checkbox"
-                checked={task.completed || false}
-                onChange={() => {}} />
-        {task.beerName}: {task.taskName} on{" "}
-        {task.scheduledDate.toLocaleDateString()}
-      </label>
-    </li>
-  ))}
-</ul>
+  <h2>This Week’s Tasks</h2>
+  <ul>
+    {weekTasks.map((task) => (
+      <li key={task.id}>
+        <label>
+          <input
+            type="checkbox"
+            checked={checkedTasks[task.id] || false}
+            onChange={async () => {
+              setCheckedTasks((prev) => ({
+                ...prev,
+                [task.id]: true,
+              }));
+              try {
+                await archiveTask(task.planId, task.id, task);
+                setWeekTasks((prev) =>
+                  prev.filter((t) => t.id !== task.id)
+                );
+              } catch (err) {
+                console.error("❌ Failed to archive:", err);
+                setCheckedTasks((prev) => ({
+                  ...prev,
+                  [task.id]: false,
+                }));
+              }
+            }}
+          />
+          {task.beerName}: {task.taskName} on{" "}
+          {task.scheduledDate.toLocaleDateString()}
+        </label>
+      </li>
+    ))}
+  </ul>
+</section>
 
-        </section>
       </main>
     </div>
   );
