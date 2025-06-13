@@ -11,7 +11,8 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import "./Schedule.css";
-import { archiveTask } from "../firebase/archiving"; 
+import { archiveTask } from "../archiveTask";
+
 
 
 function Schedule() {
