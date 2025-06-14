@@ -51,12 +51,15 @@ function App() {
   }, []);
 
   return (
-    <Router>
+   <Router>
+  <Routes>
+    <Route path="/login" element={<Login />} />
+  </Routes>
+
   <RequireAuth>
     <NavBar />
     <main>
       <Routes>
-        <Route path="/login" element={<Login />} />
         <Route path="/brewsheet/:id" element={<BrewSheet />} />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/plan" element={<BrewPlanner />} />
