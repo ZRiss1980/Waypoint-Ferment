@@ -22,6 +22,8 @@ import BrewPlanner from "./screens/BrewPlanner";
 import BrewDays from "./screens/BrewDays";
 import Tanks from "./screens/Tanks"; 
 import Login from "./Auth/Login";
+import RequireAuth from "./Auth/RequireAuth";
+
 
 
 import {
@@ -50,37 +52,40 @@ function App() {
 
   return (
     <Router>
-      <NavBar />
-      <main>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/brewsheet/:id" element={<BrewSheet />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/plan" element={<BrewPlanner />} />
-          <Route path="/brew-days" element={<BrewDays />} />
-          <Route path="/tanks" element={<Tanks />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/brew-sheet" element={<BrewSheet />} />
-          <Route path="/fermentation" element={<Fermentation />} />
-          <Route path="/sensory" element={<Sensory />} />
-          <Route path="/qaqc" element={<QAQC />} />
-          <Route path="/inventory" element={<Inventory />} />
-          <Route path="/scheduling" element={<Scheduling />} />
-          <Route path="/tasks" element={<Tasks />} />
+  <RequireAuth>
+    <NavBar />
+    <main>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/brewsheet/:id" element={<BrewSheet />} />
+        <Route path="/schedule" element={<Schedule />} />
+        <Route path="/plan" element={<BrewPlanner />} />
+        <Route path="/brew-days" element={<BrewDays />} />
+        <Route path="/tanks" element={<Tanks />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/brew-sheet" element={<BrewSheet />} />
+        <Route path="/fermentation" element={<Fermentation />} />
+        <Route path="/sensory" element={<Sensory />} />
+        <Route path="/qaqc" element={<QAQC />} />
+        <Route path="/inventory" element={<Inventory />} />
+        <Route path="/scheduling" element={<Scheduling />} />
+        <Route path="/tasks" element={<Tasks />} />
 
-          <Route path="/recipe" element={<RecipeBuilder />}>
-            <Route index element={<Navigate to="parameters" />} />
-            <Route path="parameters" element={<Parameters />} />
-            <Route path="grain-selection" element={<GrainSelection />} />
-            <Route path="hop-selection" element={<HopSelection />} />
-            <Route path="water-chemistry" element={<WaterChemistry />} />
-            <Route path="yeast-health" element={<YeastHealth />} />
-          </Route>
+        <Route path="/recipe" element={<RecipeBuilder />}>
+          <Route index element={<Navigate to="parameters" />} />
+          <Route path="parameters" element={<Parameters />} />
+          <Route path="grain-selection" element={<GrainSelection />} />
+          <Route path="hop-selection" element={<HopSelection />} />
+          <Route path="water-chemistry" element={<WaterChemistry />} />
+          <Route path="yeast-health" element={<YeastHealth />} />
+        </Route>
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-    </Router>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </main>
+  </RequireAuth>
+</Router>
+
   );
 }
 
