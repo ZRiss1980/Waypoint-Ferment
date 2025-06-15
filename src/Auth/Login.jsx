@@ -3,8 +3,7 @@ import { useAuth } from "./AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { registerPasskey } from "../Auth/passkeyUtils";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { db } from "../firebase"; 
-
+import { db } from "../firebase";
 
 export default function Login() {
   const { login } = useAuth();
@@ -13,43 +12,45 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const userCred = await login(email, password);
-    const user = userCred.user;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const user = await login(email, password); // ✅ direct user return from login()
 
-    // 🔍 Check if passkey has already been registered
-    const userDocRef = doc(db, "users", user.uid);
-    const userSnap = await getDoc(userDocRef);
+      if (!user || !user.uid) {
+        console.error("❌ Login returned invalid user:", user);
+        return;
+      }
 
-    if (!userSnap.exists()) {
-      console.error("No user doc found after login");
-      return;
+      const userDocRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userDocRef);
+
+      if (!userSnap.exists()) {
+        console.error("No user doc found after login");
+        return;
+      }
+
+      const userData = userSnap.data();
+
+      if (!userData.passkeyRegistered) {
+        console.log("🔐 Registering biometric passkey now...");
+        const credential = await registerPasskey(user);
+
+        await updateDoc(userDocRef, {
+          passkeyRegistered: true,
+          lastPasskeyCreatedAt: new Date().toISOString(),
+        });
+
+        console.log("✅ Passkey successfully registered:", credential);
+      }
+
+      console.log("✅ Login complete");
+      // Optional redirect
+      // navigate("/");
+    } catch (error) {
+      console.error("❌ Login or passkey registration failed:", error.message);
     }
-
-    const userData = userSnap.data();
-
-    if (!userData.passkeyRegistered) {
-      console.log("🔐 Registering biometric passkey now...");
-      const credential = await registerPasskey(user);
-
-      // ✅ Mark as registered in Firestore
-      await updateDoc(userDocRef, {
-        passkeyRegistered: true,
-        lastPasskeyCreatedAt: new Date().toISOString(),
-      });
-
-      console.log("✅ Passkey successfully registered:", credential);
-    }
-
-    console.log("✅ Login complete");
-  } catch (error) {
-    console.error("❌ Login or passkey registration failed:", error.message);
-  }
-};
-
+  };
 
   return (
     <div className="auth-form">
