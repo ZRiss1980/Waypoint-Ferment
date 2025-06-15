@@ -1,7 +1,11 @@
 // /src/App.jsx
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import NavBar from "./components/NavBar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import RequireAuth from "./Auth/RequireAuth";
+import AppLayout from "./components/AppLayout";
+import Login from "./Auth/Login";
+
 import Home from "./screens/Home";
 import Fermentation from "./screens/Fermentation";
 import Sensory from "./screens/Sensory";
@@ -20,11 +24,7 @@ import YeastHealth from "./screens/recipe/YeastHealth";
 import Schedule from "./screens/Schedule";
 import BrewPlanner from "./screens/BrewPlanner";
 import BrewDays from "./screens/BrewDays";
-import Tanks from "./screens/Tanks"; 
-import Login from "./Auth/Login";
-import RequireAuth from "./Auth/RequireAuth";
-
-
+import Tanks from "./screens/Tanks";
 
 import {
   subscribeToFermenters,
@@ -32,64 +32,48 @@ import {
   subscribeToRecipes,
 } from "./store/globalSync";
 
-
 import "./App.css";
 
-function App() {
- 
+export default function App() {
   useEffect(() => {
-     console.log("✅ App mounted");
+    console.log("✅ App mounted");
     const unsubFermenters = subscribeToFermenters();
     const unsubUserPlans = subscribeToUserPlans();
-    const unsubReecipes = subscribeToRecipes();
+    const unsubRecipes = subscribeToRecipes();
     return () => {
       unsubFermenters();
       unsubUserPlans();
-      unsubReecipes(); 
+      unsubRecipes();
     };
-
   }, []);
 
   return (
-   <Router>
-  <Routes>
-    <Route path="/login" element={<Login />} />
-  </Routes>
-
-  <RequireAuth>
-    <NavBar />
-    <main>
+    <Router>
       <Routes>
-        <Route path="/brewsheet/:id" element={<BrewSheet />} />
-        <Route path="/schedule" element={<Schedule />} />
-        <Route path="/plan" element={<BrewPlanner />} />
-        <Route path="/brew-days" element={<BrewDays />} />
-        <Route path="/tanks" element={<Tanks />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/brew-sheet" element={<BrewSheet />} />
-        <Route path="/fermentation" element={<Fermentation />} />
-        <Route path="/sensory" element={<Sensory />} />
-        <Route path="/qaqc" element={<QAQC />} />
-        <Route path="/inventory" element={<Inventory />} />
-        <Route path="/scheduling" element={<Scheduling />} />
-        <Route path="/tasks" element={<Tasks />} />
-
-        <Route path="/recipe" element={<RecipeBuilder />}>
-          <Route index element={<Navigate to="parameters" />} />
-          <Route path="parameters" element={<Parameters />} />
-          <Route path="grain-selection" element={<GrainSelection />} />
-          <Route path="hop-selection" element={<HopSelection />} />
-          <Route path="water-chemistry" element={<WaterChemistry />} />
-          <Route path="yeast-health" element={<YeastHealth />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<RequireAuth><AppLayout /></RequireAuth>}>
+          <Route index element={<Home />} />
+          <Route path="brewsheet/:id" element={<BrewSheet />} />
+          <Route path="brew-sheet" element={<BrewSheet />} />
+          <Route path="schedule" element={<Schedule />} />
+          <Route path="plan" element={<BrewPlanner />} />
+          <Route path="brew-days" element={<BrewDays />} />
+          <Route path="tanks" element={<Tanks />} />
+          <Route path="fermentation" element={<Fermentation />} />
+          <Route path="sensory" element={<Sensory />} />
+          <Route path="qaqc" element={<QAQC />} />
+          <Route path="inventory" element={<Inventory />} />
+          <Route path="scheduling" element={<Scheduling />} />
+          <Route path="tasks" element={<Tasks />} />
+          <Route path="recipe" element={<RecipeBuilder />} />
+          <Route path="recipe/parameters" element={<Parameters />} />
+          <Route path="recipe/grain-selection" element={<GrainSelection />} />
+          <Route path="recipe/hop-selection" element={<HopSelection />} />
+          <Route path="recipe/water-chemistry" element={<WaterChemistry />} />
+          <Route path="recipe/yeast-health" element={<YeastHealth />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
-
-        <Route path="*" element={<NotFound />} />
       </Routes>
-    </main>
-  </RequireAuth>
-</Router>
-
+    </Router>
   );
 }
-
-export default App;
