@@ -6,7 +6,7 @@ import { useAuth } from "./Auth/AuthProvider";
 
 export default function AppLayout() {
   const isLogin = useLocation().pathname === "/login";
-  const { logout } = useAuth(); // ✅ this was misplaced in your version
+  const { logout } = useAuth(); 
 
   return (
     <>

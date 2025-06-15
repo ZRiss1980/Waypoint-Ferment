@@ -22,6 +22,8 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
+    "@simplewebauthn/browser": "^13.1.0",
+    "@simplewebauthn/server": "^13.1.1",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "firebase": "^9.23.0",
