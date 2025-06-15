@@ -15,7 +15,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+ 
 
 
   useEffect(() => {
@@ -35,13 +35,8 @@ export function AuthProvider({ children }) {
     });
   };
 
-  const login = (email, password) => {
-  return signInWithEmailAndPassword(auth, email, password).then(() => {
-    console.log("📥 Login successful");
-    navigate("/", { replace: true }); // ✅ force redirect to home
-  });
-};
-
+  const login = (email, password) =>
+    signInWithEmailAndPassword(auth, email, password);
 
   const logout = () => signOut(auth);
 

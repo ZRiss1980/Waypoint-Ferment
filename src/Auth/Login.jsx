@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useAuth } from "./AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const { login } = useAuth();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -10,8 +13,8 @@ export default function Login() {
     e.preventDefault();
     try {
       await login(email, password);
-      // You can navigate or show success message here
       console.log("Login successful");
+      navigate("/"); // ✅ Redirect to home screen
     } catch (error) {
       console.error("Login failed:", error.message);
     }
