@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useAuth } from "./AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { registerPasskey } from "../Auth/passkeyUtils";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { db } from "../firebase"; 
+
 
 export default function Login() {
   const { login } = useAuth();
@@ -9,16 +13,43 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await login(email, password);
-      console.log("Login successful");
-      navigate("/"); // ✅ Redirect to home screen
-    } catch (error) {
-      console.error("Login failed:", error.message);
+  
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const userCred = await login(email, password);
+    const user = userCred.user;
+
+    // 🔍 Check if passkey has already been registered
+    const userDocRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userDocRef);
+
+    if (!userSnap.exists()) {
+      console.error("No user doc found after login");
+      return;
     }
-  };
+
+    const userData = userSnap.data();
+
+    if (!userData.passkeyRegistered) {
+      console.log("🔐 Registering biometric passkey now...");
+      const credential = await registerPasskey(user);
+
+      // ✅ Mark as registered in Firestore
+      await updateDoc(userDocRef, {
+        passkeyRegistered: true,
+        lastPasskeyCreatedAt: new Date().toISOString(),
+      });
+
+      console.log("✅ Passkey successfully registered:", credential);
+    }
+
+    console.log("✅ Login complete");
+  } catch (error) {
+    console.error("❌ Login or passkey registration failed:", error.message);
+  }
+};
+
 
   return (
     <div className="auth-form">
