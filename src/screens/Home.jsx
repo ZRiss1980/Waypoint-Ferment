@@ -47,10 +47,20 @@ function Home() {
     navigate("/recipe/parameters");
   };
 
-  return (
-    <div className="home dashboard">
-      <h1>Waypoint Ferment – Mission Control</h1>
-      <p className="subheading">
+
+   return (
+  <div className="home dashboard">
+    {/* Quick Actions – now at top for mobile usability */}
+    <div className="quick-actions">
+      <h2>Quick Actions</h2>
+      <button onClick={handleNewRecipe}>+ New Recipe</button>
+      <button disabled>+ Brew Day Checklist</button>
+      <button disabled>+ Schedule Task</button>
+      <button disabled>+ PM Entry</button>
+    </div>
+
+    <h1>Waypoint Ferment – Mission Control</h1>
+    <p className="subheading">
         This dashboard will show fermenters, BTs, the weekly schedule, tasks,
         and active brews.
       </p>
@@ -130,14 +140,6 @@ function Home() {
             <li>Yeast WLP300 at gen 5</li>
           </ul>
         </section>
-      </div>
-
-      <div className="quick-actions">
-        <h2>Quick Actions</h2>
-        <button onClick={handleNewRecipe}>+ New Recipe</button>
-        <button disabled>+ Brew Day Checklist</button>
-        <button disabled>+ Schedule Task</button>
-        <button disabled>+ PM Entry</button>
       </div>
     </div>
   );
