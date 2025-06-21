@@ -22,8 +22,8 @@ function NavBar() {
       <nav className={`nav-links ${menuOpen ? "open" : ""}`}>
         <NavLink to="/" onClick={closeMenu}>Home</NavLink>
         <NavLink to="/inventory" onClick={closeMenu}>Inventory</NavLink>
-        <NavLink to="/scheduling" onClick={closeMenu}>Scheduling</NavLink>
-        <NavLink to="/tasks" onClick={closeMenu}>Tasks</NavLink>
+        <NavLink to="/schedule" onClick={closeMenu}>Scheduling</NavLink>
+        <NavLink to="/tanks" onClick={closeMenu}>Tanks</NavLink>
         <button onClick={logout} className="logout-btn">Sign Out</button> 
       </nav>
     </header>
