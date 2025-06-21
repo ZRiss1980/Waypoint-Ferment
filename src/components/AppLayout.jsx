@@ -11,7 +11,7 @@ export default function AppLayout() {
     <>
       {!isLogin && <NavBar />}
       <main>
-        <button onClick={logout}>Sign Out</button>
+        
         <Outlet />
       </main>
     </>
