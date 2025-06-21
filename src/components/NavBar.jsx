@@ -23,4 +23,11 @@ function NavBar() {
         <NavLink to="/" onClick={closeMenu}>Home</NavLink>
         <NavLink to="/inventory" onClick={closeMenu}>Inventory</NavLink>
         <NavLink to="/scheduling" onClick={closeMenu}>Scheduling</NavLink>
-        <NavLink to="/tasks" onClick={clo
+        <NavLink to="/tasks" onClick={closeMenu}>Tasks</NavLink>
+        <button onClick={logout} className="logout-btn">Sign Out</button> 
+      </nav>
+    </header>
+  );
+}
+
+export default NavBar;
