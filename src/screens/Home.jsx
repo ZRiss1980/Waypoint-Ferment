@@ -57,6 +57,10 @@ function Home() {
       <h2>Quick Actions</h2>
       <button onClick={handleNewRecipe}>+ New Recipe</button>
       <button disabled>+ PM Entry</button>
+      <button disabled>+ New Brew Plan</button>
+      <button disabled>+ Yeast Pitch</button>
+      <button disabled>+ Vender Order</button>
+      <button disabled>+ Order Arrival</button>
     </div>
       <div className="dashboard-grid">
         <section className="card">
