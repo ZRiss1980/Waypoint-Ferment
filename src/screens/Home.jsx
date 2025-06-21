@@ -60,10 +60,7 @@ function Home() {
     </div>
 
     <h1>Waypoint Ferment – Mission Control</h1>
-    <p className="subheading">
-        This dashboard will show fermenters, BTs, the weekly schedule, tasks,
-        and active brews.
-      </p>
+   
 
       <div className="dashboard-grid">
         <section className="card">
