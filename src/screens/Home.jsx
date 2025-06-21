@@ -61,6 +61,8 @@ function Home() {
       <button disabled>+ Yeast Pitch</button>
       <button disabled>+ Vender Order</button>
       <button disabled>+ Order Arrival</button>
+      <button disabled>+ New Reminder</button>
+
     </div>
       <div className="dashboard-grid">
         <section className="card">
