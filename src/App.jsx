@@ -65,12 +65,16 @@ export default function App() {
           <Route path="inventory" element={<Inventory />} />
           <Route path="scheduling" element={<Scheduling />} />
           <Route path="tasks" element={<Tasks />} />
-          <Route path="recipe" element={<RecipeBuilder />} />
-          <Route path="recipe/parameters" element={<Parameters />} />
-          <Route path="recipe/grain-selection" element={<GrainSelection />} />
-          <Route path="recipe/hop-selection" element={<HopSelection />} />
-          <Route path="recipe/water-chemistry" element={<WaterChemistry />} />
-          <Route path="recipe/yeast-health" element={<YeastHealth />} />
+
+          {/* ✅ NESTED RECIPE ROUTES FIXED */}
+          <Route path="recipe" element={<RecipeBuilder />}>
+            <Route path="parameters" element={<Parameters />} />
+            <Route path="grain-selection" element={<GrainSelection />} />
+            <Route path="hop-selection" element={<HopSelection />} />
+            <Route path="water-chemistry" element={<WaterChemistry />} />
+            <Route path="yeast-health" element={<YeastHealth />} />
+          </Route>
+
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
