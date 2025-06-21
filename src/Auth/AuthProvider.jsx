@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
 
   const register = async (email, password) => {
     const result = await createUserWithEmailAndPassword(auth, email, password);
-    await setDoc(doc(db, "users", result.user.uid), {
+    await setDoc(doc(db, "Users", result.user.uid), {
       uid: result.user.uid,
       email: result.user.email,
       role: "user",

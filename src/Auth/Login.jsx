@@ -22,7 +22,7 @@ export default function Login() {
         return;
       }
 
-      const userDocRef = doc(db, "users", user.uid);
+      const userDocRef = doc(db, "Users", user.uid);
       const userSnap = await getDoc(userDocRef);
 
       if (!userSnap.exists()) {
