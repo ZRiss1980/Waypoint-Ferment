@@ -62,12 +62,7 @@ function Home() {
     </div>
       <div className="dashboard-grid">
         <section className="card">
-          <h2
-            className="home-link"
-            onClick={() => navigate("/schedule")}
-          >
-            Brew Schedule
-          </h2>
+          <h2 className="home-link" onClick={() => navigate("/schedule")} style={{ cursor: "pointer" }}> Brew Schedule</h2>
           {monthlyBrewPlans.length > 0 && fermenters.length > 0 && (
             <ul>
               {monthlyBrewPlans.map((plan) => {
