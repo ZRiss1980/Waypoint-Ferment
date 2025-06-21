@@ -49,7 +49,9 @@ function Home() {
 
 
    return (
+    
   <div className="home dashboard">
+     <h1>Waypoint Ferment – Mission Control</h1>
     {/* Quick Actions – now at top for mobile usability */}
     <div className="quick-actions">
       <h2>Quick Actions</h2>
@@ -58,10 +60,6 @@ function Home() {
       <button disabled>+ Schedule Task</button>
       <button disabled>+ PM Entry</button>
     </div>
-
-    <h1>Waypoint Ferment – Mission Control</h1>
-   
-
       <div className="dashboard-grid">
         <section className="card">
           <h2
