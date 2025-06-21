@@ -140,4 +140,4 @@ function Home() {
   );
 }
 
-export default Hom
+export default Home;
