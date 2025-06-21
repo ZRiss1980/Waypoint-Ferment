@@ -1,3 +1,4 @@
+// src/components/AppLayout.jsx
 import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import NavBar from "./NavBar";
@@ -11,7 +12,6 @@ export default function AppLayout() {
     <>
       {!isLogin && <NavBar />}
       <main>
-        
         <Outlet />
       </main>
     </>
