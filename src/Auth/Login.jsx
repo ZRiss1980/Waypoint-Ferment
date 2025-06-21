@@ -46,7 +46,7 @@ export default function Login() {
 
       console.log("✅ Login complete");
       // Optional redirect
-      // navigate("/");
+      navigate("/");
     } catch (error) {
       console.error("❌ Login or passkey registration failed:", error.message);
     }
