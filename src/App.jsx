@@ -66,7 +66,7 @@ export default function App() {
           <Route path="scheduling" element={<Scheduling />} />
           <Route path="tasks" element={<Tasks />} />
 
-          {/* ✅ NESTED RECIPE ROUTES FIXED */}
+         
           <Route path="recipe" element={<RecipeBuilder />}>
             <Route path="parameters" element={<Parameters />} />
             <Route path="grain-selection" element={<GrainSelection />} />
