@@ -100,3 +100,12 @@ function RecipeSidebar() {
             5. Yeast Health
           </NavLink>
         </li>
+      </ul>
+      <button className="save-recipe-btn" onClick={handleSaveRecipe}>
+        Save Recipe
+      </button>
+    </nav>
+  );
+}
+
+export default RecipeSidebar;

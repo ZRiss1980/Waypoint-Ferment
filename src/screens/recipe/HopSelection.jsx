@@ -65,8 +65,12 @@ const HopSelection = () => {
     const hopMeta = hopTypes.find((h) => h.name === hop.name);
     if (!hopMeta) return 0;
 
-    const alphaFrac = parseFloat(hop.alphaOverride) || hopMeta.alphaAcidAvg / 100 || 0.10;
-    const totalOil = hopMeta.totalOil_mLPer100g || 1.5;
+    const alphaOverrideParsed = parseFloat(hop.alphaOverride);
+    const alphaFrac = !isNaN(alphaOverrideParsed)
+      ? alphaOverrideParsed / 100
+      : hopMeta.alphaAcidAvg
+      ? hopMeta.alphaAcidAvg / 100
+      : 0.10;    const totalOil = hopMeta.totalOil_mLPer100g || 1.5;
     const galPerBBL = 31;
     const ozPerLb = 16;
     const ibuConst = 7490;
