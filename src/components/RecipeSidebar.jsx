@@ -1,14 +1,14 @@
 // /src/components/RecipeSidebar.jsx
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useParametersStore } from "../store/parametersStore";
 import useRecipeStore from "../store/useRecipeStore";
 import useRecipeDevStore from "../store/useRecipeDevStore";
-import { saveRecipeToFirestore } from "../lib/firestore/recipes"; // ✅ <- Add this
+import { saveRecipeToFirestore } from "../lib/firestore/recipes";
 import "./RecipeSidebar.css";
 
-
 function RecipeSidebar() {
+  const navigate = useNavigate();
   const parameters = useParametersStore((s) => s.parameters);
   const recipe = useRecipeStore((s) => s.recipe);
   const overwriteRecipeDev = useRecipeDevStore((s) => s.overwriteRecipeDev);
@@ -20,17 +20,21 @@ function RecipeSidebar() {
     if (!parameters.style) errors.push("BJCP Style must be selected.");
     if (!parameters.yeastStrain) errors.push("Yeast Strain is required.");
     if (!parameters.uniqueId) errors.push("Unique ID is missing.");
-    if (!recipe.grainBill || recipe.grainBill.length === 0) errors.push("Grain bill cannot be empty.");
-    if (!recipe.hopAdditions || recipe.hopAdditions.length === 0) errors.push("Hop schedule is missing.");
-    if (!recipe.targetWaterProfile?.id) errors.push("Target Water Profile not set.");
-    if (!recipe.waterSourceProfile?.id) errors.push("Water Source Profile not set.");
-    if (parameters.IBU == null || parameters.IBU < 1) errors.push("Target IBU must be entered.");
-
+    if (!recipe.grainBill || recipe.grainBill.length === 0)
+      errors.push("Grain bill cannot be empty.");
+    if (!recipe.hopAdditions || recipe.hopAdditions.length === 0)
+      errors.push("Hop schedule is missing.");
+    if (!recipe.targetWaterProfile?.id)
+      errors.push("Target Water Profile not set.");
+    if (!recipe.waterSourceProfile?.id)
+      errors.push("Water Source Profile not set.");
+    if (parameters.IBU == null || parameters.IBU < 1)
+      errors.push("Target IBU must be entered.");
 
     return errors;
   };
 
-  const handleSaveRecipe = () => {
+  const handleSaveRecipe = async () => {
     console.log("🟡 Save Recipe clicked");
 
     const currentParameters = useParametersStore.getState().parameters;
@@ -53,26 +57,20 @@ function RecipeSidebar() {
       recipeVersion: "1.0.0",
     };
 
-    overwriteRecipeDev(merged);
-    (async () => {
-  try {
-    const id = await saveRecipeToFirestore(merged);
-    console.log("📥 Recipe saved to Firestore with ID:", id);
-    alert("✅ Recipe saved successfully!");
-    useParametersStore.getState().markClean();
-    window.location.href = "/";
-  } catch (err) {
-    console.error("❌ Firestore save failed:", err);
-    alert("❌ Failed to save recipe. Check console for details.");
-  }
-})();
-
-    useParametersStore.getState().markClean();
+    try {
+      overwriteRecipeDev(merged);
+      const id = await saveRecipeToFirestore(merged);
+      console.log("📥 Recipe saved to Firestore with ID:", id);
+      alert("✅ Recipe saved successfully!");
+      useParametersStore.getState().markClean();
+      navigate("/");
+    } catch (err) {
+      console.error("❌ Firestore save failed:", err);
+      alert("❌ Failed to save recipe. Check console for details.");
+    }
 
     console.log("✅ Saved to recipeDev store:", merged);
   };
-
-
 
   return (
     <nav className="recipe-sidebar">
