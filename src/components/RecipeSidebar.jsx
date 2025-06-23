@@ -55,8 +55,15 @@ function RecipeSidebar() {
 
     overwriteRecipeDev(merged);
     saveRecipeToFirestore(merged)
-    .then((id) => console.log("📥 Firestore doc ID:", id))
-    .catch((err) => console.error("❌ Failed to save to Firestore:", err));
+  .then((id) => {
+    console.log("📥 Firestore doc ID:", id);
+    alert("✅ Recipe saved successfully.");
+    navigate("/");
+  })
+  .catch((err) => {
+    console.error("❌ Failed to save to Firestore:", err);
+    alert("❌ Failed to save recipe. Check console for details.");
+  });
 
     useParametersStore.getState().markClean();
 
@@ -93,12 +100,3 @@ function RecipeSidebar() {
             5. Yeast Health
           </NavLink>
         </li>
-      </ul>
-      <button className="save-recipe-btn" onClick={handleSaveRecipe}>
-        Save Recipe
-      </button>
-    </nav>
-  );
-}
-
-export default RecipeSidebar;
