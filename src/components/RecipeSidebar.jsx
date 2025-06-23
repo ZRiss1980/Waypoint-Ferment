@@ -24,7 +24,8 @@ function RecipeSidebar() {
     if (!recipe.hopAdditions || recipe.hopAdditions.length === 0) errors.push("Hop schedule is missing.");
     if (!recipe.targetWaterProfile?.id) errors.push("Target Water Profile not set.");
     if (!recipe.waterSourceProfile?.id) errors.push("Water Source Profile not set.");
-    if (recipe.calculatedIBU == null) errors.push("Calculated IBU is missing.");
+    if (parameters.IBU == null || parameters.IBU < 1) errors.push("Target IBU must be entered.");
+
 
     return errors;
   };
