@@ -54,16 +54,18 @@ function RecipeSidebar() {
     };
 
     overwriteRecipeDev(merged);
-    saveRecipeToFirestore(merged)
-  .then((id) => {
-    console.log("📥 Firestore doc ID:", id);
-    alert("✅ Recipe saved successfully.");
-    navigate("/");
-  })
-  .catch((err) => {
-    console.error("❌ Failed to save to Firestore:", err);
+    (async () => {
+  try {
+    const id = await saveRecipeToFirestore(merged);
+    console.log("📥 Recipe saved to Firestore with ID:", id);
+    alert("✅ Recipe saved successfully!");
+    useParametersStore.getState().markClean();
+    window.location.href = "/";
+  } catch (err) {
+    console.error("❌ Firestore save failed:", err);
     alert("❌ Failed to save recipe. Check console for details.");
-  });
+  }
+})();
 
     useParametersStore.getState().markClean();
 
