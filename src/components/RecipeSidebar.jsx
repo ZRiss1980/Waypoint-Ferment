@@ -96,16 +96,4 @@ function RecipeSidebar() {
           </NavLink>
         </li>
         <li>
-          <NavLink to="yeast-health" className={({ isActive }) => isActive ? "active" : ""}>
-            5. Yeast Health
-          </NavLink>
-        </li>
-      </ul>
-      <button className="save-recipe-btn" onClick={handleSaveRecipe}>
-        Save Recipe
-      </button>
-    </nav>
-  );
-}
-
-export default RecipeSidebar;
+          <NavLink to="yeast-health" className={({ isActive }) =
