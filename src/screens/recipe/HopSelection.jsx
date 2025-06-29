@@ -193,4 +193,10 @@ const HopSelection = () => {
     <div className="hop-selection-container">
       <h2>Hop Additions</h2>
       {renderTable("Boil Hops", splitAdditions.Boil, "Boil")}
-      {renderTable("Whirlpool Hops", splitAdditions.Whirlpool, "Whi
+      {renderTable("Whirlpool Hops", splitAdditions.Whirlpool, "Whirlpool")}
+      {renderTable("Dry Hop Additions", splitAdditions.DryHop, "DryHop")}
+    </div>
+  );
+};
+
+export default HopSelection;
