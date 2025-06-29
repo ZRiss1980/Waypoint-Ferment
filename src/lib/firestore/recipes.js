@@ -11,4 +11,7 @@ export const saveRecipeToFirestore = async (recipeData) => {
     console.log("📦 Recipe saved to Firestore with ID:", recipeData.uniqueId);
       return recipeData.uniqueId;
   } catch (error) {
-    console.error("🔥 Error savi
+    console.error("🔥 Error saving recipe to Firestore:", error);
+    throw error;
+  }
+};

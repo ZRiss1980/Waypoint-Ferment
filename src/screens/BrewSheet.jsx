@@ -583,4 +583,4 @@ if (!plan || !recipe) return <div>Loading...</div>;
   );
 }
 
-export default B
+export default BrewSheet;
