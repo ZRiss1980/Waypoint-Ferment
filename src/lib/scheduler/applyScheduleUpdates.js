@@ -3,6 +3,7 @@
 import { getDocs, collection, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { assignBrewPlanDates } from "./assignBrewPlanDates";
+import { injectTasksFromTemplates } from "./injectTasksFromTemplates";
 
 export async function applyScheduleUpdates() {
   try {
@@ -24,17 +25,18 @@ export async function applyScheduleUpdates() {
     const updatedPlans = assignBrewPlanDates(plans, fermenters);
 
     for (const plan of updatedPlans) {
-      const ref = doc(db, "userPlans", plan.id);
-      await updateDoc(ref, {
+      const planRef = doc(db, "userPlans", plan.id);
+      await updateDoc(planRef, {
         assignedFermenter: plan.assignedFermenter,
         startDate: plan.startDate,
         endDate: plan.endDate,
       });
+
+    await injectTasksFromTemplates(plan);
       console.log(`🗓️ Updated plan "${plan.beerName}" with new schedule`);
     }
 
     return updatedPlans.length;
-
   } catch (err) {
     console.error("❌ Scheduler failed to apply updates:", err);
     throw err;
