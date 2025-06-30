@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import "./Schedule.css";
 import { archiveTask } from "../archiveTask";
-import { applyScheduleUpdates } from "../lib/scheduler/applyScheduleUpdatesjs";
+import { applyScheduleUpdates } from "../lib/scheduler/applyScheduleUpdates.js";
 
 function Schedule() {
   const navigate = useNavigate();
