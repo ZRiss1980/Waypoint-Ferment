@@ -135,4 +135,17 @@ function Home() {
           </ul>
         </section>
         <section className="card">
-          <h2 sty
+          <h2 style={{ cursor: "pointer" }} onClick={() => navigate("/inventory")}>Inventory</h2>
+          <ul>
+            <li>Track live stock by ingredient type</li>
+            <li>Edit quantities directly from dashboard</li>
+            <li>Realtime sync with Firestore</li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+  );
+}
+
+export default Home;
