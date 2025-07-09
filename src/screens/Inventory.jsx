@@ -41,21 +41,22 @@ function Inventory() {
     return () => unsubscribers.forEach((unsub) => unsub());
   }, []);
 
-  useEffect(() => {
-    const fetchVendors = async () => {
-      const snap = await getDocs(collection(db, "vendors"));
-      const all = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      const byCategory = {};
-      all.forEach((v) => {
-        v.categories.forEach((cat) => {
-          if (!byCategory[cat]) byCategory[cat] = [];
-          byCategory[cat].push(v);
-        });
+  // REPLACE WITH:
+useEffect(() => {
+  const unsubscribe = onSnapshot(collection(db, "vendors"), (snap) => {
+    const all = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const byCategory = {};
+    all.forEach((v) => {
+      v.categories.forEach((cat) => {
+        if (!byCategory[cat]) byCategory[cat] = [];
+        byCategory[cat].push(v);
       });
-      setVendors(byCategory);
-    };
-    fetchVendors();
-  }, []);
+    });
+    setVendors(byCategory);
+  });
+  return () => unsubscribe();
+}, []);
+
 
   const handleAddItem = async (cat) => {
     const input = newItems[cat];
