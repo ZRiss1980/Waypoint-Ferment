@@ -134,6 +134,15 @@ function Home() {
             <li>Yeast WLP300 at gen 5</li>
           </ul>
         </section>
+        <section className="card">
+          <h2 style={{ cursor: "pointer" }} onClick={() => navigate("/inventory")}>Inventory</h2>
+          <ul>
+            <li>Track live stock by ingredient type</li>
+            <li>Edit quantities directly from dashboard</li>
+            <li>Realtime sync with Firestore</li>
+          </ul>
+        </section>
+
       </div>
     </div>
   );
