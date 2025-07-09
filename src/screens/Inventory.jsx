@@ -1,4 +1,4 @@
-// Inventory.jsx – Live Firestore + UI Add Button per Category with Vendor support
+// Inventory.jsx – Live Firestore + UI Add Button per Category with Vendor and Item Modal Support
 
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
@@ -8,26 +8,29 @@ import {
   addDoc,
   onSnapshot,
   query,
-  where,
 } from "firebase/firestore";
 import "./Inventory.css";
 
-const CATEGORIES = [
-  "grain",
-  "hops",
-  "yeast",
-  "waterSalts",
-  "chemicals",
-  "enzymes",
-];
+const CATEGORIES = ["grain", "hops", "yeast"];
+const UNITS = ["lbs", "kg", "g", "oz", "L", "gal", "bbl", "bags"];
 
 function Inventory() {
   const [inventory, setInventory] = useState({});
-  const [newItems, setNewItems] = useState({});
   const [vendors, setVendors] = useState({});
   const [showVendorModal, setShowVendorModal] = useState(null);
   const [showContactsModal, setShowContactsModal] = useState(null);
   const [newVendor, setNewVendor] = useState({ name: "", contacts: [{ type: "email", value: "", name: "" }] });
+  const [showAddItemModal, setShowAddItemModal] = useState(null);
+  const [helperData, setHelperData] = useState({});
+  const [newItem, setNewItem] = useState({
+    type: "",
+    name: "",
+    quantity: "",
+    unit: "lbs",
+    lot: "",
+    notes: "",
+    inheritFrom: "",
+  });
 
   useEffect(() => {
     const unsubscribers = CATEGORIES.map((cat) => {
@@ -41,39 +44,37 @@ function Inventory() {
     return () => unsubscribers.forEach((unsub) => unsub());
   }, []);
 
-  // REPLACE WITH:
-useEffect(() => {
-  const unsubscribe = onSnapshot(collection(db, "vendors"), (snap) => {
-    const all = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    const byCategory = {};
-    all.forEach((v) => {
-      v.categories.forEach((cat) => {
-        if (!byCategory[cat]) byCategory[cat] = [];
-        byCategory[cat].push(v);
+  useEffect(() => {
+    const fetchVendors = async () => {
+      const snap = await getDocs(collection(db, "vendors"));
+      const all = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const byCategory = {};
+      all.forEach((v) => {
+        v.categories.forEach((cat) => {
+          if (!byCategory[cat]) byCategory[cat] = [];
+          byCategory[cat].push(v);
+        });
       });
-    });
-    setVendors(byCategory);
-  });
-  return () => unsubscribe();
-}, []);
+      setVendors(byCategory);
+    };
+    fetchVendors();
+  }, []);
 
-
-  const handleAddItem = async (cat) => {
-    const input = newItems[cat];
-    if (!input || input.trim() === "") return;
-    try {
-      await addDoc(collection(db, cat), { name: input.trim(), quantity: 1 });
-      setNewItems((prev) => ({ ...prev, [cat]: "" }));
-    } catch (err) {
-      console.error("Failed to add item to", cat, err);
-    }
-  };
+  useEffect(() => {
+    const fetchHelperData = async () => {
+      const result = {};
+      for (let cat of CATEGORIES) {
+        const snap = await getDocs(collection(db, `${cat}Types`));
+        result[cat] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      }
+      setHelperData(result);
+    };
+    fetchHelperData();
+  }, []);
 
   const handleAddVendor = async (cat) => {
-    if (!newVendor.name || newVendor.contacts.length === 0) return;
     const validContacts = newVendor.contacts.filter((c) => c.value);
-    if (validContacts.length === 0) return;
-
+    if (!newVendor.name || validContacts.length === 0) return;
     try {
       await addDoc(collection(db, "vendors"), {
         vendorName: newVendor.name,
@@ -87,28 +88,52 @@ useEffect(() => {
     }
   };
 
-  const renderVendorContacts = (vendor) => {
-    return (
-      <>
-        <div className="modal-overlay" />
-        <div className="modal">
-          <h3>{vendor.vendorName} Contacts</h3>
-          <ul>
-            {vendor.contacts.map((c, i) => (
-              <li key={i}>
-                {c.name && <strong>{c.name}: </strong>}
-                {c.type === "email" && <a href={`mailto:${c.value}`}>{c.value}</a>}
-                {c.type === "phone" && <a href={`tel:${c.value}`}>{c.value}</a>}
-                {c.type === "website" && <a href={c.value} target="_blank" rel="noreferrer">Website</a>}
-                {c.type === "other" && <span>{c.value}</span>}
-              </li>
-            ))}
-          </ul>
-          <button onClick={() => setShowContactsModal(null)}>Close</button>
-        </div>
-      </>
-    );
+  const handleAddInventoryItem = async () => {
+    const { type, name, quantity, unit, lot, notes, inheritFrom } = newItem;
+    if (!type || !name || !quantity || !unit) return;
+
+    let itemData = {
+      name,
+      quantity: parseFloat(quantity),
+      unit,
+      lot: lot || "",
+      notes: notes || "",
+    };
+
+    if (inheritFrom) {
+      const match = helperData[type].find((d) => d.id === inheritFrom);
+      if (match) itemData = { ...itemData, ...match };
+    }
+
+    try {
+      await addDoc(collection(db, type), itemData);
+      setShowAddItemModal(null);
+      setNewItem({ type: "", name: "", quantity: "", unit: "lbs", lot: "", notes: "", inheritFrom: "" });
+    } catch (err) {
+      console.error("Error adding item", err);
+    }
   };
+
+  const renderVendorContacts = (vendor) => (
+    <>
+      <div className="modal-overlay" />
+      <div className="modal">
+        <h3>{vendor.vendorName} Contacts</h3>
+        <ul>
+          {vendor.contacts.map((c, i) => (
+            <li key={i}>
+              {c.name && <strong>{c.name}: </strong>}
+              {c.type === "email" && <a href={`mailto:${c.value}`}>{c.value}</a>}
+              {c.type === "phone" && <a href={`tel:${c.value}`}>{c.value}</a>}
+              {c.type === "website" && <a href={c.value} target="_blank" rel="noreferrer">Website</a>}
+              {c.type === "other" && <span>{c.value}</span>}
+            </li>
+          ))}
+        </ul>
+        <button onClick={() => setShowContactsModal(null)}>Close</button>
+      </div>
+    </>
+  );
 
   const renderCategoryTable = (cat) => {
     const items = inventory[cat] || [];
@@ -141,6 +166,7 @@ useEffect(() => {
             </button>
           ))}
           <button onClick={() => setShowVendorModal(cat)}>+ Add Vendor</button>
+          <button onClick={() => setShowAddItemModal(cat)}>+ Add {cat}</button>
         </div>
 
         {items.length === 0 ? (
@@ -148,21 +174,10 @@ useEffect(() => {
         ) : (
           <ul>
             {items.map((item) => (
-              <li key={item.id}>{item.name} (Qty: {item.quantity || 1})</li>
+              <li key={item.id}>{item.name} – {item.quantity} {item.unit || "units"}</li>
             ))}
           </ul>
         )}
-        <div className="add-item-row">
-          <input
-            type="text"
-            placeholder={`Add new ${cat} item`}
-            value={newItems[cat] || ""}
-            onChange={(e) =>
-              setNewItems((prev) => ({ ...prev, [cat]: e.target.value }))
-            }
-          />
-          <button onClick={() => handleAddItem(cat)}>+ Add</button>
-        </div>
       </section>
     );
   };
@@ -233,25 +248,62 @@ useEffect(() => {
               + Add Another Contact
             </button>
             <br />
-<button
-  onClick={async () => {
-    await handleAddVendor(showVendorModal);
-    // Refresh vendors immediately after adding
-    const snap = await getDocs(collection(db, "vendors"));
-    const all = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    const byCategory = {};
-    all.forEach((v) => {
-      v.categories.forEach((cat) => {
-        if (!byCategory[cat]) byCategory[cat] = [];
-        byCategory[cat].push(v);
-      });
-    });
-    setVendors(byCategory);
-  }}
->
-  Save
-</button>
+            <button onClick={() => handleAddVendor(showVendorModal)}>Save</button>
             <button onClick={() => setShowVendorModal(null)}>Cancel</button>
+          </div>
+        </>
+      )}
+
+      {showAddItemModal && (
+        <>
+          <div className="modal-overlay" />
+          <div className="modal">
+            <h3>Add {showAddItemModal} to Inventory</h3>
+            <label>Select existing type:</label>
+            <select
+              value={newItem.inheritFrom}
+              onChange={(e) =>
+                setNewItem((prev) => ({ ...prev, inheritFrom: e.target.value, type: showAddItemModal }))
+              }
+            >
+              <option value="">-- None --</option>
+              {(helperData[showAddItemModal] || []).map((item) => (
+                <option key={item.id} value={item.id}>{item.name}</option>
+              ))}
+            </select>
+            <input
+              type="text"
+              placeholder="Name"
+              value={newItem.name}
+              onChange={(e) => setNewItem((prev) => ({ ...prev, name: e.target.value }))}
+            />
+            <input
+              type="number"
+              placeholder="Quantity"
+              value={newItem.quantity}
+              onChange={(e) => setNewItem((prev) => ({ ...prev, quantity: e.target.value }))}
+            />
+            <select
+              value={newItem.unit}
+              onChange={(e) => setNewItem((prev) => ({ ...prev, unit: e.target.value }))}
+            >
+              {UNITS.map((u) => (
+                <option key={u} value={u}>{u}</option>
+              ))}
+            </select>
+            <input
+              type="text"
+              placeholder="Lot number (optional)"
+              value={newItem.lot}
+              onChange={(e) => setNewItem((prev) => ({ ...prev, lot: e.target.value }))}
+            />
+            <textarea
+              placeholder="Notes (optional)"
+              value={newItem.notes}
+              onChange={(e) => setNewItem((prev) => ({ ...prev, notes: e.target.value }))}
+            />
+            <button onClick={handleAddInventoryItem}>Save</button>
+            <button onClick={() => setShowAddItemModal(null)}>Cancel</button>
           </div>
         </>
       )}
