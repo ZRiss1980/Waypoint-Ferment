@@ -232,7 +232,24 @@ function Inventory() {
               + Add Another Contact
             </button>
             <br />
-            <button onClick={() => handleAddVendor(showVendorModal)}>Save</button>
+<button
+  onClick={async () => {
+    await handleAddVendor(showVendorModal);
+    // Refresh vendors immediately after adding
+    const snap = await getDocs(collection(db, "vendors"));
+    const all = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const byCategory = {};
+    all.forEach((v) => {
+      v.categories.forEach((cat) => {
+        if (!byCategory[cat]) byCategory[cat] = [];
+        byCategory[cat].push(v);
+      });
+    });
+    setVendors(byCategory);
+  }}
+>
+  Save
+</button>
             <button onClick={() => setShowVendorModal(null)}>Cancel</button>
           </div>
         </>
