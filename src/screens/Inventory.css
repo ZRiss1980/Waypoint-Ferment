@@ -7,33 +7,3 @@
   padding: 1rem;
   margin-bottom: 1rem;
 }
-.modal {
-  position: fixed;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #fff;
-  padding: 1.5rem;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  z-index: 1000;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-.modal h3 {
-  margin-top: 0;
-}
-.modal button {
-  margin-top: 1rem;
-  margin-right: 0.5rem;
-}
-.contact-row {
-  display: flex;
-  flex-direction: column;
-  margin-top: 0.5rem;
-}
-.contact-row input,
-.contact-row select {
-  margin-bottom: 0.25rem;
-}

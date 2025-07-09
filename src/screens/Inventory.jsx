@@ -88,21 +88,24 @@ function Inventory() {
 
   const renderVendorContacts = (vendor) => {
     return (
-      <div className="modal">
-        <h3>{vendor.vendorName} Contacts</h3>
-        <ul>
-          {vendor.contacts.map((c, i) => (
-            <li key={i}>
-              {c.name && <strong>{c.name}: </strong>}
-              {c.type === "email" && <a href={`mailto:${c.value}`}>{c.value}</a>}
-              {c.type === "phone" && <a href={`tel:${c.value}`}>{c.value}</a>}
-              {c.type === "website" && <a href={c.value} target="_blank" rel="noreferrer">Website</a>}
-              {c.type === "other" && <span>{c.value}</span>}
-            </li>
-          ))}
-        </ul>
-        <button onClick={() => setShowContactsModal(null)}>Close</button>
-      </div>
+      <>
+        <div className="modal-overlay" />
+        <div className="modal">
+          <h3>{vendor.vendorName} Contacts</h3>
+          <ul>
+            {vendor.contacts.map((c, i) => (
+              <li key={i}>
+                {c.name && <strong>{c.name}: </strong>}
+                {c.type === "email" && <a href={`mailto:${c.value}`}>{c.value}</a>}
+                {c.type === "phone" && <a href={`tel:${c.value}`}>{c.value}</a>}
+                {c.type === "website" && <a href={c.value} target="_blank" rel="noreferrer">Website</a>}
+                {c.type === "other" && <span>{c.value}</span>}
+              </li>
+            ))}
+          </ul>
+          <button onClick={() => setShowContactsModal(null)}>Close</button>
+        </div>
+      </>
     );
   };
 
@@ -169,67 +172,70 @@ function Inventory() {
       {CATEGORIES.map((cat) => renderCategoryTable(cat))}
 
       {showVendorModal && (
-        <div className="modal">
-          <h3>Add Vendor for {showVendorModal}</h3>
-          <input
-            type="text"
-            placeholder="Vendor Name"
-            value={newVendor.name}
-            onChange={(e) =>
-              setNewVendor((prev) => ({ ...prev, name: e.target.value }))
-            }
-          />
-          {newVendor.contacts.map((contact, i) => (
-            <div key={i} className="contact-row">
-              <select
-                value={contact.type}
-                onChange={(e) => {
-                  const updated = [...newVendor.contacts];
-                  updated[i].type = e.target.value;
-                  setNewVendor((prev) => ({ ...prev, contacts: updated }));
-                }}
-              >
-                <option value="email">Email</option>
-                <option value="phone">Phone</option>
-                <option value="website">Website</option>
-                <option value="other">Other</option>
-              </select>
-              <input
-                type="text"
-                placeholder="Contact value"
-                value={contact.value}
-                onChange={(e) => {
-                  const updated = [...newVendor.contacts];
-                  updated[i].value = e.target.value;
-                  setNewVendor((prev) => ({ ...prev, contacts: updated }));
-                }}
-              />
-              <input
-                type="text"
-                placeholder="Name (optional)"
-                value={contact.name || ""}
-                onChange={(e) => {
-                  const updated = [...newVendor.contacts];
-                  updated[i].name = e.target.value;
-                  setNewVendor((prev) => ({ ...prev, contacts: updated }));
-                }}
-              />
-            </div>
-          ))}
-          <button
-            onClick={() =>
-              setNewVendor((prev) => ({
-                ...prev,
-                contacts: [...prev.contacts, { type: "email", value: "", name: "" }],
-              }))
-            }
-          >
-            + Add Another Contact
-          </button>
-          <br />
-          <button onClick={() => handleAddVendor(showVendorModal)}>Save</button>
-          <button onClick={() => setShowVendorModal(null)}>Cancel</button>
-        </div>
+        <>
+          <div className="modal-overlay" />
+          <div className="modal">
+            <h3>Add Vendor for {showVendorModal}</h3>
+            <input
+              type="text"
+              placeholder="Vendor Name"
+              value={newVendor.name}
+              onChange={(e) =>
+                setNewVendor((prev) => ({ ...prev, name: e.target.value }))
+              }
+            />
+            {newVendor.contacts.map((contact, i) => (
+              <div key={i} className="contact-row">
+                <select
+                  value={contact.type}
+                  onChange={(e) => {
+                    const updated = [...newVendor.contacts];
+                    updated[i].type = e.target.value;
+                    setNewVendor((prev) => ({ ...prev, contacts: updated }));
+                  }}
+                >
+                  <option value="email">Email</option>
+                  <option value="phone">Phone</option>
+                  <option value="website">Website</option>
+                  <option value="other">Other</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder="Contact value"
+                  value={contact.value}
+                  onChange={(e) => {
+                    const updated = [...newVendor.contacts];
+                    updated[i].value = e.target.value;
+                    setNewVendor((prev) => ({ ...prev, contacts: updated }));
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Name (optional)"
+                  value={contact.name || ""}
+                  onChange={(e) => {
+                    const updated = [...newVendor.contacts];
+                    updated[i].name = e.target.value;
+                    setNewVendor((prev) => ({ ...prev, contacts: updated }));
+                  }}
+                />
+              </div>
+            ))}
+            <button
+              onClick={() =>
+                setNewVendor((prev) => ({
+                  ...prev,
+                  contacts: [...prev.contacts, { type: "email", value: "", name: "" }],
+                }))
+              }
+            >
+              + Add Another Contact
+            </button>
+            <br />
+            <button onClick={() => handleAddVendor(showVendorModal)}>Save</button>
+            <button onClick={() => setShowVendorModal(null)}>Cancel</button>
+          </div>
+        </>
       )}
 
       {showContactsModal && renderVendorContacts(showContactsModal)}
