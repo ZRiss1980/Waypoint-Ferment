@@ -1,129 +1,76 @@
-// /src/screens/Inventory.jsx
+// Inventory.jsx – Live Firestore + UI Add Button per Category
 
 import React, { useEffect, useState } from "react";
+import { db } from "../firebase";
 import {
   collection,
   getDocs,
-  updateDoc,
-  doc,
+  addDoc,
   onSnapshot,
 } from "firebase/firestore";
-import { db } from "../firebase";
 import "./Inventory.css";
 
 const CATEGORIES = [
   "grain",
   "hops",
   "yeast",
-  "waterSalt",
-  "chemical",
-  "enzyme",
-  "other",
+  "waterSalts",
+  "chemicals",
+  "enzymes",
 ];
 
 function Inventory() {
-  const [items, setItems] = useState([]);
-  const [editedFields, setEditedFields] = useState({});
+  const [inventory, setInventory] = useState({});
+  const [newItems, setNewItems] = useState({});
 
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, "inventoryItems"), (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      setItems(data);
+    const unsubscribers = CATEGORIES.map((cat) => {
+      return onSnapshot(collection(db, cat), (snapshot) => {
+        setInventory((prev) => ({
+          ...prev,
+          [cat]: snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
+        }));
+      });
     });
-    return () => unsub();
+    return () => unsubscribers.forEach((unsub) => unsub());
   }, []);
 
-  const handleChange = (itemId, field, value) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === itemId ? { ...item, [field]: value } : item
-      )
-    );
-    setEditedFields((prev) => ({ ...prev, [`${itemId}-${field}`]: true }));
-  };
-
-  const handleBlur = async (itemId, field, value) => {
+  const handleAddItem = async (cat) => {
+    const input = newItems[cat];
+    if (!input || input.trim() === "") return;
     try {
-      const ref = doc(db, "inventoryItems", itemId);
-      await updateDoc(ref, {
-        [field]: field === "quantity" ? parseFloat(value) : value,
-        lastUpdated: new Date().toISOString(),
-      });
-      setEditedFields((prev) => {
-        const newState = { ...prev };
-        delete newState[`${itemId}-${field}`];
-        return newState;
-      });
+      await addDoc(collection(db, cat), { name: input.trim(), quantity: 1 });
+      setNewItems((prev) => ({ ...prev, [cat]: "" }));
     } catch (err) {
-      console.error("Failed to update Firestore:", err);
+      console.error("Failed to add item to", cat, err);
     }
   };
 
-  const renderCategoryTable = (category) => {
-    const filtered = items.filter((item) => item.category === category);
-    if (filtered.length === 0) return null;
-
+  const renderCategoryTable = (cat) => {
+    const items = inventory[cat] || [];
     return (
-      <section className="inventory-card" key={category}>
-        <h2>{category.charAt(0).toUpperCase() + category.slice(1)}</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Qty</th>
-              <th>Unit</th>
-              <th>Vendor</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((item) => (
-              <tr key={item.id}>
-                <td>
-                  <input
-                    value={item.name || ""}
-                    onChange={(e) => handleChange(item.id, "name", e.target.value)}
-                    onBlur={(e) => handleBlur(item.id, "name", e.target.value)}
-                    className={editedFields[`${item.id}-name`] ? "edited" : ""}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    value={item.quantity || 0}
-                    onChange={(e) => handleChange(item.id, "quantity", e.target.value)}
-                    onBlur={(e) => handleBlur(item.id, "quantity", e.target.value)}
-                    className={editedFields[`${item.id}-quantity`] ? "edited" : ""}
-                  />
-                </td>
-                <td>
-                  <input
-                    value={item.unit || ""}
-                    onChange={(e) => handleChange(item.id, "unit", e.target.value)}
-                    onBlur={(e) => handleBlur(item.id, "unit", e.target.value)}
-                    className={editedFields[`${item.id}-unit`] ? "edited" : ""}
-                  />
-                </td>
-                <td>
-                  <input
-                    value={item.vendor || ""}
-                    onChange={(e) => handleChange(item.id, "vendor", e.target.value)}
-                    onBlur={(e) => handleBlur(item.id, "vendor", e.target.value)}
-                    className={editedFields[`${item.id}-vendor`] ? "edited" : ""}
-                  />
-                </td>
-                <td>
-                  <input
-                    value={item.notes || ""}
-                    onChange={(e) => handleChange(item.id, "notes", e.target.value)}
-                    onBlur={(e) => handleBlur(item.id, "notes", e.target.value)}
-                    className={editedFields[`${item.id}-notes`] ? "edited" : ""}
-                  />
-                </td>
-              </tr>
+      <section key={cat} className="inventory-category">
+        <h2>{cat}</h2>
+        {items.length === 0 ? (
+          <p>No items in this category yet.</p>
+        ) : (
+          <ul>
+            {items.map((item) => (
+              <li key={item.id}>{item.name} (Qty: {item.quantity || 1})</li>
             ))}
-          </tbody>
-        </table>
+          </ul>
+        )}
+        <div className="add-item-row">
+          <input
+            type="text"
+            placeholder={`Add new ${cat} item`}
+            value={newItems[cat] || ""}
+            onChange={(e) =>
+              setNewItems((prev) => ({ ...prev, [cat]: e.target.value }))
+            }
+          />
+          <button onClick={() => handleAddItem(cat)}>+ Add</button>
+        </div>
       </section>
     );
   };
