@@ -67,6 +67,7 @@ function Inventory() {
         const snap = await getDocs(collection(db, `${cat}Types`));
         result[cat] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       }
+      console.log("🔍 Helper data loaded:", result);
       setHelperData(result);
     };
     fetchHelperData();
