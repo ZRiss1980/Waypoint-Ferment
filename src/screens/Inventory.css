@@ -1,39 +1,60 @@
-.inventory-section {
-  padding: 1rem;
+.inventory-page {
+  padding: 2rem;
 }
-.inventory-card {
+
+.inventory-category {
   border: 1px solid #ccc;
   border-radius: 8px;
+  margin-bottom: 2rem;
   padding: 1rem;
+}
+
+.vendor-section {
   margin-bottom: 1rem;
 }
+
+.vendor-link {
+  margin-right: 0.5rem;
+  background: none;
+  border: none;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.add-item-row {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* ← background overlay */
+  z-index: 999;
+}
+
 .modal {
   position: fixed;
-  top: 10%;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   background: #fff;
-  padding: 1.5rem;
-  border: 2px solid #ccc;
   border-radius: 8px;
-  z-index: 1001;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  z-index: 1000;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
-.modal h3 {
-  margin-top: 0;
-}
-.modal button {
-  margin-top: 1rem;
-  margin-right: 0.5rem;
-}
+
 .contact-row {
   display: flex;
-  flex-direction: column;
+  gap: 0.5rem;
   margin-top: 0.5rem;
-}
-.contact-row input,
-.contact-row select {
-  margin-bottom: 0.25rem;
 }
