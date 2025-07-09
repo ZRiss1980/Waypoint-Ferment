@@ -64,7 +64,13 @@ function Inventory() {
     const fetchHelperData = async () => {
       const result = {};
       for (let cat of CATEGORIES) {
-        const snap = await getDocs(collection(db, `${cat}Types`));
+        const map = {
+          grain: "grainTypes",
+          hops: "hops",
+          yeast: "yeastVariables", // <-- fix mismatch
+      };
+    const snap = await getDocs(collection(db, map[cat]));
+
         result[cat] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       }
       console.log("🔍 Helper data loaded:", result);
